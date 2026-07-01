@@ -48,6 +48,42 @@ family archive.
   https://alain-lessard.copper-dog.com/book.html` returned `HTTP/2 404`.
 - No local `DREAMHOST_API`/panel API credential or DreamHost CLI was found in
   the repo environment.
+- DreamHost's current API overview says formerly available domain-management
+  commands have been removed; the available documented API surface is meta and
+  DNS commands, so hosted-subdomain creation is a panel/support action unless a
+  separate internal DreamHost API credential/path is provided.
+
+## DreamHost Panel Action
+
+Use DreamHost's **Manage Websites** flow:
+
+1. Click **Add Website**.
+2. Choose **Create a Subdomain** for `alain-lessard.copper-dog.com`.
+3. Choose **Custom Setup**.
+4. Select the existing file-management user used by the Onward deploy path
+   (`onward_user`) unless DreamHost requires a different user.
+5. Open **Advanced Settings** and set the web directory to:
+
+   `alain-lessard.copper-dog.com`
+
+   DreamHost treats this as the directory under the selected user's home. The
+   folder already exists and contains the uploaded static bundle.
+6. Complete setup, then allow DreamHost's hosting configuration time to update.
+
+If the domain is already present but mapped to the wrong directory, open the
+site in **Manage Websites**, go to **Settings**, modify **Directories**, and set
+the web directory to `alain-lessard.copper-dog.com`.
+
+Sources:
+
+- DreamHost, "Adding a website and hosting":
+  https://help.dreamhost.com/hc/en-us/articles/360049378932-Adding-a-website-and-hosting
+- DreamHost, "Adding a subdomain":
+  https://help.dreamhost.com/hc/en-us/articles/215457827-Adding-a-subdomain
+- DreamHost, "Changing the web directory assigned to a domain":
+  https://help.dreamhost.com/hc/en-us/articles/360041534491-Changing-the-web-directory-assigned-to-a-domain
+- DreamHost, "Application programming interface overview":
+  https://help.dreamhost.com/hc/en-us/articles/217560167-Application-programming-interface-overview
 
 ## Acceptance
 

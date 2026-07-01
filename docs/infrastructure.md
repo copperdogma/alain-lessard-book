@@ -81,6 +81,13 @@ different origin for this hosted subdomain, the expected follow-up is to create
 or update the hosted subdomain in DreamHost so `alain-lessard.copper-dog.com`
 uses `/home/onward_user/alain-lessard.copper-dog.com` as its web directory.
 
+DreamHost's public API documentation now lists meta and DNS commands and notes
+that formerly available domain-management commands have been removed. Without a
+separate DreamHost panel/API credential that can create hosted domains, this
+mapping must be completed in the DreamHost panel or by DreamHost support. See
+`docs/stories/story-002-dreamhost-hosted-subdomain-public-verification.md` for
+the exact panel action.
+
 ## Deploy Shape
 
 The deploy helper uploads the static bundle over SFTP and writes a remote
