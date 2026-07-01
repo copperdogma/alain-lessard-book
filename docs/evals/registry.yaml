@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "evals": [
+    {
+      "id": "eval-main-book-pdf-v1",
+      "title": "Main book searchable PDF validation",
+      "status": "active",
+      "owner_story": "story-001-main-book-scan-to-searchable-pdf",
+      "notes": "Validate processed-page count, PDF page count, OCR text extraction, and rendered visual samples."
+    }
+  ]
+}

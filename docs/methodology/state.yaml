@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "format": "json-compatible-yaml",
+  "seeded_at": "2026-07-01",
+  "seeded_from": [
+    "docs/ideal.md",
+    "docs/spec.md",
+    "tests/fixtures/formats/_coverage-matrix.json"
+  ],
+  "categories": {
+    "spec:1": { "substrate": "partial", "last_reviewed": "2026-07-01" },
+    "spec:2": { "substrate": "active", "last_reviewed": "2026-07-01" },
+    "spec:3": { "substrate": "active", "last_reviewed": "2026-07-01" },
+    "spec:4": { "substrate": "missing", "last_reviewed": "2026-07-01" },
+    "spec:5": { "substrate": "exists", "last_reviewed": "2026-07-01" }
+  },
+  "compromises": {
+    "C1": { "phase": "climb", "last_reviewed": "2026-07-01" },
+    "C2": { "phase": "climb", "last_reviewed": "2026-07-01" },
+    "C3": { "phase": "climb", "last_reviewed": "2026-07-01" },
+    "C4": { "phase": "climb", "last_reviewed": "2026-07-01" },
+    "B1": { "phase": "hold", "last_reviewed": "2026-07-01" }
+  },
+  "coverage_matrix": {
+    "path": "tests/fixtures/formats/_coverage-matrix.json",
+    "last_reviewed": "2026-07-01",
+    "notes": "Canonical machine-readable inventory of source scans and generated artifact surfaces."
+  },
+  "roadmap": {
+    "active_focus": [
+      "campaign:main-book-pdf"
+    ],
+    "sequencing_bias": [
+      {
+        "target": "campaign:main-book-pdf",
+        "reason": "The searchable main-book PDF is the first durable source-backed artifact and the likely input to later website work."
+      }
+    ],
+    "campaigns": [
+      {
+        "id": "main-book-pdf",
+        "status": "active",
+        "story_refs": [
+          "story-001-main-book-scan-to-searchable-pdf"
+        ],
+        "notes": "Clean and OCR the 153-page main-book scan set before adding supplemental materials or website surfaces."
+      }
+    ]
+  },
+  "stories_index": {
+    "sections": [
+      {
+        "id": "recommended-order",
+        "title": "Recommended Order",
+        "markdown": "Current priority: finish the searchable main-book PDF from raw scans, then inventory supplemental scans before choosing the first website slice."
+      }
+    ],
+    "uncategorized_label": "Legacy / Uncategorized Stories"
+  },
+  "archives": {},
+  "story_overrides": {
+    "category_refs": {}
+  }
+}

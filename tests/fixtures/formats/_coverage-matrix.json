@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "last_reviewed": "2026-07-01",
+  "sources": [
+    {
+      "id": "main-book-raw-scans",
+      "label": "Main book raw scans",
+      "path": "input/raw scans/main book",
+      "format": "jpg-sequence",
+      "status": "present",
+      "observed_count": 153,
+      "notes": "Alternating top/bottom scanner-platen bands after the cover."
+    },
+    {
+      "id": "supplemental-scans",
+      "label": "Supplemental scans",
+      "path": "input/raw scans",
+      "format": "mixed",
+      "status": "not-present-yet",
+      "observed_count": 0,
+      "notes": "User mentioned a couple of minor companion items still need scanning."
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "id": "processed-pages",
+      "path": "output/processed-pages",
+      "format": "jpg-sequence-plus-manifest",
+      "status": "generated"
+    },
+    {
+      "id": "searchable-pdf",
+      "path": "output/pdf/alain-lessard-book-searchable.pdf",
+      "format": "pdf-with-ocr",
+      "status": "generated"
+    }
+  ]
+}

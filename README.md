@@ -1,0 +1,87 @@
+# Alain Lessard Book
+
+This repo owns the scan processing, OCR, PDF construction, and future website
+work for the *Alain Lessard* family book project.
+
+The current source of truth is the local raw scan set:
+
+- `input/raw scans/main book/`
+- 153 JPG scans from the main book
+- page 1 is the green cover; the remaining pages alternate scanner-platen
+  bands at the top and bottom
+
+## Current Commands
+
+```bash
+make scan-intake-report
+make scan-pdf-all
+make render-pdf-checks
+make methodology-compile
+make methodology-check
+```
+
+`make scan-intake-report` inspects a raw scan folder and writes reusable intake
+evidence under `output/intake/`. For another scan set, pass `SCAN_INPUT`:
+
+```bash
+make scan-intake-report SCAN_INPUT="input/raw scans/<book-or-item-name>"
+```
+
+`make scan-pdf-all` runs the deterministic local pipeline:
+
+1. crop scanner-platen bands from raw scans
+2. normalize processed page images to one canvas size
+3. assemble an image-only PDF
+4. create both distribution and archival image-only PDF profiles
+5. OCR with profile-specific settings and write book metadata with OCRmyPDF
+
+Final PDF outputs:
+
+- `output/pdf/alain-lessard-book-searchable.pdf` - reader-facing distribution PDF/A copy
+- `output/pdf/alain-lessard-book-archival-searchable.pdf` - higher-quality archival copy with the color cover preserved and non-cover pages stored as high-quality grayscale
+
+Pipeline manifests and review images:
+
+- `output/intake/scan-intake-report.json`
+- `output/intake/scan-intake-report.md`
+- `output/processed-pages/manifest.json`
+- `output/processed-pages/contact-sheets/`
+- `tmp/pdfs/rendered/`
+
+## `doc-web` Boundary
+
+`doc-web` is the right downstream runtime for turning this book into a
+website-ready HTML/provenance bundle. It should consume the cleaned image set or
+the final searchable PDF after this repo has produced it.
+
+For the PDF deliverable itself, keep using this repo's local scan pipeline:
+`doc-web` emits HTML bundles and provenance manifests, not the polished
+image-backed searchable PDF.
+
+## Onward Process Mapping
+
+The first-pass scan/PDF workflow is anchored to the older local Onward scan
+project, especially its book-scan README notes: clean and straighten scans,
+merge images into PDF, run OCRmyPDF, keep a smaller public PDF and a larger
+archival PDF, and set useful PDF metadata. This repo keeps that process in code
+instead of Photoshop/Preview/manual metadata edits.
+
+## Reusing This Pipeline
+
+For a future book, start with `docs/runbooks/future-book-scan-intake.md` and the
+checklist template at `docs/templates/book-scan-intake-checklist.md`. The first
+step is always to preserve raw scans, run `make scan-intake-report`, and record
+the input contract before adapting crop, color, OCR, or PDF profile settings.
+
+## Methodology
+
+This repo is bootstrapped from the same reusable methodology package used by
+the Onward project. Planning starts from:
+
+- `docs/ideal.md`
+- `docs/spec.md`
+- `docs/methodology/state.yaml`
+- `docs/methodology/graph.json`
+- `docs/stories.md`
+
+The active first story is the main-book scan cleanup and searchable PDF.

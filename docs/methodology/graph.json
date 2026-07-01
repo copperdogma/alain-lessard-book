@@ -1,0 +1,225 @@
+{
+  "version": 1,
+  "documents": {
+    "ideal": "docs/ideal.md",
+    "spec": "docs/spec.md",
+    "state": "docs/methodology/state.yaml",
+    "graph": "docs/methodology/graph.json",
+    "stories_index": "docs/stories.md",
+    "coverage_matrix": "tests/fixtures/formats/_coverage-matrix.json",
+    "evals_registry": "docs/evals/registry.yaml"
+  },
+  "ideal": {
+    "path": "docs/ideal.md",
+    "title": "The Ideal"
+  },
+  "spec": {
+    "path": "docs/spec.md",
+    "title": "Spec",
+    "categories": [
+      {
+        "id": "spec:1",
+        "title": "Source Intake & Inventory",
+        "summary": "The repo needs a clear inventory of raw scans, supplemental scans, source PDFs, and generated artifacts.",
+        "compromise_refs": [
+          "C1"
+        ],
+        "substrate": "partial",
+        "last_reviewed": "2026-07-01"
+      },
+      {
+        "id": "spec:2",
+        "title": "Scan Cleanup & PDF Construction",
+        "summary": "The main book should become a clean, consistent, searchable PDF without losing visual source fidelity.",
+        "compromise_refs": [
+          "C2"
+        ],
+        "substrate": "active",
+        "last_reviewed": "2026-07-01"
+      },
+      {
+        "id": "spec:3",
+        "title": "OCR, Text, & Provenance",
+        "summary": "OCR should make the book searchable while preserving an inspectable relationship to scanned page images.",
+        "compromise_refs": [
+          "C3"
+        ],
+        "substrate": "active",
+        "last_reviewed": "2026-07-01"
+      },
+      {
+        "id": "spec:4",
+        "title": "Website & Digital Edition",
+        "summary": "The website should eventually make the book and companion materials readable, searchable, and navigable outside the PDF.",
+        "compromise_refs": [
+          "C4"
+        ],
+        "substrate": "missing",
+        "last_reviewed": "2026-07-01"
+      },
+      {
+        "id": "spec:5",
+        "title": "Planning Infrastructure",
+        "summary": "The repo needs enough structure to survive long gaps and handoffs without turning into process theater.",
+        "compromise_refs": [
+          "B1"
+        ],
+        "substrate": "exists",
+        "last_reviewed": "2026-07-01"
+      }
+    ]
+  },
+  "state": {
+    "version": 1,
+    "format": "json-compatible-yaml",
+    "seeded_at": "2026-07-01",
+    "seeded_from": [
+      "docs/ideal.md",
+      "docs/spec.md",
+      "tests/fixtures/formats/_coverage-matrix.json"
+    ],
+    "categories": {
+      "spec:1": {
+        "substrate": "partial",
+        "last_reviewed": "2026-07-01"
+      },
+      "spec:2": {
+        "substrate": "active",
+        "last_reviewed": "2026-07-01"
+      },
+      "spec:3": {
+        "substrate": "active",
+        "last_reviewed": "2026-07-01"
+      },
+      "spec:4": {
+        "substrate": "missing",
+        "last_reviewed": "2026-07-01"
+      },
+      "spec:5": {
+        "substrate": "exists",
+        "last_reviewed": "2026-07-01"
+      }
+    },
+    "compromises": {
+      "C1": {
+        "phase": "climb",
+        "last_reviewed": "2026-07-01"
+      },
+      "C2": {
+        "phase": "climb",
+        "last_reviewed": "2026-07-01"
+      },
+      "C3": {
+        "phase": "climb",
+        "last_reviewed": "2026-07-01"
+      },
+      "C4": {
+        "phase": "climb",
+        "last_reviewed": "2026-07-01"
+      },
+      "B1": {
+        "phase": "hold",
+        "last_reviewed": "2026-07-01"
+      }
+    },
+    "coverage_matrix": {
+      "path": "tests/fixtures/formats/_coverage-matrix.json",
+      "last_reviewed": "2026-07-01",
+      "notes": "Canonical machine-readable inventory of source scans and generated artifact surfaces."
+    },
+    "roadmap": {
+      "active_focus": [
+        "campaign:main-book-pdf"
+      ],
+      "sequencing_bias": [
+        {
+          "target": "campaign:main-book-pdf",
+          "reason": "The searchable main-book PDF is the first durable source-backed artifact and the likely input to later website work."
+        }
+      ],
+      "campaigns": [
+        {
+          "id": "main-book-pdf",
+          "status": "active",
+          "story_refs": [
+            "story-001-main-book-scan-to-searchable-pdf"
+          ],
+          "notes": "Clean and OCR the 153-page main-book scan set before adding supplemental materials or website surfaces."
+        }
+      ]
+    },
+    "stories_index": {
+      "sections": [
+        {
+          "id": "recommended-order",
+          "title": "Recommended Order",
+          "markdown": "Current priority: finish the searchable main-book PDF from raw scans, then inventory supplemental scans before choosing the first website slice."
+        }
+      ],
+      "uncategorized_label": "Legacy / Uncategorized Stories"
+    },
+    "archives": {},
+    "story_overrides": {
+      "category_refs": {}
+    }
+  },
+  "coverage_matrix": {
+    "version": 1,
+    "last_reviewed": "2026-07-01",
+    "sources": [
+      {
+        "id": "main-book-raw-scans",
+        "label": "Main book raw scans",
+        "path": "input/raw scans/main book",
+        "format": "jpg-sequence",
+        "status": "present",
+        "observed_count": 153,
+        "notes": "Alternating top/bottom scanner-platen bands after the cover."
+      },
+      {
+        "id": "supplemental-scans",
+        "label": "Supplemental scans",
+        "path": "input/raw scans",
+        "format": "mixed",
+        "status": "not-present-yet",
+        "observed_count": 0,
+        "notes": "User mentioned a couple of minor companion items still need scanning."
+      }
+    ],
+    "generated_artifacts": [
+      {
+        "id": "processed-pages",
+        "path": "output/processed-pages",
+        "format": "jpg-sequence-plus-manifest",
+        "status": "generated"
+      },
+      {
+        "id": "searchable-pdf",
+        "path": "output/pdf/alain-lessard-book-searchable.pdf",
+        "format": "pdf-with-ocr",
+        "status": "generated"
+      }
+    ]
+  },
+  "evals": [
+    {
+      "id": "eval-main-book-pdf-v1",
+      "title": "Main book searchable PDF validation",
+      "status": "active",
+      "owner_story": "story-001-main-book-scan-to-searchable-pdf",
+      "notes": "Validate processed-page count, PDF page count, OCR text extraction, and rendered visual samples."
+    }
+  ],
+  "stories": {
+    "items": [
+      {
+        "path": "docs/stories/story-001-main-book-scan-to-searchable-pdf.md",
+        "title": "Main book scan to searchable PDF",
+        "status": "Active"
+      }
+    ],
+    "counts_by_status": {
+      "Active": 1
+    }
+  }
+}
