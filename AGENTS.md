@@ -96,6 +96,9 @@ The repo has raw main-book scans, deterministic scan-to-PDF tooling, two
 searchable main-book PDFs, Onward-style audio scripts for narrative sections,
 and a generated static family archive under `build/family-site/`. The 2026-07-01
 SFTP deploy uploaded the bundle to DreamHost at
-`/home/onward_user/alain-lessard.copper-dog.com`, but public verification is
-blocked until `alain-lessard.copper-dog.com` resolves in DNS. Final
-supplemental scans and reviewed audio MP3 files are still pending.
+`/home/onward_user/alain-lessard.copper-dog.com`, and the Cloudflare DNS record
+now points `alain-lessard.copper-dog.com` at the same DreamHost origin as
+Onward. Public verification is still blocked because DreamHost returns `Site
+Not Found`; the hosted subdomain/virtual host still needs to be created or
+mapped to that directory. Final supplemental scans and reviewed audio MP3 files
+are still pending.

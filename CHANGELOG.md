@@ -15,5 +15,8 @@
 - Copied the Onward DreamHost deploy helper, widened the SFTP timeout for this
   larger bundle, created the DreamHost remote directory, and uploaded the
   generated static bundle to `/home/onward_user/alain-lessard.copper-dog.com`.
-- Recorded that public verification remains blocked because
-  `alain-lessard.copper-dog.com` does not yet resolve in DNS.
+- Created the Cloudflare DNS record for `alain-lessard.copper-dog.com` pointing
+  at the Onward DreamHost origin.
+- Recorded that public verification remains blocked because DreamHost returns
+  `Site Not Found` until the hosted subdomain is mapped to the uploaded
+  directory.

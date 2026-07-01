@@ -53,9 +53,10 @@ gitignored local `.env`. The intended public host is
 python -m pip install -r requirements-deploy.txt
 ```
 
-The 2026-07-01 SFTP upload completed to DreamHost, but public verification is
-still blocked until DNS resolves for `alain-lessard.copper-dog.com`; see
-`docs/infrastructure.md`.
+The 2026-07-01 SFTP upload completed to DreamHost, and the Cloudflare DNS
+record now exists. Public verification is still blocked because DreamHost
+returns its missing-site page until the hosted subdomain is mapped to the
+uploaded directory; see `docs/infrastructure.md`.
 
 Final PDF outputs:
 
@@ -109,5 +110,6 @@ the Onward project. Planning starts from:
 - `docs/stories.md`
 
 The completed first story is the main-book scan cleanup and searchable PDF. The
-current open gate is public DNS/host verification for the uploaded static site,
-followed by supplemental scan intake and reviewed audio-file generation.
+current open gate is DreamHost hosted-subdomain verification for the uploaded
+static site, followed by supplemental scan intake and reviewed audio-file
+generation.

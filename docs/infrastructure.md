@@ -42,9 +42,21 @@ Do not commit `.env` or print credential values in logs.
 
 ## DNS
 
-The target hostname is `alain-lessard.copper-dog.com`. As of 2026-07-01, the
-static bundle has been uploaded to DreamHost, but public DNS does not yet
-resolve for that hostname from the local terminal.
+The target hostname is `alain-lessard.copper-dog.com`.
+
+As of 2026-07-01:
+
+- Cloudflare is authoritative for `copper-dog.com`.
+- Cloudflare DNS record `alain-lessard.copper-dog.com` exists:
+  - type: `A`
+  - content: `208.113.159.28`
+  - proxied: `true`
+  - record id: `4bdf435e1aba643e02f6db6011132dd0`
+- Authoritative checks against Cloudflare nameservers resolve the hostname to
+  Cloudflare edge IPs.
+- The DreamHost remote directory exists and contains the uploaded static bundle.
+- Public HTTPS still returns DreamHost's `Site Not Found` page because the
+  hosted subdomain/virtual host is not mapped in DreamHost yet.
 
 Before calling deployment fully complete, verify:
 
@@ -54,15 +66,20 @@ curl -I https://alain-lessard.copper-dog.com
 curl -I https://alain-lessard.copper-dog.com/book.html
 ```
 
-If DNS still does not resolve, the static bundle can be built and uploaded to
-DreamHost, but the public verification gate remains blocked until the hosted
-subdomain and Cloudflare record exist.
+If the local resolver has a stale NXDOMAIN cache immediately after DNS changes,
+verify against Cloudflare directly:
+
+```bash
+dig @chelsea.ns.cloudflare.com alain-lessard.copper-dog.com +short
+curl -I --resolve alain-lessard.copper-dog.com:443:104.21.43.33 \
+  https://alain-lessard.copper-dog.com
+```
 
 The Onward project records `copper-dog.com` as Cloudflare-managed DNS pointing
 subdomains at DreamHost origin `208.113.159.28`. Unless DreamHost assigns a
 different origin for this hosted subdomain, the expected follow-up is to create
-the `alain-lessard` DNS record in Cloudflare and ensure the DreamHost hosted
-subdomain is mapped to the remote directory above.
+or update the hosted subdomain in DreamHost so `alain-lessard.copper-dog.com`
+uses `/home/onward_user/alain-lessard.copper-dog.com` as its web directory.
 
 ## Deploy Shape
 

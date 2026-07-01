@@ -4,8 +4,9 @@
 
 ## Recommended Order
 
-Current priority: configure DNS/public hosting for `alain-lessard.copper-dog.com`, then inventory supplemental scans and generate reviewed audio files when source material is available.
+Current priority: create or map the DreamHost hosted subdomain for `alain-lessard.copper-dog.com`, then inventory supplemental scans and generate reviewed audio files when source material is available.
 
 ## Current Stories
 
 - **Done** — `docs/stories/story-001-main-book-scan-to-searchable-pdf.md` — Main book scan to searchable PDF
+- **Blocked** — `docs/stories/story-002-dreamhost-hosted-subdomain-public-verification.md` — DreamHost hosted subdomain public verification
