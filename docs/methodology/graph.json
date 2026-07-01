@@ -34,7 +34,7 @@
         "compromise_refs": [
           "C2"
         ],
-        "substrate": "active",
+        "substrate": "exists",
         "last_reviewed": "2026-07-01"
       },
       {
@@ -44,7 +44,7 @@
         "compromise_refs": [
           "C3"
         ],
-        "substrate": "active",
+        "substrate": "exists",
         "last_reviewed": "2026-07-01"
       },
       {
@@ -54,7 +54,7 @@
         "compromise_refs": [
           "C4"
         ],
-        "substrate": "missing",
+        "substrate": "partial",
         "last_reviewed": "2026-07-01"
       },
       {
@@ -84,15 +84,15 @@
         "last_reviewed": "2026-07-01"
       },
       "spec:2": {
-        "substrate": "active",
+        "substrate": "exists",
         "last_reviewed": "2026-07-01"
       },
       "spec:3": {
-        "substrate": "active",
+        "substrate": "exists",
         "last_reviewed": "2026-07-01"
       },
       "spec:4": {
-        "substrate": "missing",
+        "substrate": "partial",
         "last_reviewed": "2026-07-01"
       },
       "spec:5": {
@@ -106,11 +106,11 @@
         "last_reviewed": "2026-07-01"
       },
       "C2": {
-        "phase": "climb",
+        "phase": "hold",
         "last_reviewed": "2026-07-01"
       },
       "C3": {
-        "phase": "climb",
+        "phase": "hold",
         "last_reviewed": "2026-07-01"
       },
       "C4": {
@@ -129,22 +129,39 @@
     },
     "roadmap": {
       "active_focus": [
-        "campaign:main-book-pdf"
+        "campaign:publish-site-dns",
+        "campaign:supplemental-materials"
       ],
       "sequencing_bias": [
         {
-          "target": "campaign:main-book-pdf",
-          "reason": "The searchable main-book PDF is the first durable source-backed artifact and the likely input to later website work."
+          "target": "campaign:publish-site-dns",
+          "reason": "The static bundle has been generated and uploaded to DreamHost, but the public host cannot be verified until DNS resolves."
+        },
+        {
+          "target": "campaign:supplemental-materials",
+          "reason": "The main-book artifact path is established; the user noted a couple of companion items still need to be scanned."
         }
       ],
       "campaigns": [
         {
           "id": "main-book-pdf",
-          "status": "active",
+          "status": "done",
           "story_refs": [
             "story-001-main-book-scan-to-searchable-pdf"
           ],
-          "notes": "Clean and OCR the 153-page main-book scan set before adding supplemental materials or website surfaces."
+          "notes": "The 153-page main book now has cleaned page images plus distribution and archival searchable PDFs."
+        },
+        {
+          "id": "publish-site-dns",
+          "status": "blocked",
+          "story_refs": [],
+          "notes": "The Onward-style static site was built and uploaded to `/home/onward_user/alain-lessard.copper-dog.com` on DreamHost, but `alain-lessard.copper-dog.com` did not resolve during public verification."
+        },
+        {
+          "id": "supplemental-materials",
+          "status": "pending",
+          "story_refs": [],
+          "notes": "The minor companion materials mentioned by the user still need source scans and inventory rows before they can join the site/archive surface."
         }
       ]
     },
@@ -153,7 +170,7 @@
         {
           "id": "recommended-order",
           "title": "Recommended Order",
-          "markdown": "Current priority: finish the searchable main-book PDF from raw scans, then inventory supplemental scans before choosing the first website slice."
+          "markdown": "Current priority: configure DNS/public hosting for `alain-lessard.copper-dog.com`, then inventory supplemental scans and generate reviewed audio files when source material is available."
         }
       ],
       "uncategorized_label": "Legacy / Uncategorized Stories"
@@ -215,11 +232,11 @@
       {
         "path": "docs/stories/story-001-main-book-scan-to-searchable-pdf.md",
         "title": "Main book scan to searchable PDF",
-        "status": "Active"
+        "status": "Done"
       }
     ],
     "counts_by_status": {
-      "Active": 1
+      "Done": 1
     }
   }
 }

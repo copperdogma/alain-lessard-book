@@ -1,0 +1,128 @@
+{
+  "schema_version": "alain_lessard_audiobook_manifest_v1",
+  "mode": "onward-style-narrative-audio",
+  "note": "Scripts are prepared for narrative sections only; genealogy tables and indexes remain readable/searchable.",
+  "entries": [
+    {
+      "index": 1,
+      "title": "Opening Matter",
+      "script": "script/01-opening-matter.md",
+      "source_pages": [
+        1,
+        7
+      ],
+      "status": "script-ready",
+      "audio_file": null
+    },
+    {
+      "index": 2,
+      "title": "Alain Family History",
+      "script": "script/02-alain-family-history.md",
+      "source_pages": [
+        8,
+        13
+      ],
+      "status": "script-ready",
+      "audio_file": null
+    },
+    {
+      "index": 3,
+      "title": "Henri Delphice Alain",
+      "script": "script/03-henri-delphice-alain.md",
+      "source_pages": [
+        14,
+        20
+      ],
+      "status": "script-ready",
+      "audio_file": null
+    },
+    {
+      "index": 4,
+      "title": "Moise \"Smokey\" Alain",
+      "script": "script/04-moise-smokey-alain.md",
+      "source_pages": [
+        21,
+        23
+      ],
+      "status": "script-ready",
+      "audio_file": null
+    },
+    {
+      "index": 5,
+      "title": "Louis and Clara Alain",
+      "script": "script/05-louis-and-clara-alain.md",
+      "source_pages": [
+        24,
+        63
+      ],
+      "status": "script-ready",
+      "audio_file": null
+    },
+    {
+      "index": 6,
+      "title": "Yvonne, Rolland, and Alain Family Stories",
+      "script": "script/06-yvonne-rolland-and-alain-family-stories.md",
+      "source_pages": [
+        64,
+        76
+      ],
+      "status": "script-ready",
+      "audio_file": null
+    },
+    {
+      "index": 7,
+      "title": "Additional Alain and L'Heureux Stories",
+      "script": "script/07-additional-alain-and-l-heureux-stories.md",
+      "source_pages": [
+        77,
+        81
+      ],
+      "status": "script-ready",
+      "audio_file": null
+    },
+    {
+      "index": 8,
+      "title": "Lessard Family History",
+      "script": "script/08-lessard-family-history.md",
+      "source_pages": [
+        88,
+        95
+      ],
+      "status": "script-ready",
+      "audio_file": null
+    },
+    {
+      "index": 9,
+      "title": "Lessard Family Stories",
+      "script": "script/09-lessard-family-stories.md",
+      "source_pages": [
+        96,
+        130
+      ],
+      "status": "script-ready",
+      "audio_file": null
+    },
+    {
+      "index": 10,
+      "title": "Veillardville",
+      "script": "script/10-veillardville.md",
+      "source_pages": [
+        136,
+        142
+      ],
+      "status": "script-ready",
+      "audio_file": null
+    },
+    {
+      "index": 11,
+      "title": "Memories and Personal Records",
+      "script": "script/11-memories-and-personal-records.md",
+      "source_pages": [
+        143,
+        152
+      ],
+      "status": "script-ready",
+      "audio_file": null
+    }
+  ]
+}

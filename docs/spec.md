@@ -76,16 +76,20 @@ searchable, and navigable outside the PDF.
 The chosen site stack should support chapter reading, indexes, source downloads,
 and companion archive materials.
 
-### C4 Website content model does not exist yet
+### C4 Website content exists, but the public hostname is not live yet
 
-- Ideal: cleaned scans and OCR feed a structured book/site canon
-- Constraint: first establish the PDF and source lineage before building the
-  website
-- Limitation: this repo is brand new and has not chosen its site runtime
-- Limitation type: execution
-- Evolution signal: the first website slice renders real book content from
-  source-backed artifacts
-- Residual form: keep only the site shell and adapters that prove reusable
+- Ideal: cleaned scans and OCR feed a structured, public, Onward-style book site
+- Constraint: the first static site is generated from the processed page images,
+  searchable PDF text, and audio-script manifest, then uploaded over the Onward
+  DreamHost SFTP path
+- Limitation: `alain-lessard.copper-dog.com` did not resolve from the local
+  terminal after the 2026-07-01 upload, so public HTTPS verification is blocked
+  on DNS/host configuration
+- Limitation type: infrastructure
+- Evolution signal: Cloudflare/DreamHost DNS resolves and `curl -I` returns
+  success for `/`, `/book.html`, and `/chapter-001.html`
+- Residual form: keep the static generator, deploy helper, and infrastructure
+  note; delete only temporary DNS workaround notes
 
 ## spec:5 Planning Infrastructure
 

@@ -12,4 +12,6 @@ build/
 tmp/
 output/processed-pages/
 output/pdf/
+audiobook/**/*.mp3
+audiobook/ElevenLabs_*/
 .env

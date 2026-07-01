@@ -15,6 +15,8 @@ The current source of truth is the local raw scan set:
 ```bash
 make scan-intake-report
 make scan-pdf-all
+make build-audiobook-script
+make build-family-site
 make render-pdf-checks
 make methodology-compile
 make methodology-check
@@ -35,6 +37,26 @@ make scan-intake-report SCAN_INPUT="input/raw scans/<book-or-item-name>"
 4. create both distribution and archival image-only PDF profiles
 5. OCR with profile-specific settings and write book metadata with OCRmyPDF
 
+`make build-audiobook-script` generates Onward-style narration scripts for
+story/prose sections while leaving genealogy tables, indexes, and dense lists
+as readable/searchable material.
+
+`make build-family-site` builds the static website bundle under
+`build/family-site/`, including page images, OCR reading pages, search data, PDF
+downloads, archive notes, and audio-script links.
+
+`make deploy-static` uploads `build/family-site/` to DreamHost using the
+gitignored local `.env`. The intended public host is
+`alain-lessard.copper-dog.com`. Install the deploy helper dependency first:
+
+```bash
+python -m pip install -r requirements-deploy.txt
+```
+
+The 2026-07-01 SFTP upload completed to DreamHost, but public verification is
+still blocked until DNS resolves for `alain-lessard.copper-dog.com`; see
+`docs/infrastructure.md`.
+
 Final PDF outputs:
 
 - `output/pdf/alain-lessard-book-searchable.pdf` - reader-facing distribution PDF/A copy
@@ -47,6 +69,8 @@ Pipeline manifests and review images:
 - `output/processed-pages/manifest.json`
 - `output/processed-pages/contact-sheets/`
 - `tmp/pdfs/rendered/`
+- `audiobook/script/`
+- `build/family-site/`
 
 ## `doc-web` Boundary
 
@@ -84,4 +108,6 @@ the Onward project. Planning starts from:
 - `docs/methodology/graph.json`
 - `docs/stories.md`
 
-The active first story is the main-book scan cleanup and searchable PDF.
+The completed first story is the main-book scan cleanup and searchable PDF. The
+current open gate is public DNS/host verification for the uploaded static site,
+followed by supplemental scan intake and reviewed audio-file generation.

@@ -4,8 +4,8 @@
 
 ## Recommended Order
 
-Current priority: finish the searchable main-book PDF from raw scans, then inventory supplemental scans before choosing the first website slice.
+Current priority: configure DNS/public hosting for `alain-lessard.copper-dog.com`, then inventory supplemental scans and generate reviewed audio files when source material is available.
 
 ## Current Stories
 
-- **Active** — `docs/stories/story-001-main-book-scan-to-searchable-pdf.md` — Main book scan to searchable PDF
+- **Done** — `docs/stories/story-001-main-book-scan-to-searchable-pdf.md` — Main book scan to searchable PDF

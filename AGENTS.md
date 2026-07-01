@@ -42,6 +42,10 @@ first.
 - For scan processing, prefer deterministic scripts and recorded manifests over
   manual image edits.
 - For PDF work, render and inspect pages before calling the output final.
+- For website work, build the static bundle with `make build-family-site` and
+  verify rendered pages before deployment.
+- For deployment, use `make deploy-static`, keep `.env` secret, and verify the
+  public host in `docs/infrastructure.md`.
 - For website work, keep reader-facing language warm, family-centered, and free
   of build/process terminology.
 - Provenance matters. Generated pages, OCR text, PDFs, and future website
@@ -66,6 +70,7 @@ Canonical location: `.agents/skills/`
 - `docs/ideal.md` - product and execution ideals
 - `docs/spec.md` - active project constraints with stable `spec:N` ids
 - `docs/input-contract.md` - current local input contract
+- `docs/infrastructure.md` - DreamHost target, DNS, and deploy command truth
 - `docs/runbooks/future-book-scan-intake.md` - reusable intake and handoff
   process for future book scan projects
 - `docs/runbooks/scan-to-pdf.md` - scan cleanup, PDF, and OCR runbook
@@ -87,6 +92,10 @@ Canonical location: `.agents/skills/`
 
 ## Current Repo Reality
 
-The repo has raw main-book scans and a deterministic scan-to-PDF pipeline. It
-does not yet have final supplemental scans, a canonical website content model,
-or a published site.
+The repo has raw main-book scans, deterministic scan-to-PDF tooling, two
+searchable main-book PDFs, Onward-style audio scripts for narrative sections,
+and a generated static family archive under `build/family-site/`. The 2026-07-01
+SFTP deploy uploaded the bundle to DreamHost at
+`/home/onward_user/alain-lessard.copper-dog.com`, but public verification is
+blocked until `alain-lessard.copper-dog.com` resolves in DNS. Final
+supplemental scans and reviewed audio MP3 files are still pending.

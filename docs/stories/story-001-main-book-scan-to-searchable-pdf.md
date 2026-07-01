@@ -1,6 +1,6 @@
 ---
 title: "Main book scan to searchable PDF"
-status: "Active"
+status: "Done"
 ---
 
 # Main Book Scan To Searchable PDF
@@ -36,3 +36,12 @@ raw scans and recording page-level processing decisions.
 - Both PDFs carry expected title, author, subject, and keyword metadata.
 - OCR text extraction returns non-empty text for text-heavy sample pages.
 - Rendered sample PNGs show no scanner platen band and remain legible.
+
+## Closeout Evidence
+
+- `make validate-pdf` passed on 2026-07-01 with 153 pages in both distribution
+  and archival PDFs.
+- `make render-pdf-checks` passed on 2026-07-01 and refreshed representative
+  rendered page checks under `tmp/pdfs/rendered/`.
+- The archival PDF preserves the color cover while storing non-cover pages as
+  high-quality grayscale.

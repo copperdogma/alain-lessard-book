@@ -1,8 +1,10 @@
 BUNDLED_PYTHON := /Users/cam/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3
 PYTHON ?= $(shell if [ -x "$(BUNDLED_PYTHON)" ]; then echo "$(BUNDLED_PYTHON)"; else command -v python3; fi)
 SCAN_INPUT ?= input/raw scans/main book
+FAMILY_SITE_OUTPUT ?= build/family-site
+AUDIOBOOK_SCRIPT_OUTPUT ?= audiobook/script
 
-.PHONY: skills-sync skills-check methodology-compile methodology-check scan-intake-report process-scans build-image-pdf ocr-pdf archival-image-pdf archival-pdf scan-pdf-all render-pdf-checks validate-pdf
+.PHONY: skills-sync skills-check methodology-compile methodology-check scan-intake-report process-scans build-image-pdf ocr-pdf archival-image-pdf archival-pdf scan-pdf-all build-audiobook-script build-family-site deploy-static render-pdf-checks validate-pdf
 
 skills-sync:
 	./scripts/sync-agent-skills.sh
@@ -35,6 +37,15 @@ archival-pdf: archival-image-pdf
 	$(PYTHON) scripts/process_book_scans.py ocr --profile archival
 
 scan-pdf-all: ocr-pdf archival-pdf
+
+build-audiobook-script:
+	$(PYTHON) scripts/build_audiobook_script.py --output "$(AUDIOBOOK_SCRIPT_OUTPUT)"
+
+build-family-site: build-audiobook-script
+	$(PYTHON) scripts/build_family_site.py --output "$(FAMILY_SITE_OUTPUT)"
+
+deploy-static:
+	$(PYTHON) scripts/deploy_static_site.py --source "$(FAMILY_SITE_OUTPUT)"
 
 render-pdf-checks:
 	$(PYTHON) scripts/process_book_scans.py render-checks
