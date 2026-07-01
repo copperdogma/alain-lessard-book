@@ -48,6 +48,9 @@ family archive.
   https://alain-lessard.copper-dog.com/book.html` returned `HTTP/2 404`.
 - No local `DREAMHOST_API`/panel API credential or DreamHost CLI was found in
   the repo environment.
+- Password-based SSH using the same DreamHost user did not expose a usable
+  shell/control command for hosted-domain mapping; the available credential path
+  remains SFTP upload only.
 - DreamHost's current API overview says formerly available domain-management
   commands have been removed; the available documented API surface is meta and
   DNS commands, so hosted-subdomain creation is a panel/support action unless a
