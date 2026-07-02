@@ -17,6 +17,9 @@
   generated static bundle to `/home/onward_user/alain-lessard.copper-dog.com`.
 - Created the Cloudflare DNS record for `alain-lessard.copper-dog.com` pointing
   at the Onward DreamHost origin.
-- Recorded that public verification remains blocked because DreamHost returns
-  `Site Not Found` until the hosted subdomain is mapped to the uploaded
-  directory.
+- Recorded the interim DreamHost `Site Not Found` failure while the hosted
+  subdomain still needed to be mapped to the uploaded directory.
+- Created the DreamHost hosted subdomain, updated Cloudflare to DreamHost's
+  assigned origin `173.236.136.184`, issued a Let's Encrypt certificate, and
+  verified public HTTPS for the homepage, book page, first chapter, and
+  searchable PDF download.

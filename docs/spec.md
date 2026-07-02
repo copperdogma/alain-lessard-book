@@ -76,19 +76,20 @@ searchable, and navigable outside the PDF.
 The chosen site stack should support chapter reading, indexes, source downloads,
 and companion archive materials.
 
-### C4 Website content exists, but DreamHost is not serving the hostname yet
+### C4 Website is live; companion materials and reviewed audio are still pending
 
 - Ideal: cleaned scans and OCR feed a structured, public, Onward-style book site
 - Constraint: the first static site is generated from the processed page images,
   searchable PDF text, and audio-script manifest, then uploaded over the Onward
   DreamHost SFTP path
-- Limitation: the Cloudflare DNS record now exists, but public HTTPS returns
-  DreamHost's `Site Not Found` page because the hosted subdomain/virtual host
-  is not mapped to `/home/onward_user/alain-lessard.copper-dog.com`
-- Limitation type: infrastructure
-- Evolution signal: DreamHost maps the hosted subdomain to the uploaded
-  directory and `curl -I` returns success for `/`, `/book.html`, and
-  `/chapter-001.html` without the DreamHost missing-site page
+- Constraint: DreamHost assigned this hosted subdomain to origin
+  `173.236.136.184`, not the older Onward origin IP
+- Limitation: the public site currently contains generated audio scripts but no
+  reviewed narrated MP3 files, and supplemental companion scans are still
+  pending
+- Limitation type: source availability
+- Evolution signal: supplemental items are scanned and inventoried, then
+  reviewed audio files are generated and published where narration is useful
 - Residual form: keep the static generator, deploy helper, and infrastructure
   note; delete only temporary DNS workaround notes
 

@@ -53,10 +53,10 @@ gitignored local `.env`. The intended public host is
 python -m pip install -r requirements-deploy.txt
 ```
 
-The 2026-07-01 SFTP upload completed to DreamHost, and the Cloudflare DNS
-record now exists. Public verification is still blocked because DreamHost
-returns its missing-site page until the hosted subdomain is mapped to the
-uploaded directory; see `docs/infrastructure.md`.
+The 2026-07-01 SFTP upload completed to DreamHost, the DreamHost hosted
+subdomain is mapped to the uploaded directory, Cloudflare points the proxied
+record at DreamHost's assigned origin, and public HTTPS verification now passes;
+see `docs/infrastructure.md`.
 
 Final PDF outputs:
 

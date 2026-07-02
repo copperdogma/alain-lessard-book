@@ -49,16 +49,22 @@ As of 2026-07-01:
 - Cloudflare is authoritative for `copper-dog.com`.
 - Cloudflare DNS record `alain-lessard.copper-dog.com` exists:
   - type: `A`
-  - content: `208.113.159.28`
+  - content: `173.236.136.184`
   - proxied: `true`
   - record id: `4bdf435e1aba643e02f6db6011132dd0`
 - Authoritative checks against Cloudflare nameservers resolve the hostname to
   Cloudflare edge IPs.
-- The DreamHost remote directory exists and contains the uploaded static bundle.
-- Public HTTPS still returns DreamHost's `Site Not Found` page because the
-  hosted subdomain/virtual host is not mapped in DreamHost yet.
+- DreamHost nameservers return origin `173.236.136.184` for the hosted
+  subdomain.
+- The DreamHost hosted subdomain maps to
+  `/home/onward_user/alain-lessard.copper-dog.com`, and that remote directory
+  contains the uploaded static bundle.
+- DreamHost issued a Let's Encrypt certificate for
+  `alain-lessard.copper-dog.com` expiring on 2026-09-30.
+- Public HTTPS serves the generated static site, and public HTTP redirects to
+  HTTPS.
 
-Before calling deployment fully complete, verify:
+Useful deployment verification commands:
 
 ```bash
 dig +short alain-lessard.copper-dog.com
@@ -75,18 +81,28 @@ curl -I --resolve alain-lessard.copper-dog.com:443:104.21.43.33 \
   https://alain-lessard.copper-dog.com
 ```
 
-The Onward project records `copper-dog.com` as Cloudflare-managed DNS pointing
-subdomains at DreamHost origin `208.113.159.28`. Unless DreamHost assigns a
-different origin for this hosted subdomain, the expected follow-up is to create
-or update the hosted subdomain in DreamHost so `alain-lessard.copper-dog.com`
-uses `/home/onward_user/alain-lessard.copper-dog.com` as its web directory.
+The Onward project records `onward.copper-dog.com` at DreamHost origin
+`208.113.159.28`, but DreamHost assigned this hosted subdomain to
+`173.236.136.184`. Cloudflare must keep the proxied `A` record pointed at the
+DreamHost nameserver-reported origin for this specific hostname.
 
 DreamHost's public API documentation now lists meta and DNS commands and notes
-that formerly available domain-management commands have been removed. Without a
-separate DreamHost panel/API credential that can create hosted domains, this
-mapping must be completed in the DreamHost panel or by DreamHost support. See
-`docs/stories/story-002-dreamhost-hosted-subdomain-public-verification.md` for
-the exact panel action.
+that formerly available domain-management commands have been removed. Hosted
+subdomain creation and certificate setup were completed in the DreamHost panel.
+
+Fresh public verification on 2026-07-01:
+
+```bash
+dig @chelsea.ns.cloudflare.com alain-lessard.copper-dog.com +short
+curl -I https://alain-lessard.copper-dog.com
+curl -I https://alain-lessard.copper-dog.com/book.html
+curl -I https://alain-lessard.copper-dog.com/chapter-001.html
+curl -I https://alain-lessard.copper-dog.com/downloads/alain-lessard-book-searchable.pdf
+curl -I http://alain-lessard.copper-dog.com
+```
+
+Observed result: Cloudflare edge IPs resolve; the homepage, book page, chapter
+page, and searchable PDF return `HTTP/2 200`; HTTP returns `301` to HTTPS.
 
 ## Deploy Shape
 

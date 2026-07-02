@@ -54,7 +54,7 @@
         "compromise_refs": [
           "C4"
         ],
-        "substrate": "partial",
+        "substrate": "exists",
         "last_reviewed": "2026-07-01"
       },
       {
@@ -92,7 +92,7 @@
         "last_reviewed": "2026-07-01"
       },
       "spec:4": {
-        "substrate": "partial",
+        "substrate": "exists",
         "last_reviewed": "2026-07-01"
       },
       "spec:5": {
@@ -114,7 +114,7 @@
         "last_reviewed": "2026-07-01"
       },
       "C4": {
-        "phase": "climb",
+        "phase": "hold",
         "last_reviewed": "2026-07-01"
       },
       "B1": {
@@ -129,17 +129,12 @@
     },
     "roadmap": {
       "active_focus": [
-        "campaign:publish-site-hosting",
         "campaign:supplemental-materials"
       ],
       "sequencing_bias": [
         {
-          "target": "campaign:publish-site-hosting",
-          "reason": "The static bundle has been generated, uploaded to DreamHost, and pointed at by Cloudflare DNS, but DreamHost still returns its missing-site page until the hosted subdomain is mapped."
-        },
-        {
           "target": "campaign:supplemental-materials",
-          "reason": "The main-book artifact path is established; the user noted a couple of companion items still need to be scanned."
+          "reason": "The main-book PDF and public website path is established; the user noted a couple of companion items still need to be scanned, and reviewed audio MP3 files are not yet present."
         }
       ],
       "campaigns": [
@@ -153,11 +148,11 @@
         },
         {
           "id": "publish-site-hosting",
-          "status": "blocked",
+          "status": "done",
           "story_refs": [
             "story-002-dreamhost-hosted-subdomain-public-verification"
           ],
-          "notes": "The Onward-style static site was built and uploaded to `/home/onward_user/alain-lessard.copper-dog.com` on DreamHost, and Cloudflare DNS now points the hostname at the Onward origin, but DreamHost returns `Site Not Found` until the hosted subdomain/virtual host is created or mapped."
+          "notes": "The Onward-style static site was built, uploaded to `/home/onward_user/alain-lessard.copper-dog.com`, mapped as a DreamHost hosted subdomain, assigned a Let's Encrypt certificate, and verified publicly over HTTPS at `alain-lessard.copper-dog.com`."
         },
         {
           "id": "supplemental-materials",
@@ -172,7 +167,7 @@
         {
           "id": "recommended-order",
           "title": "Recommended Order",
-          "markdown": "Current priority: create or map the DreamHost hosted subdomain for `alain-lessard.copper-dog.com`, then inventory supplemental scans and generate reviewed audio files when source material is available."
+          "markdown": "Current priority: inventory supplemental scans and generate reviewed audio files when source material is available."
         }
       ],
       "uncategorized_label": "Legacy / Uncategorized Stories"
@@ -239,12 +234,11 @@
       {
         "path": "docs/stories/story-002-dreamhost-hosted-subdomain-public-verification.md",
         "title": "DreamHost hosted subdomain public verification",
-        "status": "Blocked"
+        "status": "Done"
       }
     ],
     "counts_by_status": {
-      "Done": 1,
-      "Blocked": 1
+      "Done": 2
     }
   }
 }
