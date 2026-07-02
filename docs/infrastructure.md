@@ -104,6 +104,24 @@ curl -I http://alain-lessard.copper-dog.com
 Observed result: Cloudflare edge IPs resolve; the homepage, book page, chapter
 page, and searchable PDF return `HTTP/2 200`; HTTP returns `301` to HTTPS.
 
+Fresh public verification on 2026-07-02 after the `doc-web` rebuild:
+
+```bash
+make deploy-static
+curl -I https://alain-lessard.copper-dog.com/
+curl -I https://alain-lessard.copper-dog.com/chapter-001.html
+curl -I https://alain-lessard.copper-dog.com/chapter-016.html
+curl -fsSL https://alain-lessard.copper-dog.com/book.html
+curl -fsSL 'https://alain-lessard.copper-dog.com/search-index.json?v=20260702-docweb-r2'
+```
+
+Observed result: the homepage, figure-heavy chapter, and table-heavy personal
+records chapter return `HTTP/2 200`. The live book page references
+`assets/search.js?v=20260702-docweb-r2`, that script fetches
+`search-index.json?v=20260702-docweb-r2`, the public search index has 39 entries
+and no stale `pages/` URLs, and a live browser search for "Veillardville"
+returns 12 results with the first result linking to `chapter-014.html`.
+
 ## Deploy Shape
 
 The deploy helper uploads the static bundle over SFTP and writes a remote

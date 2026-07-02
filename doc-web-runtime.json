@@ -1,0 +1,9 @@
+{
+  "sourcePath": "../doc-web",
+  "pythonExecutable": "python",
+  "defaultRecipe": "configs/doc-web/recipe-alain-images-html-mvp.yaml",
+  "defaultInputImages": "output/processed-pages",
+  "sourceRunsRoot": "output/runs",
+  "snapshotRoot": ".runtime/doc-web-imports",
+  "acceptedBundleRoot": "input/doc-web-html"
+}

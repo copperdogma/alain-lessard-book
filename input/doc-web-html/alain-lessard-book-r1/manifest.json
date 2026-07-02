@@ -1,0 +1,941 @@
+{
+  "schema_version": "doc_web_bundle_manifest_v1",
+  "module_id": "build_chapter_html_v1",
+  "run_id": "alain-lessard-book-r1",
+  "created_at": "2026-07-02T05:22:49.004529Z",
+  "document_id": "alain-lessard",
+  "title": "Alain Lessard",
+  "creator": null,
+  "source_artifact": "05_extract_page_numbers_html_v1/pages_html_with_page_numbers.jsonl",
+  "index_path": "index.html",
+  "entries": [
+    {
+      "entry_id": "page-001",
+      "kind": "page",
+      "title": "Page 1",
+      "path": "page-001.html",
+      "order": 1,
+      "prev_entry_id": null,
+      "next_entry_id": "page-002",
+      "source_pages": [
+        8
+      ],
+      "printed_pages": [
+        1
+      ],
+      "printed_page_start": 1,
+      "printed_page_end": 1
+    },
+    {
+      "entry_id": "page-002",
+      "kind": "page",
+      "title": "Page 2",
+      "path": "page-002.html",
+      "order": 2,
+      "prev_entry_id": "page-001",
+      "next_entry_id": "page-003",
+      "source_pages": [
+        9
+      ],
+      "printed_pages": [
+        2
+      ],
+      "printed_page_start": 2,
+      "printed_page_end": 2
+    },
+    {
+      "entry_id": "page-003",
+      "kind": "page",
+      "title": "Image 3",
+      "path": "page-003.html",
+      "order": 3,
+      "prev_entry_id": "page-002",
+      "next_entry_id": "page-004",
+      "source_pages": [
+        3
+      ],
+      "printed_pages": [],
+      "printed_page_start": null,
+      "printed_page_end": null
+    },
+    {
+      "entry_id": "page-004",
+      "kind": "page",
+      "title": "Page 3",
+      "path": "page-004.html",
+      "order": 4,
+      "prev_entry_id": "page-003",
+      "next_entry_id": "page-005",
+      "source_pages": [
+        10
+      ],
+      "printed_pages": [
+        3
+      ],
+      "printed_page_start": 3,
+      "printed_page_end": 3
+    },
+    {
+      "entry_id": "page-005",
+      "kind": "page",
+      "title": "Page iii",
+      "path": "page-005.html",
+      "order": 5,
+      "prev_entry_id": "page-004",
+      "next_entry_id": "page-006",
+      "source_pages": [
+        4
+      ],
+      "printed_pages": [],
+      "printed_page_start": null,
+      "printed_page_end": null
+    },
+    {
+      "entry_id": "page-006",
+      "kind": "page",
+      "title": "Page 4",
+      "path": "page-006.html",
+      "order": 6,
+      "prev_entry_id": "page-005",
+      "next_entry_id": "page-007",
+      "source_pages": [
+        11
+      ],
+      "printed_pages": [
+        4
+      ],
+      "printed_page_start": 4,
+      "printed_page_end": 4
+    },
+    {
+      "entry_id": "page-007",
+      "kind": "page",
+      "title": "Page iv",
+      "path": "page-007.html",
+      "order": 7,
+      "prev_entry_id": "page-006",
+      "next_entry_id": "page-008",
+      "source_pages": [
+        5
+      ],
+      "printed_pages": [],
+      "printed_page_start": null,
+      "printed_page_end": null
+    },
+    {
+      "entry_id": "page-008",
+      "kind": "page",
+      "title": "Page 5",
+      "path": "page-008.html",
+      "order": 8,
+      "prev_entry_id": "page-007",
+      "next_entry_id": "page-009",
+      "source_pages": [
+        12
+      ],
+      "printed_pages": [
+        5
+      ],
+      "printed_page_start": 5,
+      "printed_page_end": 5
+    },
+    {
+      "entry_id": "page-009",
+      "kind": "page",
+      "title": "Page v",
+      "path": "page-009.html",
+      "order": 9,
+      "prev_entry_id": "page-008",
+      "next_entry_id": "page-010",
+      "source_pages": [
+        6
+      ],
+      "printed_pages": [],
+      "printed_page_start": null,
+      "printed_page_end": null
+    },
+    {
+      "entry_id": "page-010",
+      "kind": "page",
+      "title": "Page 6",
+      "path": "page-010.html",
+      "order": 10,
+      "prev_entry_id": "page-009",
+      "next_entry_id": "page-011",
+      "source_pages": [
+        13
+      ],
+      "printed_pages": [
+        6
+      ],
+      "printed_page_start": 6,
+      "printed_page_end": 6
+    },
+    {
+      "entry_id": "page-011",
+      "kind": "page",
+      "title": "Page vi",
+      "path": "page-011.html",
+      "order": 11,
+      "prev_entry_id": "page-010",
+      "next_entry_id": "page-012",
+      "source_pages": [
+        7
+      ],
+      "printed_pages": [],
+      "printed_page_start": null,
+      "printed_page_end": null
+    },
+    {
+      "entry_id": "page-012",
+      "kind": "page",
+      "title": "Page 7",
+      "path": "page-012.html",
+      "order": 12,
+      "prev_entry_id": "page-011",
+      "next_entry_id": "page-013",
+      "source_pages": [
+        14
+      ],
+      "printed_pages": [
+        7
+      ],
+      "printed_page_start": 7,
+      "printed_page_end": 7
+    },
+    {
+      "entry_id": "page-013",
+      "kind": "page",
+      "title": "Page 8",
+      "path": "page-013.html",
+      "order": 13,
+      "prev_entry_id": "page-012",
+      "next_entry_id": "page-014",
+      "source_pages": [
+        15
+      ],
+      "printed_pages": [
+        8
+      ],
+      "printed_page_start": 8,
+      "printed_page_end": 8
+    },
+    {
+      "entry_id": "page-014",
+      "kind": "page",
+      "title": "Page 9",
+      "path": "page-014.html",
+      "order": 14,
+      "prev_entry_id": "page-013",
+      "next_entry_id": "page-015",
+      "source_pages": [
+        16
+      ],
+      "printed_pages": [
+        9
+      ],
+      "printed_page_start": 9,
+      "printed_page_end": 9
+    },
+    {
+      "entry_id": "page-015",
+      "kind": "page",
+      "title": "Page 10",
+      "path": "page-015.html",
+      "order": 15,
+      "prev_entry_id": "page-014",
+      "next_entry_id": "page-016",
+      "source_pages": [
+        17
+      ],
+      "printed_pages": [
+        10
+      ],
+      "printed_page_start": 10,
+      "printed_page_end": 10
+    },
+    {
+      "entry_id": "page-016",
+      "kind": "page",
+      "title": "Page 11",
+      "path": "page-016.html",
+      "order": 16,
+      "prev_entry_id": "page-015",
+      "next_entry_id": "page-017",
+      "source_pages": [
+        18
+      ],
+      "printed_pages": [
+        11
+      ],
+      "printed_page_start": 11,
+      "printed_page_end": 11
+    },
+    {
+      "entry_id": "page-017",
+      "kind": "page",
+      "title": "Page 12",
+      "path": "page-017.html",
+      "order": 17,
+      "prev_entry_id": "page-016",
+      "next_entry_id": "page-018",
+      "source_pages": [
+        19
+      ],
+      "printed_pages": [
+        12
+      ],
+      "printed_page_start": 12,
+      "printed_page_end": 12
+    },
+    {
+      "entry_id": "page-018",
+      "kind": "page",
+      "title": "Page 13",
+      "path": "page-018.html",
+      "order": 18,
+      "prev_entry_id": "page-017",
+      "next_entry_id": "page-019",
+      "source_pages": [
+        20
+      ],
+      "printed_pages": [
+        13
+      ],
+      "printed_page_start": 13,
+      "printed_page_end": 13
+    },
+    {
+      "entry_id": "page-019",
+      "kind": "page",
+      "title": "Page 14",
+      "path": "page-019.html",
+      "order": 19,
+      "prev_entry_id": "page-018",
+      "next_entry_id": "page-020",
+      "source_pages": [
+        21
+      ],
+      "printed_pages": [
+        14
+      ],
+      "printed_page_start": 14,
+      "printed_page_end": 14
+    },
+    {
+      "entry_id": "page-020",
+      "kind": "page",
+      "title": "Page 15",
+      "path": "page-020.html",
+      "order": 20,
+      "prev_entry_id": "page-019",
+      "next_entry_id": "page-021",
+      "source_pages": [
+        22
+      ],
+      "printed_pages": [
+        15
+      ],
+      "printed_page_start": 15,
+      "printed_page_end": 15
+    },
+    {
+      "entry_id": "page-021",
+      "kind": "page",
+      "title": "Page 16",
+      "path": "page-021.html",
+      "order": 21,
+      "prev_entry_id": "page-020",
+      "next_entry_id": "chapter-001",
+      "source_pages": [
+        23
+      ],
+      "printed_pages": [
+        16
+      ],
+      "printed_page_start": 16,
+      "printed_page_end": 16
+    },
+    {
+      "entry_id": "chapter-001",
+      "kind": "chapter",
+      "title": "LOUIS AND CLARA (LESSARD) ALAIN",
+      "path": "chapter-001.html",
+      "order": 22,
+      "prev_entry_id": "page-021",
+      "next_entry_id": "chapter-002",
+      "source_pages": [
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87
+      ],
+      "printed_pages": [
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80
+      ],
+      "printed_page_start": 17,
+      "printed_page_end": 80
+    },
+    {
+      "entry_id": "chapter-002",
+      "kind": "chapter",
+      "title": "Introduction",
+      "path": "chapter-002.html",
+      "order": 23,
+      "prev_entry_id": "chapter-001",
+      "next_entry_id": "chapter-003",
+      "source_pages": [
+        88
+      ],
+      "printed_pages": [
+        81
+      ],
+      "printed_page_start": 81,
+      "printed_page_end": 81
+    },
+    {
+      "entry_id": "chapter-003",
+      "kind": "chapter",
+      "title": "Preface",
+      "path": "chapter-003.html",
+      "order": 24,
+      "prev_entry_id": "chapter-002",
+      "next_entry_id": "chapter-004",
+      "source_pages": [
+        89
+      ],
+      "printed_pages": [
+        82
+      ],
+      "printed_page_start": 82,
+      "printed_page_end": 82
+    },
+    {
+      "entry_id": "chapter-004",
+      "kind": "chapter",
+      "title": "Part I – Alain Family History",
+      "path": "chapter-004.html",
+      "order": 25,
+      "prev_entry_id": "chapter-003",
+      "next_entry_id": "chapter-005",
+      "source_pages": [
+        89,
+        90,
+        91,
+        92
+      ],
+      "printed_pages": [
+        82,
+        83,
+        84,
+        85
+      ],
+      "printed_page_start": 82,
+      "printed_page_end": 85
+    },
+    {
+      "entry_id": "chapter-005",
+      "kind": "chapter",
+      "title": "EDOUARD LESSARD",
+      "path": "chapter-005.html",
+      "order": 26,
+      "prev_entry_id": "chapter-004",
+      "next_entry_id": "chapter-006",
+      "source_pages": [
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101
+      ],
+      "printed_pages": [
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94
+      ],
+      "printed_page_start": 86,
+      "printed_page_end": 94
+    },
+    {
+      "entry_id": "chapter-006",
+      "kind": "chapter",
+      "title": "Simon Allain – First Ancestor",
+      "path": "chapter-006.html",
+      "order": 27,
+      "prev_entry_id": "chapter-005",
+      "next_entry_id": "chapter-007",
+      "source_pages": [
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110
+      ],
+      "printed_pages": [
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103
+      ],
+      "printed_page_start": 95,
+      "printed_page_end": 103
+    },
+    {
+      "entry_id": "chapter-007",
+      "kind": "chapter",
+      "title": "MARTIN ALPHONSE LESSARD",
+      "path": "chapter-007.html",
+      "order": 28,
+      "prev_entry_id": "chapter-006",
+      "next_entry_id": "chapter-008",
+      "source_pages": [
+        111,
+        112,
+        113
+      ],
+      "printed_pages": [
+        104,
+        105,
+        106
+      ],
+      "printed_page_start": 104,
+      "printed_page_end": 106
+    },
+    {
+      "entry_id": "chapter-008",
+      "kind": "chapter",
+      "title": "Henri Alain",
+      "path": "chapter-008.html",
+      "order": 29,
+      "prev_entry_id": "chapter-007",
+      "next_entry_id": "chapter-009",
+      "source_pages": [
+        114,
+        115,
+        116,
+        117,
+        118
+      ],
+      "printed_pages": [
+        107,
+        108,
+        109,
+        110,
+        111
+      ],
+      "printed_page_start": 107,
+      "printed_page_end": 111
+    },
+    {
+      "entry_id": "chapter-009",
+      "kind": "chapter",
+      "title": "Moise Alain",
+      "path": "chapter-009.html",
+      "order": 30,
+      "prev_entry_id": "chapter-008",
+      "next_entry_id": "chapter-010",
+      "source_pages": [
+        119,
+        120,
+        121,
+        122,
+        123
+      ],
+      "printed_pages": [
+        112,
+        113,
+        114,
+        115,
+        116
+      ],
+      "printed_page_start": 112,
+      "printed_page_end": 116
+    },
+    {
+      "entry_id": "chapter-010",
+      "kind": "chapter",
+      "title": "Louis Alain's Children's Stories",
+      "path": "chapter-010.html",
+      "order": 31,
+      "prev_entry_id": "chapter-009",
+      "next_entry_id": "chapter-011",
+      "source_pages": [
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130
+      ],
+      "printed_pages": [
+        117,
+        118,
+        119,
+        120,
+        121,
+        122,
+        123
+      ],
+      "printed_page_start": 117,
+      "printed_page_end": 123
+    },
+    {
+      "entry_id": "chapter-011",
+      "kind": "chapter",
+      "title": "Additional",
+      "path": "chapter-011.html",
+      "order": 32,
+      "prev_entry_id": "chapter-010",
+      "next_entry_id": "chapter-012",
+      "source_pages": [
+        131,
+        132,
+        133
+      ],
+      "printed_pages": [
+        124,
+        125,
+        126
+      ],
+      "printed_page_start": 124,
+      "printed_page_end": 126
+    },
+    {
+      "entry_id": "chapter-012",
+      "kind": "chapter",
+      "title": "Rolland Alain's Children's Stories",
+      "path": "chapter-012.html",
+      "order": 33,
+      "prev_entry_id": "chapter-011",
+      "next_entry_id": "chapter-013",
+      "source_pages": [
+        134
+      ],
+      "printed_pages": [
+        127
+      ],
+      "printed_page_start": 127,
+      "printed_page_end": 127
+    },
+    {
+      "entry_id": "chapter-013",
+      "kind": "chapter",
+      "title": "Marie Paule (Alain) Menzies",
+      "path": "chapter-013.html",
+      "order": 34,
+      "prev_entry_id": "chapter-012",
+      "next_entry_id": "chapter-014",
+      "source_pages": [
+        135
+      ],
+      "printed_pages": [
+        128
+      ],
+      "printed_page_start": 128,
+      "printed_page_end": 128
+    },
+    {
+      "entry_id": "chapter-014",
+      "kind": "chapter",
+      "title": "Part V - Veillardville",
+      "path": "chapter-014.html",
+      "order": 35,
+      "prev_entry_id": "chapter-013",
+      "next_entry_id": "chapter-015",
+      "source_pages": [
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        142
+      ],
+      "printed_pages": [
+        129,
+        130,
+        131,
+        132,
+        133,
+        134,
+        135
+      ],
+      "printed_page_start": 129,
+      "printed_page_end": 135
+    },
+    {
+      "entry_id": "chapter-015",
+      "kind": "chapter",
+      "title": "Part VI – Memories",
+      "path": "chapter-015.html",
+      "order": 36,
+      "prev_entry_id": "chapter-014",
+      "next_entry_id": "chapter-016",
+      "source_pages": [
+        143,
+        144,
+        145,
+        146,
+        147,
+        148,
+        149
+      ],
+      "printed_pages": [
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        142
+      ],
+      "printed_page_start": 136,
+      "printed_page_end": 142
+    },
+    {
+      "entry_id": "chapter-016",
+      "kind": "chapter",
+      "title": "Part VII – Personal Records",
+      "path": "chapter-016.html",
+      "order": 37,
+      "prev_entry_id": "chapter-015",
+      "next_entry_id": "chapter-017",
+      "source_pages": [
+        150,
+        151
+      ],
+      "printed_pages": [
+        143,
+        144
+      ],
+      "printed_page_start": 143,
+      "printed_page_end": 144
+    },
+    {
+      "entry_id": "chapter-017",
+      "kind": "chapter",
+      "title": "Bibliography",
+      "path": "chapter-017.html",
+      "order": 38,
+      "prev_entry_id": "chapter-016",
+      "next_entry_id": "chapter-018",
+      "source_pages": [
+        152,
+        153
+      ],
+      "printed_pages": [
+        145,
+        146
+      ],
+      "printed_page_start": 145,
+      "printed_page_end": 146
+    },
+    {
+      "entry_id": "chapter-018",
+      "kind": "chapter",
+      "title": "Alain Lessard",
+      "path": "chapter-018.html",
+      "order": 39,
+      "prev_entry_id": "chapter-017",
+      "next_entry_id": null,
+      "source_pages": [
+        1,
+        2
+      ],
+      "printed_pages": [
+        1987,
+        1987
+      ],
+      "printed_page_start": 1987,
+      "printed_page_end": 1987
+    }
+  ],
+  "reading_order": [
+    "page-001",
+    "page-002",
+    "page-003",
+    "page-004",
+    "page-005",
+    "page-006",
+    "page-007",
+    "page-008",
+    "page-009",
+    "page-010",
+    "page-011",
+    "page-012",
+    "page-013",
+    "page-014",
+    "page-015",
+    "page-016",
+    "page-017",
+    "page-018",
+    "page-019",
+    "page-020",
+    "page-021",
+    "chapter-001",
+    "chapter-002",
+    "chapter-003",
+    "chapter-004",
+    "chapter-005",
+    "chapter-006",
+    "chapter-007",
+    "chapter-008",
+    "chapter-009",
+    "chapter-010",
+    "chapter-011",
+    "chapter-012",
+    "chapter-013",
+    "chapter-014",
+    "chapter-015",
+    "chapter-016",
+    "chapter-017",
+    "chapter-018"
+  ],
+  "asset_roots": [
+    "images"
+  ],
+  "provenance_path": "provenance/blocks.jsonl"
+}

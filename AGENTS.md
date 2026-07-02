@@ -93,12 +93,13 @@ Canonical location: `.agents/skills/`
 ## Current Repo Reality
 
 The repo has raw main-book scans, deterministic scan-to-PDF tooling, two
-searchable main-book PDFs, Onward-style audio scripts for narrative sections,
-and a generated static family archive under `build/family-site/`. The 2026-07-01
-SFTP deploy uploaded the bundle to DreamHost at
-`/home/onward_user/alain-lessard.copper-dog.com`, and the Cloudflare DNS record
-now points `alain-lessard.copper-dog.com` at DreamHost's assigned origin for
-this hosted subdomain. DreamHost has a Let's Encrypt certificate installed, and
-public HTTPS verification passes for the homepage, book page, first chapter,
-and searchable PDF download. Final supplemental scans and reviewed audio MP3
-files are still pending.
+searchable main-book PDFs, an accepted `doc-web` HTML/provenance bundle at
+`input/doc-web-html/alain-lessard-book-r1/`, Onward-style audio scripts for
+narrative sections, and a generated static family archive under
+`build/family-site/`. The current website is built from the active `doc-web`
+bundle and preserves chapter entries, source scan links, figures, captions,
+tables, TOC, and search. The 2026-07-02 SFTP deploy uploaded the rebuilt bundle
+to DreamHost at `/home/onward_user/alain-lessard.copper-dog.com`; public HTTPS
+verification passes for the homepage, book/search page, figure-heavy chapter,
+table-heavy personal-records chapter, doc-web crops, and versioned search
+index. Final supplemental scans and reviewed audio MP3 files are still pending.

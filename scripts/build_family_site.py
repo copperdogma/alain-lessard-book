@@ -7,170 +7,141 @@ import re
 import shutil
 from dataclasses import dataclass
 from html import escape
+from html.parser import HTMLParser
 from pathlib import Path
+from typing import Iterable
 
 from PIL import Image
-from pypdf import PdfReader
 
 
 ROOT = Path(__file__).resolve().parents[1]
+ACTIVE_BUNDLE_PATH = ROOT / "input" / "doc-web-html" / "active-bundle.json"
 PROCESSED_DIR = ROOT / "output" / "processed-pages"
-MANIFEST_PATH = PROCESSED_DIR / "manifest.json"
 PDF_DIR = ROOT / "output" / "pdf"
 DISTRIBUTION_PDF = PDF_DIR / "alain-lessard-book-searchable.pdf"
 ARCHIVAL_PDF = PDF_DIR / "alain-lessard-book-archival-searchable.pdf"
 DEFAULT_OUTPUT_DIR = ROOT / "build" / "family-site"
-DEFAULT_AUDIO_SCRIPT_DIR = ROOT / "audiobook" / "script"
+AUDIOBOOK_MANIFEST_PATH = ROOT / "audiobook" / "manifest.json"
 
 SITE_TITLE = "Alain Lessard"
 SITE_SUBTITLE = "Our First Ancestors and A Compilation of Stories of Their Descendants"
 PUBLIC_HOST = "https://alain-lessard.copper-dog.com"
 BOOK_YEAR = "1987"
+SITE_ASSET_VERSION = "20260702-docweb-r2"
+
+ARTICLE_RE = re.compile(r"<article\b[^>]*>(.*?)</article>", re.IGNORECASE | re.DOTALL)
+IMAGE_SRC_RE = re.compile(r'(<img\b[^>]*\bsrc=")images/', re.IGNORECASE)
+IMG_TAG_RE = re.compile(r"<img\b(?![^>]*\bloading=)", re.IGNORECASE)
+DECORATIVE_FIGURE_RE = re.compile(
+    r'<figure\b[^>]*>\s*<img\b(?![^>]*\bsrc=)[^>]*alt="Decorative line break"[^>]*/?>\s*</figure>',
+    re.IGNORECASE,
+)
+NO_SRC_IMG_RE = re.compile(r"<img\b(?![^>]*\bsrc=)[^>]*>", re.IGNORECASE)
+TABLE_RE = re.compile(r"(<table\b.*?</table>)", re.IGNORECASE | re.DOTALL)
+BLOCK_TAGS = {
+    "address",
+    "article",
+    "aside",
+    "blockquote",
+    "caption",
+    "dd",
+    "div",
+    "dl",
+    "dt",
+    "figcaption",
+    "figure",
+    "footer",
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h5",
+    "h6",
+    "header",
+    "hr",
+    "li",
+    "main",
+    "nav",
+    "ol",
+    "p",
+    "pre",
+    "section",
+    "table",
+    "tbody",
+    "td",
+    "tfoot",
+    "th",
+    "thead",
+    "tr",
+    "ul",
+}
 
 
 @dataclass(frozen=True)
-class Section:
-    slug: str
+class Bundle:
+    root: Path
+    manifest_path: Path
+    provenance_path: Path | None
+    manifest: dict
+    active: dict
+
+
+@dataclass(frozen=True)
+class Entry:
+    entry_id: str
+    kind: str
     title: str
-    start_page: int
-    end_page: int
-    group: str
-    summary: str
-    audio: bool = True
+    path: str
+    order: int
+    source_pages: tuple[int, ...]
+    printed_pages: tuple[int, ...]
+    printed_page_start: int | None
+    printed_page_end: int | None
 
-    @property
-    def filename(self) -> str:
-        return f"{self.slug}.html"
+    @classmethod
+    def from_record(cls, record: dict) -> "Entry":
+        return cls(
+            entry_id=str(record["entry_id"]),
+            kind=str(record.get("kind") or "entry"),
+            title=str(record.get("title") or record["entry_id"]),
+            path=str(record.get("path") or f"{record['entry_id']}.html"),
+            order=int(record.get("order") or 0),
+            source_pages=tuple(int(page) for page in record.get("source_pages") or []),
+            printed_pages=tuple(int(page) for page in record.get("printed_pages") or [] if page is not None),
+            printed_page_start=int(record["printed_page_start"]) if record.get("printed_page_start") is not None else None,
+            printed_page_end=int(record["printed_page_end"]) if record.get("printed_page_end") is not None else None,
+        )
 
 
-SECTIONS: tuple[Section, ...] = (
-    Section(
-        "chapter-001",
-        "Opening Matter",
-        1,
-        7,
-        "Front matter",
-        "Cover, title page, dedication, introduction, acknowledgements, and preface.",
-        True,
-    ),
-    Section(
-        "chapter-002",
-        "Alain Family History",
-        8,
-        13,
-        "Alain family",
-        "The Alain name, coat of arms, Simon Allain, and the family path toward Henri Alain.",
-        True,
-    ),
-    Section(
-        "chapter-003",
-        "Henri Delphice Alain",
-        14,
-        20,
-        "Alain family stories",
-        "Henri and Alma's story, early Saskatchewan homesteading, and family memories.",
-        True,
-    ),
-    Section(
-        "chapter-004",
-        "Moise \"Smokey\" Alain",
-        21,
-        23,
-        "Alain family stories",
-        "Moise Alain's recollections of childhood, work, sport, and family life.",
-        True,
-    ),
-    Section(
-        "chapter-005",
-        "Louis and Clara Alain",
-        24,
-        63,
-        "Alain family stories",
-        "The central Louis and Clara story and the stories of their children and families.",
-        True,
-    ),
-    Section(
-        "chapter-006",
-        "Yvonne, Rolland, and Alain Family Stories",
-        64,
-        76,
-        "Alain family stories",
-        "Yvonne O'Brien, Rolland Alain, their family stories, and related Alain family memories.",
-        True,
-    ),
-    Section(
-        "chapter-007",
-        "Additional Alain and L'Heureux Stories",
-        77,
-        81,
-        "Additional stories",
-        "Moise L'Heureux, Bruno Alain, and supporting family stories.",
-        True,
-    ),
-    Section(
-        "chapter-008",
-        "Alain, Folley, and L'Heureux Genealogy",
-        82,
-        87,
-        "Genealogy",
-        "Genealogical tables and reference pages for connected Alain family lines.",
-        False,
-    ),
-    Section(
-        "chapter-009",
-        "Lessard Family History",
-        88,
-        95,
-        "Lessard family",
-        "The Lessard name, Etienne de Lessart, Edouard Lessard, and the ancestral line.",
-        True,
-    ),
-    Section(
-        "chapter-010",
-        "Lessard Family Stories",
-        96,
-        130,
-        "Lessard family stories",
-        "Joseph Deride Lessard, Gene Lessard, Martin Lessard, Joseph Lessard, and descendant stories.",
-        True,
-    ),
-    Section(
-        "chapter-011",
-        "Additional Lessard Material",
-        131,
-        135,
-        "Additional stories",
-        "Simeon Bernier, Lessard genealogy, and Strasser family material.",
-        False,
-    ),
-    Section(
-        "chapter-012",
-        "Veillardville",
-        136,
-        142,
-        "Place history",
-        "Veillardville's founding, local businesses, community life, and related memories.",
-        True,
-    ),
-    Section(
-        "chapter-013",
-        "Memories and Personal Records",
-        143,
-        152,
-        "Memories",
-        "Reunions, newspaper clippings, personal records, and later family memories.",
-        True,
-    ),
-    Section(
-        "chapter-014",
-        "Index",
-        153,
-        153,
-        "Reference",
-        "The printed index for names and topics in the book.",
-        False,
-    ),
-)
+class TextExtractor(HTMLParser):
+    def __init__(self, skip_tags: Iterable[str] = ()) -> None:
+        super().__init__(convert_charrefs=True)
+        self.skip_tags = {tag.lower() for tag in skip_tags}
+        self.skip_stack: list[str] = []
+        self.parts: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        tag = tag.lower()
+        if self.skip_stack or tag in self.skip_tags:
+            self.skip_stack.append(tag)
+            return
+        if tag in BLOCK_TAGS or tag == "br":
+            self.parts.append("\n")
+
+    def handle_endtag(self, tag: str) -> None:
+        tag = tag.lower()
+        if self.skip_stack:
+            if tag == self.skip_stack[-1]:
+                self.skip_stack.pop()
+            elif tag in self.skip_stack:
+                self.skip_stack = self.skip_stack[: self.skip_stack.index(tag)]
+            return
+        if tag in BLOCK_TAGS:
+            self.parts.append("\n")
+
+    def handle_data(self, data: str) -> None:
+        if not self.skip_stack and data.strip():
+            self.parts.append(data)
 
 
 def require_file(path: Path, label: str) -> None:
@@ -184,107 +155,138 @@ def clean_dir(path: Path) -> None:
     path.mkdir(parents=True, exist_ok=True)
 
 
-def slugify(text: str) -> str:
-    lowered = text.lower()
-    lowered = re.sub(r"[^a-z0-9]+", "-", lowered)
-    return lowered.strip("-") or "section"
+def load_bundle() -> Bundle:
+    require_file(ACTIVE_BUNDLE_PATH, "active doc-web bundle marker")
+    active = json.loads(ACTIVE_BUNDLE_PATH.read_text(encoding="utf-8"))
+    bundle_root = (ROOT / active["bundleRoot"]).resolve()
+    manifest_path = (ROOT / active["manifestPath"]).resolve()
+    provenance_raw = active.get("provenancePath")
+    provenance_path = (ROOT / provenance_raw).resolve() if provenance_raw else None
+    require_file(bundle_root, "active doc-web bundle")
+    require_file(manifest_path, "doc-web bundle manifest")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    return Bundle(
+        root=bundle_root,
+        manifest_path=manifest_path,
+        provenance_path=provenance_path if provenance_path and provenance_path.exists() else None,
+        manifest=manifest,
+        active=active,
+    )
 
 
-def normalize_text(text: str) -> str:
-    text = text.replace("\u00ad", "")
-    text = re.sub(r"(?<=\w)-\n(?=\w)", "", text)
-    text = re.sub(r"[ \t]+\n", "\n", text)
-    text = re.sub(r"\n{3,}", "\n\n", text)
-    return text.strip()
+def ordered_entries(bundle: Bundle) -> list[Entry]:
+    entries = [Entry.from_record(record) for record in bundle.manifest.get("entries", [])]
+    by_id = {entry.entry_id: entry for entry in entries}
+    ordered: list[Entry] = []
+    for entry_id in bundle.manifest.get("reading_order") or []:
+        if entry_id in by_id:
+            ordered.append(by_id.pop(entry_id))
+    ordered.extend(sorted(by_id.values(), key=lambda entry: (entry.order, entry.entry_id)))
+    return ordered
 
 
-def paragraphs_from_text(text: str) -> list[str]:
-    text = normalize_text(text)
+def read_article_html(bundle: Bundle, entry: Entry) -> str:
+    source = bundle.root / entry.path
+    require_file(source, f"doc-web entry {entry.entry_id}")
+    html = source.read_text(encoding="utf-8")
+    match = ARTICLE_RE.search(html)
+    if not match:
+        raise SystemExit(f"Could not find article body in {source}")
+    article = match.group(1).strip()
+    article = IMAGE_SRC_RE.sub(r"\1images/doc-web/", article)
+    article = IMG_TAG_RE.sub('<img loading="lazy" decoding="async"', article)
+    article = DECORATIVE_FIGURE_RE.sub('<hr class="decorative-break">', article)
+    article = NO_SRC_IMG_RE.sub("", article)
+    article = TABLE_RE.sub(r'<div class="table-scroll">\1</div>', article)
+    return article
+
+
+def html_to_text(html: str, skip_tags: Iterable[str] = ()) -> str:
+    parser = TextExtractor(skip_tags=skip_tags)
+    parser.feed(html)
+    raw = "".join(parser.parts)
+    lines = [re.sub(r"\s+", " ", line).strip() for line in raw.splitlines()]
+    blocks: list[str] = []
+    current: list[str] = []
+    for line in lines:
+        if not line:
+            if current:
+                blocks.append(" ".join(current).strip())
+                current = []
+            continue
+        current.append(line)
+    if current:
+        blocks.append(" ".join(current).strip())
+    return "\n\n".join(block for block in blocks if block)
+
+
+def excerpt_from_html(html: str, limit: int = 240) -> str:
+    text = re.sub(r"\s+", " ", html_to_text(html)).strip()
     if not text:
-        return []
-    paragraphs = [part.strip() for part in re.split(r"\n\s*\n", text) if part.strip()]
-    if len(paragraphs) <= 1:
-        lines = [line.strip() for line in text.splitlines() if line.strip()]
-        paragraphs = []
-        buffer: list[str] = []
-        for line in lines:
-            if len(line) < 34 and buffer:
-                paragraphs.append(" ".join(buffer).strip())
-                buffer = [line]
-            else:
-                buffer.append(line)
-        if buffer:
-            paragraphs.append(" ".join(buffer).strip())
-    return [re.sub(r"\s+", " ", paragraph).strip() for paragraph in paragraphs if paragraph.strip()]
+        return "This entry is represented by source images and structured reading data."
+    if len(text) <= limit:
+        return text
+    return text[: limit - 1].rsplit(" ", 1)[0] + "."
 
 
-def load_page_texts() -> dict[int, str]:
-    require_file(DISTRIBUTION_PDF, "distribution searchable PDF")
-    reader = PdfReader(str(DISTRIBUTION_PDF))
-    return {
-        page_number: normalize_text(page.extract_text() or "")
-        for page_number, page in enumerate(reader.pages, start=1)
-    }
+def compact_ranges(values: Iterable[int]) -> str:
+    ordered = sorted({int(value) for value in values})
+    if not ordered:
+        return ""
+    ranges: list[str] = []
+    start = previous = ordered[0]
+    for value in ordered[1:]:
+        if value == previous + 1:
+            previous = value
+            continue
+        ranges.append(f"{start}" if start == previous else f"{start}-{previous}")
+        start = previous = value
+    ranges.append(f"{start}" if start == previous else f"{start}-{previous}")
+    return ", ".join(ranges)
 
 
-def load_manifest() -> dict:
-    require_file(MANIFEST_PATH, "processing manifest")
-    return json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+def page_label(prefix: str, values: Iterable[int]) -> str:
+    text = compact_ranges(values)
+    if not text:
+        return ""
+    return f"{prefix} {text}"
 
 
-def page_image_path(page_number: int) -> Path:
-    return PROCESSED_DIR / f"page-{page_number:03d}.jpg"
+def printable_page_values(entry: Entry) -> tuple[int, ...]:
+    values = entry.printed_pages
+    if not values and entry.printed_page_start is not None:
+        end = entry.printed_page_end or entry.printed_page_start
+        values = tuple(range(entry.printed_page_start, end + 1))
+    # Some cover/title entries carry a year where a printed page number would be.
+    return tuple(value for value in values if 0 < value < 400)
 
 
-def section_for_page(page_number: int) -> Section:
-    for section in SECTIONS:
-        if section.start_page <= page_number <= section.end_page:
-            return section
-    return SECTIONS[-1]
+def entry_meta_label(entry: Entry) -> str:
+    printed = page_label("Printed page" if len(printable_page_values(entry)) == 1 else "Printed pages", printable_page_values(entry))
+    source = page_label("Source scan" if len(entry.source_pages) == 1 else "Source scans", entry.source_pages)
+    return " | ".join(part for part in (printed, source) if part)
 
 
-def write_site_assets(output_dir: Path) -> None:
-    assets_dir = output_dir / "assets"
-    assets_dir.mkdir(parents=True, exist_ok=True)
-    (assets_dir / "site.css").write_text(SITE_CSS, encoding="utf-8")
-    (assets_dir / "search.js").write_text(SEARCH_JS, encoding="utf-8")
+def scan_url(page_number: int) -> str:
+    return f"images/scans/page-{page_number:03d}.jpg"
 
 
-def write_web_images(output_dir: Path) -> None:
-    images_dir = output_dir / "images"
-    images_dir.mkdir(parents=True, exist_ok=True)
-    for page_number in range(1, 154):
-        source = page_image_path(page_number)
-        require_file(source, f"processed page {page_number}")
-        destination = images_dir / f"page-{page_number:03d}.jpg"
-        with Image.open(source) as image:
-            image = image.convert("RGB")
-            max_width = 1280
-            if image.width > max_width:
-                ratio = max_width / image.width
-                image = image.resize((max_width, round(image.height * ratio)), Image.Resampling.LANCZOS)
-            image.save(destination, quality=84, optimize=True, progressive=True)
-
-
-def copy_downloads(output_dir: Path) -> None:
-    downloads_dir = output_dir / "downloads"
-    downloads_dir.mkdir(parents=True, exist_ok=True)
-    for source in (DISTRIBUTION_PDF, ARCHIVAL_PDF):
-        if source.exists():
-            shutil.copy2(source, downloads_dir / source.name)
-
-
-def page_title(page_number: int, text: str) -> str:
-    if page_number == 1:
-        return "Cover"
-    lines = [line.strip() for line in text.splitlines() if line.strip()]
-    for line in lines[:8]:
-        letters = [char for char in line if char.isalpha()]
-        if len(line) >= 5 and (not letters or sum(char.isupper() for char in letters) >= max(3, len(letters) * 0.6)):
-            return line[:80].title()
-    if lines:
-        return lines[0][:80]
-    return f"Page {page_number}"
+def source_scan_links(entry: Entry) -> str:
+    pages = list(entry.source_pages)
+    if not pages:
+        return "<p>No source scans are attached to this entry.</p>"
+    if len(pages) <= 10:
+        links = pages
+    else:
+        links = pages[:4] + pages[-4:]
+    rendered = []
+    seen_gap = False
+    for page in links:
+        if len(pages) > 10 and not seen_gap and page == pages[-4]:
+            rendered.append('<span class="scan-gap">...</span>')
+            seen_gap = True
+        rendered.append(f'<a href="{scan_url(page)}">Scan {page:03d}</a>')
+    return f'<div class="scan-links">{"".join(rendered)}</div>'
 
 
 def html_page(title: str, body: str, current: str = "") -> str:
@@ -305,7 +307,8 @@ def html_page(title: str, body: str, current: str = "") -> str:
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{escape(title)} - {escape(SITE_TITLE)}</title>
   <meta name="description" content="A digital family archive edition of the Alain Lessard book.">
-  <link rel="stylesheet" href="assets/site.css">
+  <link rel="canonical" href="{PUBLIC_HOST}/">
+  <link rel="stylesheet" href="assets/site.css?v={SITE_ASSET_VERSION}">
 </head>
 <body>
   <header class="site-header">
@@ -319,28 +322,32 @@ def html_page(title: str, body: str, current: str = "") -> str:
 {body}
   </main>
   <footer class="site-footer">
-    <p>Digitized from the 1987 family history book. Raw scans, processing scripts, and provenance notes are maintained in the project archive.</p>
+    <p>Digitized from the {BOOK_YEAR} family history book for reading, searching, listening, and family reference.</p>
   </footer>
 </body>
 </html>
 """
 
 
-def section_cards() -> str:
-    return "\n".join(
-        f"""<article class="section-card">
-  <p class="section-card-kicker">{escape(section.group)} · Pages {section.start_page}-{section.end_page}</p>
-  <h3><a href="{section.filename}">{escape(section.title)}</a></h3>
-  <p>{escape(section.summary)}</p>
+def render_chapter_card(bundle: Bundle, entry: Entry) -> str:
+    article = read_article_html(bundle, entry)
+    label = entry_meta_label(entry)
+    return f"""<article class="entry-card">
+  <p class="eyebrow">{escape(entry.kind.title())}{f" | {escape(label)}" if label else ""}</p>
+  <h3><a href="{escape(entry.path)}">{escape(entry.title)}</a></h3>
+  <p>{escape(excerpt_from_html(article))}</p>
 </article>"""
-        for section in SECTIONS
-    )
 
 
-def render_index(page_texts: dict[int, str]) -> str:
+def render_home(bundle: Bundle, entries: list[Entry]) -> str:
+    chapters = [entry for entry in entries if entry.kind == "chapter"]
+    feature_cards = "\n".join(render_chapter_card(bundle, entry) for entry in chapters[:6])
+    table_count = sum(read_article_html(bundle, entry).lower().count("<table") for entry in entries)
+    figure_count = sum(read_article_html(bundle, entry).lower().count("<figure") for entry in entries)
     body = f"""
     <section class="hero">
-      <div class="hero-copy">
+      <div class="hero-inner">
+        <p class="eyebrow">Family history edition</p>
         <h1>{escape(SITE_TITLE)}</h1>
         <p>{escape(SITE_SUBTITLE)}</p>
         <div class="hero-actions">
@@ -348,580 +355,966 @@ def render_index(page_texts: dict[int, str]) -> str:
           <a class="button" href="downloads/{DISTRIBUTION_PDF.name}">Download PDF</a>
         </div>
       </div>
-      <figure class="hero-cover">
-        <img src="images/page-001.jpg" alt="Green cover of the Alain Lessard book">
-      </figure>
     </section>
 
     <section class="intro-grid">
       <article>
-        <h2>A family archive edition</h2>
-        <p>This site brings together the scanned book, cleaned page images, OCR text, source PDFs, and audio-script handoff in one place. The book remains the center; companion scans and later audio can connect to the same source lineage.</p>
+        <h2>A family reading edition</h2>
+        <p>The scanned book is available as connected web chapters, with photographs, captions, and tables kept in the flow of the text.</p>
       </article>
       <article>
-        <h2>What is ready now</h2>
-        <ul>
-          <li>Reader-facing and archival PDFs.</li>
-          <li>Page-by-page web reading with scan images and OCR text.</li>
-          <li>Search data across all scanned pages.</li>
-          <li>Onward-style audio scripts for narrative sections, not tables.</li>
-        </ul>
+        <h2>Search and source pages</h2>
+        <p>Names, places, and stories can be searched across the reading edition, and each entry links back to its source scans.</p>
       </article>
       <article>
-        <h2>Source honesty</h2>
-        <p>Secondary materials can be added when they are scanned. Missing companion items are kept explicit rather than silently represented as complete.</p>
+        <h2>Audio handoff</h2>
+        <p>Narrative chapters have audiobook scripts prepared separately from reference tables and indexes.</p>
       </article>
+    </section>
+
+    <section class="stat-band" aria-label="Edition summary">
+      <div><strong>{len(entries)}</strong><span>reading entries</span></div>
+      <div><strong>{figure_count}</strong><span>figures and captions</span></div>
+      <div><strong>{table_count}</strong><span>structured tables</span></div>
     </section>
 
     <section class="section-list">
       <div class="section-heading">
-        <h2>Book Sections</h2>
-        <p>Section ranges are based on the printed table of contents and the OCR page map. Every section links back to individual scan pages.</p>
+        <h2>Start Reading</h2>
+        <p>Browse the chapter entries or use the full table of contents on the reading page.</p>
       </div>
-      <div class="cards">{section_cards()}</div>
+      <div class="cards">{feature_cards}</div>
     </section>
 """
     return html_page("Home", body, "Home")
 
 
-def render_book(page_texts: dict[int, str]) -> str:
-    toc = "\n".join(
-        f'<li><a href="{section.filename}">{escape(section.title)}</a><span>Pages {section.start_page}-{section.end_page}</span></li>'
-        for section in SECTIONS
-    )
-    page_list = "\n".join(
-        f"""<article class="page-row" data-page="{page_number}" data-section="{escape(section_for_page(page_number).title)}">
-  <a href="pages/page-{page_number:03d}.html"><img src="images/page-{page_number:03d}.jpg" alt="Scanned page {page_number}" loading="lazy"></a>
-  <div>
-    <p class="eyebrow">Page {page_number:03d}</p>
-    <h3><a href="pages/page-{page_number:03d}.html">{escape(page_title(page_number, page_texts.get(page_number, "")))}</a></h3>
-    <p>{escape((page_texts.get(page_number, "")[:260] or "Cover image").replace(chr(10), " "))}</p>
-  </div>
+def render_toc(entries: list[Entry]) -> str:
+    lines = []
+    for entry in entries:
+        label = entry_meta_label(entry)
+        lines.append(
+            f'<li><a href="{escape(entry.path)}">{escape(entry.title)}</a>'
+            f'<span>{escape(label or entry.kind.title())}</span></li>'
+        )
+    return "\n".join(lines)
+
+
+def render_book(bundle: Bundle, entries: list[Entry]) -> str:
+    chapters = [entry for entry in entries if entry.kind == "chapter"]
+    pages = [entry for entry in entries if entry.kind == "page"]
+    chapter_cards = "\n".join(render_chapter_card(bundle, entry) for entry in chapters)
+    page_cards = "\n".join(
+        f"""<article class="compact-entry">
+  <a href="{escape(entry.path)}">{escape(entry.title)}</a>
+  <span>{escape(entry_meta_label(entry) or "Source page")}</span>
 </article>"""
-        for page_number in range(1, 154)
+        for entry in pages
     )
     body = f"""
     <section class="page-title">
       <h1>Read the Book</h1>
-      <p>Browse by section or search OCR text across the scanned pages.</p>
+      <p>Search the text, browse the table of contents, and open chapters with their photographs, captions, and tables in place.</p>
     </section>
     <section class="book-tools">
-      <label class="search-label" for="site-search">Search the OCR text</label>
+      <label class="search-label" for="site-search">Search the book</label>
       <input id="site-search" class="search-input" type="search" placeholder="Search names, places, stories">
       <div id="search-results" class="search-results" aria-live="polite"></div>
     </section>
     <section class="book-layout">
       <aside class="toc-panel">
-        <h2>Sections</h2>
-        <ol>{toc}</ol>
+        <h2>Contents</h2>
+        <ol>{render_toc(entries)}</ol>
       </aside>
-      <div class="page-list">{page_list}</div>
+      <div class="entry-list">
+        <h2>Chapters</h2>
+        <div class="cards">{chapter_cards}</div>
+        <h2>Page Entries</h2>
+        <div class="compact-grid">{page_cards}</div>
+      </div>
     </section>
-    <script src="assets/search.js"></script>
+    <script src="assets/search.js?v={SITE_ASSET_VERSION}"></script>
 """
     return html_page("Read", body, "Read")
 
 
-def render_section(section: Section, page_texts: dict[int, str]) -> str:
-    page_links = "\n".join(
-        f'<a class="page-pill" href="pages/page-{page_number:03d}.html">Page {page_number}</a>'
-        for page_number in range(section.start_page, section.end_page + 1)
+def entry_nav(entries: list[Entry], index: int) -> str:
+    previous_entry = entries[index - 1] if index > 0 else None
+    next_entry = entries[index + 1] if index < len(entries) - 1 else None
+    previous_link = (
+        f'<a class="button" href="{escape(previous_entry.path)}">Previous</a>' if previous_entry else '<span class="button disabled">Previous</span>'
     )
-    pages = "\n".join(
-        f"""<article class="reading-page">
-  <figure><img src="images/page-{page_number:03d}.jpg" alt="Scanned page {page_number}" loading="lazy"></figure>
-  <div class="ocr-text">
-    <p class="eyebrow">Page {page_number:03d}</p>
-    {render_text_paragraphs(page_texts.get(page_number, ""))}
-  </div>
-</article>"""
-        for page_number in range(section.start_page, section.end_page + 1)
-    )
-    audio_note = (
-        '<p class="callout">This section is included in the narrative audio-script queue.</p>'
-        if section.audio
-        else '<p class="callout">This section is kept as readable/searchable reference material rather than narrated audio.</p>'
-    )
+    next_link = f'<a class="button" href="{escape(next_entry.path)}">Next</a>' if next_entry else '<span class="button disabled">Next</span>'
+    return f"""<nav class="reader-nav" aria-label="Reading navigation">
+  {previous_link}
+  <a class="button" href="book.html">Contents</a>
+  {next_link}
+</nav>"""
+
+
+def render_entry_page(bundle: Bundle, entries: list[Entry], index: int) -> str:
+    entry = entries[index]
+    article = read_article_html(bundle, entry)
+    label = entry_meta_label(entry)
     body = f"""
-    <section class="page-title">
-      <p class="eyebrow">{escape(section.group)} · Pages {section.start_page}-{section.end_page}</p>
-      <h1>{escape(section.title)}</h1>
-      <p>{escape(section.summary)}</p>
-      {audio_note}
-      <div class="page-pills">{page_links}</div>
+    <section class="entry-header">
+      <p class="eyebrow">{escape(entry.kind.title())}{f" | {escape(label)}" if label else ""}</p>
     </section>
-    <section class="reading-stack">{pages}</section>
-"""
-    return html_page(section.title, body, "Read")
-
-
-def render_text_paragraphs(text: str) -> str:
-    paragraphs = paragraphs_from_text(text)
-    if not paragraphs:
-        return "<p>No OCR text was extracted for this page.</p>"
-    rendered: list[str] = []
-    for index, paragraph in enumerate(paragraphs[:24]):
-        if index == 0 and len(paragraph) < 90:
-            rendered.append(f"<h2>{escape(paragraph)}</h2>")
-        else:
-            rendered.append(f"<p>{escape(paragraph)}</p>")
-    if len(paragraphs) > 24:
-        rendered.append("<p><em>OCR text continues on the scanned page image.</em></p>")
-    return "\n".join(rendered)
-
-
-def render_page(page_number: int, page_texts: dict[int, str]) -> str:
-    section = section_for_page(page_number)
-    previous_link = f'pages/page-{page_number - 1:03d}.html' if page_number > 1 else None
-    next_link = f'pages/page-{page_number + 1:03d}.html' if page_number < 153 else None
-    nav = "\n".join(
-        [
-            f'<a class="button" href="../{previous_link}">Previous page</a>' if previous_link else "",
-            f'<a class="button" href="../{section.filename}">{escape(section.title)}</a>',
-            f'<a class="button" href="../{next_link}">Next page</a>' if next_link else "",
-        ]
-    )
-    body = f"""
-    <section class="page-title">
-      <p class="eyebrow">{escape(section.title)}</p>
-      <h1>Page {page_number}</h1>
-      <div class="hero-actions">{nav}</div>
-    </section>
-    <section class="single-page">
-      <figure><img src="../images/page-{page_number:03d}.jpg" alt="Scanned page {page_number}"></figure>
-      <article class="ocr-text">
-        <h2>OCR Text</h2>
-        {render_text_paragraphs(page_texts.get(page_number, ""))}
+    {entry_nav(entries, index)}
+    <section class="reader-shell">
+      <aside class="source-panel">
+        <h2>Source Pages</h2>
+        <p>{escape(label or "Source scans attached to the book entry.")}</p>
+        {source_scan_links(entry)}
+      </aside>
+      <article class="book-article">
+        {article}
       </article>
     </section>
+    {entry_nav(entries, index)}
 """
-    html = html_page(f"Page {page_number}", body, "Read")
-    return html.replace('href="assets/site.css"', 'href="../assets/site.css"').replace('href="index.html"', 'href="../index.html"').replace('href="book.html"', 'href="../book.html"').replace('href="audiobook.html"', 'href="../audiobook.html"').replace('href="archive.html"', 'href="../archive.html"')
+    return html_page(entry.title, body, "Read")
 
 
-def render_archive(manifest: dict) -> str:
+def render_archive(bundle: Bundle, entries: list[Entry]) -> str:
     pdf_cards = []
     for label, pdf in (("Reader PDF", DISTRIBUTION_PDF), ("Archival PDF", ARCHIVAL_PDF)):
         if pdf.exists():
             size_mb = pdf.stat().st_size / 1024 / 1024
             pdf_cards.append(
-                f"""<article class="section-card">
-  <p class="section-card-kicker">{label}</p>
+                f"""<article class="entry-card">
+  <p class="eyebrow">{label}</p>
   <h3><a href="downloads/{pdf.name}">{pdf.name}</a></h3>
-  <p>{size_mb:.1f} MiB. Generated from the cleaned page-image pipeline.</p>
+  <p>{size_mb:.1f} MiB.</p>
 </article>"""
             )
+    provenance_link = (
+        '<li><a href="data/block-provenance.jsonl">Block provenance data</a></li>' if bundle.provenance_path else ""
+    )
     body = f"""
     <section class="page-title">
-      <h1>Archive Sources</h1>
-      <p>Download the generated PDFs and inspect the source-processing contract.</p>
+      <h1>Archive</h1>
+      <p>Downloads and source records for the family book edition.</p>
     </section>
     <section class="cards">{''.join(pdf_cards)}</section>
-    <section class="intro-grid">
+    <section class="archive-grid">
       <article>
-        <h2>Raw scans</h2>
-        <p>The raw main-book scan set contains {manifest.get('page_count', 153)} files and remains unchanged under the project input folder.</p>
+        <h2>Structured Reading Files</h2>
+        <ul>
+          <li><a href="data/structured-manifest.json">Reading manifest</a></li>
+          {provenance_link}
+          <li>{len(entries)} reading entries</li>
+          <li>{len(bundle.manifest.get("asset_roots", []))} asset roots</li>
+        </ul>
       </article>
       <article>
-        <h2>Processing manifest</h2>
-        <p>The local processing manifest records crop decisions, page dimensions, and output paths for each scan.</p>
-      </article>
-      <article>
-        <h2>Secondary materials</h2>
-        <p>Companion scans are not yet present in this repo. They should be added as a named raw-scan folder before PDF or website intake.</p>
+        <h2>Source Scans</h2>
+        <p>Each chapter and page entry links back to the scans that produced it. Supplemental items can be added as they are scanned.</p>
       </article>
     </section>
 """
     return html_page("Archive", body, "Archive")
 
 
-def audio_script_files() -> list[Path]:
-    if not DEFAULT_AUDIO_SCRIPT_DIR.exists():
-        return []
-    return sorted(DEFAULT_AUDIO_SCRIPT_DIR.glob("*.md"))
-
-
 def render_audiobook() -> str:
-    scripts = audio_script_files()
-    if scripts:
-        script_cards = "\n".join(
-            f"""<article class="section-card">
-  <p class="section-card-kicker">Audio script</p>
-  <h3><a href="audiobook/script/{path.name}">{escape(script_title(path))}</a></h3>
-  <p>Prepared for narration from OCR text and reviewed section boundaries.</p>
-</article>"""
-            for path in scripts
-        )
+    if AUDIOBOOK_MANIFEST_PATH.exists():
+        manifest = json.loads(AUDIOBOOK_MANIFEST_PATH.read_text(encoding="utf-8"))
+        entries = manifest.get("entries", [])
+        skipped = manifest.get("skipped_entries", [])
     else:
-        script_cards = '<p class="callout">Audio scripts have not been generated yet. Run <code>make build-audiobook-script</code>.</p>'
+        entries = []
+        skipped = []
+    script_rows = "\n".join(
+        f"""<article class="entry-card">
+  <p class="eyebrow">Script {int(entry["index"]):02d}</p>
+  <h3><a href="{escape(str(entry["script"]))}">{escape(str(entry["title"]))}</a></h3>
+  <p>{escape(str(entry.get("source_label") or ""))}</p>
+</article>"""
+        for entry in entries
+    )
+    skipped_rows = "\n".join(
+        f"<li>{escape(str(item.get('title')))} <span>{escape(str(item.get('reason')))}</span></li>" for item in skipped
+    )
     body = f"""
     <section class="page-title">
-      <h1>Audio Companion</h1>
-      <p>The audio lane follows the Onward model: narrative sections become audiobook material, while genealogy tables, indexes, and dense lists stay readable and searchable.</p>
+      <h1>Audiobook</h1>
+      <p>Onward-style narration scripts are prepared for story chapters. Tables, indexes, and dense records stay in the readable archive.</p>
     </section>
-    <section class="intro-grid">
+    <section class="cards">{script_rows or '<p>No narration scripts have been generated yet.</p>'}</section>
+    <section class="archive-grid">
       <article>
-        <h2>What belongs in audio</h2>
-        <p>Stories, introductions, poems, recollections, and place histories are prepared as narration scripts.</p>
-      </article>
-      <article>
-        <h2>What stays visual</h2>
-        <p>Tables, genealogy lists, indexes, and reference structures remain on the site and in the PDFs where they can be searched and scanned.</p>
+        <h2>Reference Material</h2>
+        <ul>{skipped_rows or '<li>No skipped reference entries recorded.</li>'}</ul>
       </article>
     </section>
-    <section class="cards">{script_cards}</section>
 """
-    return html_page("Audio Companion", body, "Audio")
+    return html_page("Audiobook", body, "Audio")
 
 
-def script_title(path: Path) -> str:
-    text = path.read_text(encoding="utf-8").splitlines()
-    for line in text:
-        if line.startswith("# "):
-            return line[2:].strip()
-    return path.stem.replace("-", " ").title()
+def write_site_assets(output_dir: Path) -> None:
+    assets_dir = output_dir / "assets"
+    assets_dir.mkdir(parents=True, exist_ok=True)
+    (assets_dir / "site.css").write_text(SITE_CSS, encoding="utf-8")
+    (assets_dir / "search.js").write_text(SEARCH_JS, encoding="utf-8")
 
 
-def write_search_index(output_dir: Path, page_texts: dict[int, str]) -> None:
+def write_scan_images(output_dir: Path) -> None:
+    require_file(PROCESSED_DIR, "processed page images")
+    scans_dir = output_dir / "images" / "scans"
+    scans_dir.mkdir(parents=True, exist_ok=True)
+    for source in sorted(PROCESSED_DIR.glob("page-*.jpg")):
+        destination = scans_dir / source.name
+        with Image.open(source) as image:
+            image = image.convert("RGB")
+            max_width = 1400
+            if image.width > max_width:
+                ratio = max_width / image.width
+                image = image.resize((max_width, round(image.height * ratio)), Image.Resampling.LANCZOS)
+            image.save(destination, quality=86, optimize=True, progressive=True)
+
+
+def copy_doc_web_images(bundle: Bundle, output_dir: Path) -> None:
+    source = bundle.root / "images"
+    require_file(source, "doc-web image crops")
+    destination = output_dir / "images" / "doc-web"
+    shutil.copytree(source, destination, dirs_exist_ok=True)
+
+
+def copy_downloads(output_dir: Path) -> None:
+    downloads_dir = output_dir / "downloads"
+    downloads_dir.mkdir(parents=True, exist_ok=True)
+    for source in (DISTRIBUTION_PDF, ARCHIVAL_PDF):
+        if source.exists():
+            shutil.copy2(source, downloads_dir / source.name)
+
+
+def copy_structured_data(bundle: Bundle, output_dir: Path) -> None:
+    data_dir = output_dir / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(bundle.manifest_path, data_dir / "structured-manifest.json")
+    if bundle.provenance_path:
+        shutil.copy2(bundle.provenance_path, data_dir / "block-provenance.jsonl")
+
+
+def write_audio_scripts(output_dir: Path) -> None:
+    source = ROOT / "audiobook" / "script"
+    if not source.exists():
+        return
+    destination = output_dir / "script"
+    shutil.copytree(source, destination, dirs_exist_ok=True)
+
+
+def write_search_index(output_dir: Path, bundle: Bundle, entries: list[Entry]) -> None:
     rows = []
-    for page_number, text in page_texts.items():
-        section = section_for_page(page_number)
+    for entry in entries:
+        article = read_article_html(bundle, entry)
         rows.append(
             {
-                "page": page_number,
-                "title": page_title(page_number, text),
-                "section": section.title,
-                "url": f"pages/page-{page_number:03d}.html",
-                "text": re.sub(r"\s+", " ", text).strip(),
+                "entry_id": entry.entry_id,
+                "kind": entry.kind,
+                "title": entry.title,
+                "url": entry.path,
+                "source_label": entry_meta_label(entry),
+                "text": re.sub(r"\s+", " ", html_to_text(article)).strip(),
             }
         )
-    (output_dir / "search-index.json").write_text(json.dumps(rows, ensure_ascii=False), encoding="utf-8")
+    (output_dir / "search-index.json").write_text(json.dumps(rows, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def copy_audio_scripts(output_dir: Path) -> None:
-    scripts = audio_script_files()
-    if not scripts:
-        return
-    destination = output_dir / "audiobook" / "script"
-    destination.mkdir(parents=True, exist_ok=True)
-    for script in scripts:
-        shutil.copy2(script, destination / script.name)
+def write_build_summary(output_dir: Path, bundle: Bundle, entries: list[Entry]) -> None:
+    summary = {
+        "schema_version": "alain_family_site_build_summary_v1",
+        "bundle_snapshot_id": bundle.active.get("snapshotId"),
+        "bundle_root": bundle.active.get("bundleRoot"),
+        "entry_count": len(entries),
+        "chapter_count": sum(1 for entry in entries if entry.kind == "chapter"),
+        "page_entry_count": sum(1 for entry in entries if entry.kind == "page"),
+        "figure_count": sum(read_article_html(bundle, entry).lower().count("<figure") for entry in entries),
+        "table_count": sum(read_article_html(bundle, entry).lower().count("<table") for entry in entries),
+        "public_host": PUBLIC_HOST,
+    }
+    internal_dir = output_dir / "_internal"
+    internal_dir.mkdir(parents=True, exist_ok=True)
+    (internal_dir / "build-summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 def build(output_dir: Path) -> None:
-    manifest = load_manifest()
-    page_texts = load_page_texts()
+    bundle = load_bundle()
+    entries = ordered_entries(bundle)
     clean_dir(output_dir)
     write_site_assets(output_dir)
-    write_web_images(output_dir)
+    write_scan_images(output_dir)
+    copy_doc_web_images(bundle, output_dir)
     copy_downloads(output_dir)
-    write_search_index(output_dir, page_texts)
-    copy_audio_scripts(output_dir)
+    copy_structured_data(bundle, output_dir)
+    write_audio_scripts(output_dir)
 
-    (output_dir / "index.html").write_text(render_index(page_texts), encoding="utf-8")
-    (output_dir / "book.html").write_text(render_book(page_texts), encoding="utf-8")
-    (output_dir / "archive.html").write_text(render_archive(manifest), encoding="utf-8")
+    (output_dir / "index.html").write_text(render_home(bundle, entries), encoding="utf-8")
+    (output_dir / "book.html").write_text(render_book(bundle, entries), encoding="utf-8")
+    (output_dir / "archive.html").write_text(render_archive(bundle, entries), encoding="utf-8")
     (output_dir / "audiobook.html").write_text(render_audiobook(), encoding="utf-8")
-    for section in SECTIONS:
-        (output_dir / section.filename).write_text(render_section(section, page_texts), encoding="utf-8")
-    pages_dir = output_dir / "pages"
-    pages_dir.mkdir(parents=True, exist_ok=True)
-    for page_number in range(1, 154):
-        (pages_dir / f"page-{page_number:03d}.html").write_text(render_page(page_number, page_texts), encoding="utf-8")
-    (output_dir / "_internal").mkdir(parents=True, exist_ok=True)
-    (output_dir / "_internal" / "build-summary.json").write_text(
-        json.dumps(
-            {
-                "title": SITE_TITLE,
-                "page_count": len(page_texts),
-                "sections": [section.__dict__ for section in SECTIONS],
-                "public_host": PUBLIC_HOST,
-            },
-            indent=2,
-            ensure_ascii=False,
-        )
-        + "\n",
-        encoding="utf-8",
-    )
+    for index, entry in enumerate(entries):
+        (output_dir / entry.path).write_text(render_entry_page(bundle, entries, index), encoding="utf-8")
+    write_search_index(output_dir, bundle, entries)
+    write_build_summary(output_dir, bundle, entries)
     print(f"built family site: {output_dir}")
+    print(f"entries: {len(entries)}")
 
 
 def cli_main() -> int:
-    parser = argparse.ArgumentParser(description="Build the Alain Lessard static family archive site.")
+    parser = argparse.ArgumentParser(description="Build the Alain Lessard family archive website from the active doc-web bundle.")
     parser.add_argument("--output", default=str(DEFAULT_OUTPUT_DIR))
     args = parser.parse_args()
     build(Path(args.output).resolve())
     return 0
 
 
-SITE_CSS = r"""
+SITE_CSS = """
 :root {
-  --bg: #f7f2e9;
-  --paper: #fffdf8;
-  --paper-soft: #f1e6d8;
-  --ink: #241b13;
-  --muted: #6c5d4d;
-  --border: #dac9b4;
-  --accent: #315d49;
-  --accent-strong: #244534;
-  --accent-soft: #dfe9df;
-  --rose: #8b4f48;
-  --shadow: 0 18px 50px rgba(61, 45, 27, 0.12);
-  --serif: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
-  --sans: "Avenir Next", "Segoe UI", Helvetica, Arial, sans-serif;
+  color-scheme: light;
+  --bg: #f7f8f6;
+  --paper: #ffffff;
+  --ink: #22231f;
+  --muted: #626861;
+  --line: #d8ddd5;
+  --deep: #143d3b;
+  --deep-2: #1f5b55;
+  --accent: #8d2f23;
+  --accent-2: #c1912f;
+  --shadow: 0 18px 38px rgba(20, 34, 30, 0.12);
+  --radius: 8px;
 }
-* { box-sizing: border-box; }
-html { background: var(--bg); color: var(--ink); font-size: 18px; }
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+}
+
 body {
   margin: 0;
-  font-family: var(--serif);
-  line-height: 1.75;
-  background: linear-gradient(180deg, #fbf8f2 0%, var(--bg) 34rem);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--bg);
 }
-a { color: inherit; text-underline-offset: .18em; }
-img { display: block; max-width: 100%; height: auto; }
-.site-header, main, .site-footer {
-  width: min(1180px, calc(100% - 32px));
-  margin: 0 auto;
+
+a {
+  color: var(--deep-2);
+  text-underline-offset: 0.16em;
 }
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
 .site-header {
-  min-height: 84px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1rem 0;
+  padding: 0.8rem 1.4rem;
+  background: rgba(255, 255, 255, 0.94);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(12px);
 }
+
 .brand {
   display: inline-flex;
-  gap: .75rem;
   align-items: center;
+  gap: 0.7rem;
+  min-width: 16rem;
+  color: var(--ink);
   text-decoration: none;
-  font-family: var(--sans);
 }
+
 .brand-mark {
-  width: 3rem;
-  height: 3rem;
   display: inline-grid;
   place-items: center;
-  background: var(--accent);
-  color: white;
+  width: 2.4rem;
+  height: 2.4rem;
   border-radius: 50%;
-  font-weight: 800;
-  letter-spacing: .04em;
+  color: #fff;
+  background: var(--deep);
+  font-weight: 700;
 }
-.brand strong { display: block; font-size: 1.1rem; line-height: 1.1; }
-.brand small { display: block; color: var(--muted); max-width: 24rem; line-height: 1.25; }
-.site-nav { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: flex-end; }
-.nav-link, .button, .page-pill {
-  min-height: 2.55rem;
+
+.brand strong,
+.brand small {
+  display: block;
+}
+
+.brand small {
+  max-width: 32rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.25;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  padding: 0.45rem 0.7rem;
+  color: var(--ink);
+  text-decoration: none;
+  border-radius: var(--radius);
+}
+
+.nav-link:hover,
+.nav-link.is-active {
+  color: #fff;
+  background: var(--deep);
+}
+
+.hero {
+  min-height: 58vh;
+  display: flex;
+  align-items: flex-end;
+  color: #fff;
+  background-image: linear-gradient(90deg, rgba(10, 25, 24, 0.9), rgba(10, 25, 24, 0.58), rgba(10, 25, 24, 0.2)), url("../images/scans/page-001.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.hero-inner {
+  width: min(72rem, 100%);
+  padding: 5rem 1.4rem 4.6rem;
+  margin: 0 auto;
+}
+
+.hero h1 {
+  max-width: 46rem;
+  margin: 0;
+  font-size: 4rem;
+  line-height: 1.02;
+  letter-spacing: 0;
+}
+
+.hero p {
+  max-width: 40rem;
+  margin: 1rem 0 0;
+  font-size: 1.2rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.45rem;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.hero .eyebrow {
+  color: #f4cf72;
+}
+
+.hero-actions,
+.reader-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1.3rem;
+}
+
+.button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: .55rem .9rem;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  font-family: var(--sans);
-  font-size: .92rem;
+  min-height: 2.55rem;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--deep);
+  background: #fff;
   font-weight: 700;
   text-decoration: none;
-  background: rgba(255,255,255,.66);
 }
-.nav-link.is-active, .button.primary {
-  background: var(--accent);
+
+.button.primary {
+  color: #fff;
   border-color: var(--accent);
-  color: white;
+  background: var(--accent);
 }
-.hero {
-  min-height: calc(100vh - 112px);
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 430px);
-  align-items: center;
-  gap: clamp(2rem, 5vw, 5rem);
-  padding: 1rem 0 4rem;
-}
-.hero h1, .page-title h1 {
-  margin: 0;
-  font-family: var(--sans);
-  font-size: clamp(3rem, 9vw, 7.5rem);
-  line-height: .94;
-  letter-spacing: 0;
-}
-.hero p {
-  max-width: 42rem;
+
+.button.disabled {
   color: var(--muted);
-  font-size: clamp(1.15rem, 2vw, 1.55rem);
+  background: #eef0ec;
 }
-.hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin-top: 1.4rem; }
-.hero-cover {
-  margin: 0;
-  padding: .75rem;
-  background: var(--paper);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
+
+.intro-grid,
+.archive-grid,
+.section-list,
+.page-title,
+.book-tools,
+.book-layout,
+.entry-header,
+.reader-shell,
+.reader-nav,
+.stat-band {
+  width: min(72rem, calc(100% - 2.8rem));
+  margin-left: auto;
+  margin-right: auto;
 }
-.hero-cover img { aspect-ratio: 2550 / 3371; object-fit: cover; }
-.intro-grid {
+
+.intro-grid,
+.archive-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
-  margin: 2rem 0 4rem;
+  padding: 2.2rem 0;
 }
-.intro-grid article, .section-card, .toc-panel, .book-tools, .ocr-text {
+
+.archive-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.intro-grid article,
+.archive-grid article,
+.entry-card,
+.source-panel,
+.book-tools,
+.toc-panel,
+.compact-entry {
   background: var(--paper);
-  border: 1px solid var(--border);
-  box-shadow: 0 10px 28px rgba(61, 45, 27, 0.06);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
 }
-.intro-grid article, .section-card, .toc-panel, .book-tools { padding: 1.2rem; }
-h2, h3 { font-family: var(--sans); line-height: 1.18; }
+
+.intro-grid article,
+.archive-grid article,
+.entry-card,
+.source-panel,
+.book-tools,
+.toc-panel {
+  padding: 1rem;
+}
+
+.intro-grid h2,
+.archive-grid h2,
+.section-heading h2,
+.page-title h1,
+.entry-list h2,
+.source-panel h2 {
+  margin: 0 0 0.55rem;
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+.stat-band {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+  padding: 1.1rem 0 0.5rem;
+}
+
+.stat-band div {
+  padding: 1rem;
+  background: var(--deep);
+  color: #fff;
+  border-radius: var(--radius);
+}
+
+.stat-band strong {
+  display: block;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.stat-band span {
+  display: block;
+  margin-top: 0.35rem;
+}
+
+.section-list {
+  padding: 2.2rem 0 3rem;
+}
+
 .section-heading {
   display: flex;
+  align-items: end;
   justify-content: space-between;
   gap: 1rem;
-  align-items: end;
   margin-bottom: 1rem;
 }
-.section-heading h2, .page-title h1 { margin-bottom: .4rem; }
+
+.section-heading p {
+  max-width: 34rem;
+  margin: 0;
+  color: var(--muted);
+}
+
 .cards {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
 }
-.section-card h3 { margin: .1rem 0 .45rem; font-size: 1.2rem; }
-.section-card p { margin: .35rem 0 0; }
-.section-card-kicker, .eyebrow {
-  font-family: var(--sans);
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  font-size: .72rem;
-  font-weight: 800;
-  color: var(--rose);
+
+.entry-card h3 {
+  margin: 0 0 0.55rem;
+  font-size: 1.08rem;
+  line-height: 1.25;
+  letter-spacing: 0;
 }
-.page-title {
-  padding: 3rem 0 1.5rem;
-  max-width: 820px;
-}
-.page-title p { color: var(--muted); font-size: 1.1rem; }
-.book-tools { margin-bottom: 1.25rem; }
-.search-label { display: block; font-family: var(--sans); font-weight: 800; margin-bottom: .45rem; }
-.search-input {
-  width: 100%;
-  min-height: 3rem;
-  border: 1px solid var(--border);
-  border-radius: .35rem;
-  padding: .7rem .9rem;
-  font: 1rem var(--sans);
-}
-.search-results { margin-top: 1rem; display: grid; gap: .75rem; }
-.search-hit {
-  display: block;
-  padding: .85rem;
-  background: var(--paper-soft);
-  border: 1px solid var(--border);
-  text-decoration: none;
-}
-.book-layout {
-  display: grid;
-  grid-template-columns: 300px minmax(0, 1fr);
-  gap: 1rem;
-  align-items: start;
-}
-.toc-panel { position: sticky; top: 1rem; }
-.toc-panel ol { padding-left: 1.1rem; margin: 0; }
-.toc-panel li { margin: .7rem 0; }
-.toc-panel span { display: block; color: var(--muted); font-size: .86rem; font-family: var(--sans); }
-.page-list { display: grid; gap: 1rem; }
-.page-row {
-  display: grid;
-  grid-template-columns: 130px minmax(0, 1fr);
-  gap: 1rem;
-  align-items: start;
-  padding: .85rem;
-  background: rgba(255,255,255,.62);
-  border: 1px solid var(--border);
-}
-.page-row img { border: 1px solid var(--border); background: white; }
-.reading-stack { display: grid; gap: 2rem; }
-.reading-page, .single-page {
-  display: grid;
-  grid-template-columns: minmax(280px, 43%) minmax(0, 1fr);
-  gap: 1.25rem;
-  align-items: start;
-}
-.reading-page figure, .single-page figure {
-  margin: 0;
-  background: white;
-  border: 1px solid var(--border);
-  padding: .5rem;
-  position: sticky;
-  top: 1rem;
-}
-.ocr-text { padding: 1.25rem; }
-.ocr-text h2 { margin-top: 0; }
-.page-pills { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
-.callout {
-  padding: .85rem 1rem;
-  border-left: .25rem solid var(--accent);
-  background: var(--accent-soft);
-  color: var(--accent-strong) !important;
-}
-.site-footer {
-  margin-top: 4rem;
-  padding: 2rem 0;
-  border-top: 1px solid var(--border);
+
+.entry-card p:last-child {
+  margin-bottom: 0;
   color: var(--muted);
 }
-@media (max-width: 860px) {
-  .site-header { align-items: flex-start; flex-direction: column; }
-  .site-nav { justify-content: flex-start; }
-  .hero, .intro-grid, .cards, .book-layout, .reading-page, .single-page {
+
+.page-title,
+.entry-header {
+  padding: 2.2rem 0 1rem;
+}
+
+.page-title h1 {
+  font-size: 2.2rem;
+}
+
+.page-title p {
+  max-width: 46rem;
+  margin: 0.4rem 0 0;
+  color: var(--muted);
+}
+
+.book-tools {
+  margin-top: 0.8rem;
+  padding: 1rem;
+}
+
+.search-label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 700;
+}
+
+.search-input {
+  width: 100%;
+  min-height: 2.8rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font: inherit;
+}
+
+.search-results {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 0.8rem;
+}
+
+.search-result {
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fbfcfa;
+}
+
+.search-result h3,
+.search-result p {
+  margin: 0;
+}
+
+.search-result p {
+  color: var(--muted);
+}
+
+.book-layout {
+  display: grid;
+  grid-template-columns: 18rem minmax(0, 1fr);
+  gap: 1.2rem;
+  padding: 1.4rem 0 3rem;
+}
+
+.toc-panel {
+  position: sticky;
+  top: 5.2rem;
+  max-height: calc(100vh - 6.5rem);
+  overflow: auto;
+}
+
+.toc-panel ol {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.toc-panel li {
+  margin: 0 0 0.7rem;
+}
+
+.toc-panel span,
+.compact-entry span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.entry-list h2 {
+  margin-top: 1.8rem;
+}
+
+.entry-list h2:first-child {
+  margin-top: 0;
+}
+
+.compact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.compact-entry {
+  padding: 0.7rem;
+}
+
+.reader-nav {
+  justify-content: space-between;
+  padding: 0.2rem 0 1rem;
+}
+
+.reader-shell {
+  display: grid;
+  grid-template-columns: 15rem minmax(0, 54rem);
+  gap: 1.4rem;
+  align-items: start;
+  padding: 0.4rem 0 2.2rem;
+}
+
+.source-panel {
+  position: sticky;
+  top: 5.2rem;
+}
+
+.source-panel p {
+  color: var(--muted);
+}
+
+.scan-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.scan-links a,
+.scan-gap {
+  padding: 0.35rem 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fbfcfa;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.book-article {
+  min-width: 0;
+  overflow: hidden;
+  padding: 2.2rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.05rem;
+}
+
+.book-article h1,
+.book-article h2,
+.book-article h3,
+.book-article h4,
+.book-article h5,
+.book-article h6 {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+.book-article h1 {
+  margin-top: 0;
+  font-size: 2rem;
+}
+
+.book-article p {
+  margin: 0 0 0.85rem;
+}
+
+.book-article figure {
+  margin: 1.45rem 0;
+  text-align: center;
+}
+
+.book-article .decorative-break {
+  width: 7rem;
+  margin: 1.8rem auto;
+  border: 0;
+  border-top: 2px solid var(--accent-2);
+}
+
+.book-article figure img {
+  display: inline-block;
+  max-height: 34rem;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.book-article figcaption {
+  max-width: 42rem;
+  margin: 0.5rem auto 0;
+  color: var(--muted);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.book-article .table-scroll {
+  width: 100%;
+  max-width: 100%;
+  margin: 1.2rem 0;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+
+.book-article table {
+  width: 100%;
+  min-width: 38rem;
+  margin: 0;
+  border-collapse: collapse;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 0.92rem;
+}
+
+.book-article th,
+.book-article td {
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+.book-article th {
+  background: #eef4ef;
+}
+
+.book-article tr:nth-child(even) td {
+  background: #fbfcfa;
+}
+
+.book-article ul,
+.book-article ol {
+  padding-left: 1.5rem;
+}
+
+.site-footer {
+  padding: 2rem 1.4rem;
+  color: var(--muted);
+  background: #fff;
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+
+@media (max-width: 880px) {
+  .site-header,
+  .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .brand {
+    min-width: 0;
+  }
+
+  .hero h1 {
+    font-size: 2.7rem;
+  }
+
+  .intro-grid,
+  .archive-grid,
+  .cards,
+  .stat-band,
+  .book-layout,
+  .compact-grid,
+  .reader-shell {
     grid-template-columns: 1fr;
   }
-  .hero { min-height: auto; padding-top: 2rem; }
-  .toc-panel, .reading-page figure, .single-page figure { position: static; }
-  .page-row { grid-template-columns: 92px minmax(0, 1fr); }
+
+  .toc-panel,
+  .source-panel {
+    position: static;
+    max-height: none;
+  }
+
+  .book-article {
+    padding: 1.2rem;
+  }
 }
 """
 
 
-SEARCH_JS = r"""
+SEARCH_JS = """
 (async () => {
   const input = document.querySelector("#site-search");
   const results = document.querySelector("#search-results");
   if (!input || !results) return;
-  const response = await fetch("search-index.json");
-  const rows = await response.json();
 
-  function excerpt(text, term) {
-    const lower = text.toLowerCase();
-    const index = lower.indexOf(term.toLowerCase());
-    if (index === -1) return text.slice(0, 220);
-    const start = Math.max(0, index - 90);
-    return text.slice(start, start + 260);
+  const response = await fetch("search-index.json?v=20260702-docweb-r2");
+  const index = await response.json();
+
+  function snippet(text, term) {
+    const haystack = text.toLowerCase();
+    const needle = term.toLowerCase();
+    const at = haystack.indexOf(needle);
+    if (at === -1) return text.slice(0, 210);
+    const start = Math.max(0, at - 80);
+    const end = Math.min(text.length, at + needle.length + 140);
+    return `${start > 0 ? "... " : ""}${text.slice(start, end)}${end < text.length ? " ..." : ""}`;
   }
 
-  input.addEventListener("input", () => {
-    const query = input.value.trim();
-    results.innerHTML = "";
-    if (query.length < 2) return;
-    const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
-    const hits = rows.filter(row => terms.every(term =>
-      row.text.toLowerCase().includes(term) ||
-      row.title.toLowerCase().includes(term) ||
-      row.section.toLowerCase().includes(term)
-    )).slice(0, 18);
-    if (!hits.length) {
-      results.innerHTML = '<p class="callout">No matches found.</p>';
+  function render(query) {
+    const term = query.trim();
+    if (term.length < 2) {
+      results.innerHTML = "";
       return;
     }
-    for (const hit of hits) {
-      const a = document.createElement("a");
-      a.className = "search-hit";
-      a.href = hit.url;
-      a.innerHTML = `<strong>${hit.title}</strong><br><small>${hit.section} · Page ${hit.page}</small><p>${excerpt(hit.text, query)}</p>`;
-      results.appendChild(a);
-    }
-  });
+    const normalized = term.toLowerCase();
+    const matches = index
+      .map((row) => {
+        const titleHit = row.title.toLowerCase().includes(normalized);
+        const textAt = row.text.toLowerCase().indexOf(normalized);
+        if (!titleHit && textAt === -1) return null;
+        return { row, score: titleHit ? 0 : textAt + 10 };
+      })
+      .filter(Boolean)
+      .sort((a, b) => a.score - b.score)
+      .slice(0, 12);
+
+    results.innerHTML = matches
+      .map(({ row }) => `
+        <article class="search-result">
+          <h3><a href="${row.url}">${row.title}</a></h3>
+          <p>${row.source_label || row.kind}</p>
+          <p>${snippet(row.text, term)}</p>
+        </article>
+      `)
+      .join("") || "<p>No matches found.</p>";
+  }
+
+  input.addEventListener("input", (event) => render(event.target.value));
 })();
 """
 

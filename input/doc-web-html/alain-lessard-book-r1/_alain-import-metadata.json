@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "alain_doc_web_import_v1",
+  "snapshotId": "alain-lessard-book-r1",
+  "importedAt": "2026-07-02T05:27:38Z",
+  "source": {
+    "docWebRoot": "/Users/cam/Documents/Projects/doc-web",
+    "bundleRoot": "/Users/cam/Documents/Projects/doc-web/output/runs/alain-lessard-book-r1/output/html",
+    "contract": {
+      "bundle_layout": {
+        "default_asset_roots": [
+          "images"
+        ],
+        "entry_path_pattern": "{entry_id}.html",
+        "index_path": "index.html",
+        "provenance_path": "provenance/blocks.jsonl"
+      },
+      "compatibility_policy": {
+        "consumer_gate_fields": [
+          "schema_fingerprint",
+          "supported_bundle_schema_versions",
+          "preview_contract_fingerprint",
+          "supported_preview_schema_versions"
+        ],
+        "contract_version_role": "coarse-runtime-boundary-family"
+      },
+      "contract_name": "doc-web",
+      "contract_version": "1",
+      "package_name": "doc-web",
+      "preview_content_hint_modes": [
+        "auto",
+        "ai",
+        "deterministic"
+      ],
+      "preview_contract_fingerprint": "sha256:23dea53c26ed45d7af432b38497e0e663ba31c418c43b8bd034a17551079c3a9",
+      "preview_coverage_states": [
+        "complete",
+        "sampled",
+        "partial",
+        "deferred"
+      ],
+      "preview_layout": {
+        "cache_identity_path": "cache/cache_identity.json",
+        "metadata_path": "preview_metadata.json",
+        "parsed_units_path": "cache/parsed_units.jsonl",
+        "selector_map_path": "preview_to_full_selectors.json",
+        "status_path": "preview_status.jsonl"
+      },
+      "preview_status_stages": [
+        "accepted",
+        "preparing_pages",
+        "detecting_text_or_ocr_need",
+        "reading_sample",
+        "building_preview_html",
+        "preview_ready",
+        "continuing_full_processing",
+        "ready",
+        "failed"
+      ],
+      "requires_python": ">=3.11",
+      "runtime_version": "0.1.0",
+      "schema_fingerprint": "sha256:6aa27f484cb97b6c8a102382aa0ce5d06e097a315b32ab4eeac71b7867935abd",
+      "supported_bundle_schema_versions": {
+        "manifest": "doc_web_bundle_manifest_v1",
+        "provenance": "doc_web_provenance_block_v1"
+      },
+      "supported_preview_schema_versions": {
+        "cache_identity": "doc_web_cache_identity_v1",
+        "metadata": "doc_web_preview_metadata_v1",
+        "selector_map": "doc_web_preview_selector_map_v1"
+      }
+    },
+    "runId": "alain-lessard-book-r1",
+    "recipePath": "configs/doc-web/recipe-alain-images-html-mvp.yaml"
+  },
+  "bundle": {
+    "document_id": "alain-lessard",
+    "title": "Alain Lessard",
+    "entry_count": 39,
+    "provenance_row_count": 1738,
+    "image_count": 155,
+    "reading_order": [
+      "page-001",
+      "page-002",
+      "page-003",
+      "page-004",
+      "page-005",
+      "page-006",
+      "page-007",
+      "page-008",
+      "page-009",
+      "page-010",
+      "page-011",
+      "page-012",
+      "page-013",
+      "page-014",
+      "page-015",
+      "page-016",
+      "page-017",
+      "page-018",
+      "page-019",
+      "page-020",
+      "page-021",
+      "chapter-001",
+      "chapter-002",
+      "chapter-003",
+      "chapter-004",
+      "chapter-005",
+      "chapter-006",
+      "chapter-007",
+      "chapter-008",
+      "chapter-009",
+      "chapter-010",
+      "chapter-011",
+      "chapter-012",
+      "chapter-013",
+      "chapter-014",
+      "chapter-015",
+      "chapter-016",
+      "chapter-017",
+      "chapter-018"
+    ],
+    "runtimeBundleRoot": ".runtime/doc-web-imports/alain-lessard-book-r1/bundle",
+    "acceptedBundleRoot": "input/doc-web-html/alain-lessard-book-r1",
+    "manifestPath": "input/doc-web-html/alain-lessard-book-r1/manifest.json",
+    "provenancePath": "input/doc-web-html/alain-lessard-book-r1/provenance/blocks.jsonl"
+  }
+}

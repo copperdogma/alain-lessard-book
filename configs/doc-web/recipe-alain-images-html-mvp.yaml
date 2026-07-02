@@ -1,0 +1,137 @@
+# Alain-specific MVP: cleaned page images to chapter HTML.
+#
+# This is intentionally based on doc-web's generic image-directory recipe plus
+# the figure/caption extraction tuning proven by the Onward site. It avoids
+# Onward-only genealogy validation and page-specific table rescue.
+
+input:
+  images: output/processed-pages
+
+stages:
+  - id: images_to_manifest
+    stage: extract
+    module: images_dir_to_manifest_v1
+    out: pages_images_manifest.jsonl
+    params:
+      input_dir: output/processed-pages
+
+  - id: ocr_ai
+    stage: extract
+    module: ocr_ai_gpt51_v1
+    needs: [images_to_manifest]
+    inputs:
+      pages: images_to_manifest
+    out: pages_html.jsonl
+    params:
+      model: gemini-3.1-pro-preview
+      retry_model: gpt-5.1
+      max_output_tokens: 65536
+      max_long_side: 2048
+      concurrency: 5
+      skip_blank_pages: true
+      ocr_hints: |
+        - Preserve text exactly as printed; do not correct spelling or normalize punctuation.
+        - Preserve line breaks and paragraph structure as seen in the image.
+        - When tables are present, preserve the grid as <table> with correct rows/columns.
+        - Keep table captions and photo captions close to the table or image they describe.
+        - Do not infer missing cells or merge columns unless explicitly visible.
+        - This is a family-history book: preserve names, accents, dates, and relationship labels carefully.
+
+  - id: crop_illustrations
+    stage: extract
+    module: crop_illustrations_guided_v1
+    needs: [ocr_ai]
+    inputs:
+      ocr_manifest: ocr_ai
+    out: illustration_manifest.jsonl
+    params:
+      transparency: false
+      output_format: jpeg
+      jpeg_quality: 92
+      detection_mode: layout
+      white_threshold: 252
+      close_kernel: 31
+      close_iterations: 3
+      score_min_nonwhite: 0.01
+      min_nonwhite_ratio: 0.02
+      max_text_ratio: 0.02
+      text_line_kernel_w: 31
+      text_line_kernel_h: 3
+      text_line_iterations: 1
+      text_block_kernel_w: 25
+      text_block_kernel_h: 3
+      text_block_iterations: 1
+      min_area_ratio: 0.001
+      min_width: 120
+      min_height: 120
+      padding_percent: 0.08
+      text_kernel: 3
+      text_iterations: 1
+      refine_with_textlines: false
+      trim_layout_text: true
+      layout_text_model: PP-DocLayout_plus-L
+      layout_text_score_thresh: 0.6
+      layout_text_max_gap_ratio: 0.2
+      layout_text_bottom_band_ratio: 0.35
+      layout_text_top_band_ratio: 0.35
+      layout_text_margin_px: 6
+      layout_text_min_width_ratio: 0.4
+      layout_text_max_height_ratio: 0.2
+      layout_split_text: false
+      layout_split_min_gap_ratio: 0.12
+      layout_split_margin_px: 6
+      trim_text_edges: false
+      trim_ocr_text_edges: false
+      split_when_missing: true
+      trim_caption: false
+      caption_relax_max_gap_ratio: 0.2
+      cover_pages: "1"
+
+  - id: table_rescue
+    stage: adapter
+    module: table_rescue_html_loop_v1
+    needs: [ocr_ai]
+    inputs:
+      pages: ocr_ai
+    out: pages_html_rescued.jsonl
+    params:
+      model: gpt-5.1
+      max_passes: 3
+      max_pages: 80
+      fail_on_unresolved: false
+      rescue_hints: |
+        - Preserve row/column boundaries exactly; do not reflow text.
+        - Use <br> for multiple entries inside a single cell.
+        - Do not add or remove words.
+        - Prefer keeping visible family group labels inside structured table output.
+
+  - id: extract_page_numbers
+    stage: transform
+    module: extract_page_numbers_html_v1
+    needs: [table_rescue]
+    inputs:
+      pages: table_rescue
+    out: pages_html_with_page_numbers.jsonl
+
+  - id: portionize_toc
+    stage: portionize
+    module: portionize_toc_html_v1
+    needs: [extract_page_numbers]
+    inputs:
+      pages: extract_page_numbers
+    out: portions_toc.jsonl
+
+  - id: build_chapters
+    stage: build
+    module: build_chapter_html_v1
+    needs: [extract_page_numbers, portionize_toc, crop_illustrations]
+    inputs:
+      pages: extract_page_numbers
+      portions: portionize_toc
+      illustration_manifest: crop_illustrations
+    out: chapters_manifest.jsonl
+    params:
+      images_subdir: images
+      book_title: "Alain Lessard"
+      book_author: ""
+      merge_contiguous_genealogy_tables: true

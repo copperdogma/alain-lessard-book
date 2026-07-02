@@ -25,7 +25,7 @@
           "C1"
         ],
         "substrate": "partial",
-        "last_reviewed": "2026-07-01"
+        "last_reviewed": "2026-07-02"
       },
       {
         "id": "spec:2",
@@ -35,7 +35,7 @@
           "C2"
         ],
         "substrate": "exists",
-        "last_reviewed": "2026-07-01"
+        "last_reviewed": "2026-07-02"
       },
       {
         "id": "spec:3",
@@ -45,7 +45,7 @@
           "C3"
         ],
         "substrate": "exists",
-        "last_reviewed": "2026-07-01"
+        "last_reviewed": "2026-07-02"
       },
       {
         "id": "spec:4",
@@ -55,7 +55,7 @@
           "C4"
         ],
         "substrate": "exists",
-        "last_reviewed": "2026-07-01"
+        "last_reviewed": "2026-07-02"
       },
       {
         "id": "spec:5",
@@ -65,7 +65,7 @@
           "B1"
         ],
         "substrate": "exists",
-        "last_reviewed": "2026-07-01"
+        "last_reviewed": "2026-07-02"
       }
     ]
   },
@@ -81,23 +81,23 @@
     "categories": {
       "spec:1": {
         "substrate": "partial",
-        "last_reviewed": "2026-07-01"
+        "last_reviewed": "2026-07-02"
       },
       "spec:2": {
         "substrate": "exists",
-        "last_reviewed": "2026-07-01"
+        "last_reviewed": "2026-07-02"
       },
       "spec:3": {
         "substrate": "exists",
-        "last_reviewed": "2026-07-01"
+        "last_reviewed": "2026-07-02"
       },
       "spec:4": {
         "substrate": "exists",
-        "last_reviewed": "2026-07-01"
+        "last_reviewed": "2026-07-02"
       },
       "spec:5": {
         "substrate": "exists",
-        "last_reviewed": "2026-07-01"
+        "last_reviewed": "2026-07-02"
       }
     },
     "compromises": {
@@ -115,7 +115,7 @@
       },
       "C4": {
         "phase": "hold",
-        "last_reviewed": "2026-07-01"
+        "last_reviewed": "2026-07-02"
       },
       "B1": {
         "phase": "hold",
@@ -124,8 +124,8 @@
     },
     "coverage_matrix": {
       "path": "tests/fixtures/formats/_coverage-matrix.json",
-      "last_reviewed": "2026-07-01",
-      "notes": "Canonical machine-readable inventory of source scans and generated artifact surfaces."
+      "last_reviewed": "2026-07-02",
+      "notes": "Canonical machine-readable inventory of source scans, doc-web bundle, generated site, audio-script, and PDF artifact surfaces."
     },
     "roadmap": {
       "active_focus": [
@@ -134,7 +134,7 @@
       "sequencing_bias": [
         {
           "target": "campaign:supplemental-materials",
-          "reason": "The main-book PDF and public website path is established; the user noted a couple of companion items still need to be scanned, and reviewed audio MP3 files are not yet present."
+          "reason": "The main-book PDF, doc-web website path, and public deployment are established; the user noted a couple of companion items still need to be scanned, and reviewed audio MP3 files are not yet present."
         }
       ],
       "campaigns": [
@@ -153,6 +153,14 @@
             "story-002-dreamhost-hosted-subdomain-public-verification"
           ],
           "notes": "The Onward-style static site was built, uploaded to `/home/onward_user/alain-lessard.copper-dog.com`, mapped as a DreamHost hosted subdomain, assigned a Let's Encrypt certificate, and verified publicly over HTTPS at `alain-lessard.copper-dog.com`."
+        },
+        {
+          "id": "doc-web-onward-style-site",
+          "status": "done",
+          "story_refs": [
+            "story-003-doc-web-powered-onward-style-site"
+          ],
+          "notes": "The accepted doc-web bundle `input/doc-web-html/alain-lessard-book-r1/` now drives the public site and audio-script handoff, preserving figures, captions, tables, source scan links, TOC, and search."
         },
         {
           "id": "supplemental-materials",
@@ -179,7 +187,7 @@
   },
   "coverage_matrix": {
     "version": 1,
-    "last_reviewed": "2026-07-01",
+    "last_reviewed": "2026-07-02",
     "sources": [
       {
         "id": "main-book-raw-scans",
@@ -212,6 +220,30 @@
         "path": "output/pdf/alain-lessard-book-searchable.pdf",
         "format": "pdf-with-ocr",
         "status": "generated"
+      },
+      {
+        "id": "archival-searchable-pdf",
+        "path": "output/pdf/alain-lessard-book-archival-searchable.pdf",
+        "format": "pdf-with-ocr",
+        "status": "generated"
+      },
+      {
+        "id": "doc-web-html-bundle",
+        "path": "input/doc-web-html/alain-lessard-book-r1",
+        "format": "doc-web-html-provenance-bundle",
+        "status": "generated"
+      },
+      {
+        "id": "family-site-build",
+        "path": "build/family-site",
+        "format": "static-site-bundle",
+        "status": "generated"
+      },
+      {
+        "id": "audiobook-scripts",
+        "path": "audiobook/script",
+        "format": "markdown-narration-scripts",
+        "status": "generated"
       }
     ]
   },
@@ -235,10 +267,15 @@
         "path": "docs/stories/story-002-dreamhost-hosted-subdomain-public-verification.md",
         "title": "DreamHost hosted subdomain public verification",
         "status": "Done"
+      },
+      {
+        "path": "docs/stories/story-003-doc-web-powered-onward-style-site.md",
+        "title": "doc-web powered Onward-style site",
+        "status": "Done"
       }
     ],
     "counts_by_status": {
-      "Done": 2
+      "Done": 3
     }
   }
 }

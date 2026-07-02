@@ -1,128 +1,317 @@
 {
-  "schema_version": "alain_lessard_audiobook_manifest_v1",
+  "schema_version": "alain_lessard_audiobook_manifest_v2",
   "mode": "onward-style-narrative-audio",
-  "note": "Scripts are prepared for narrative sections only; genealogy tables and indexes remain readable/searchable.",
+  "preferred_voice": {
+    "provider": "ElevenLabs",
+    "name": "Matilda",
+    "voice_id": "XrExE9yKIg1WjnnlVkGX"
+  },
+  "note": "Scripts are prepared for narrative entries only; genealogy tables, personal records, bibliography, and page-level reference material remain readable/searchable.",
   "entries": [
     {
       "index": 1,
-      "title": "Opening Matter",
-      "script": "script/01-opening-matter.md",
-      "source_pages": [
-        1,
-        7
-      ],
+      "entry_id": "chapter-001",
+      "title": "LOUIS AND CLARA (LESSARD) ALAIN",
+      "script": "script/01-louis-and-clara-lessard-alain.md",
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
       "status": "script-ready",
       "audio_file": null
     },
     {
       "index": 2,
-      "title": "Alain Family History",
-      "script": "script/02-alain-family-history.md",
-      "source_pages": [
-        8,
-        13
-      ],
+      "entry_id": "chapter-002",
+      "title": "Introduction",
+      "script": "script/02-introduction.md",
+      "source_label": "Printed page 81 | Source scan 88",
       "status": "script-ready",
       "audio_file": null
     },
     {
       "index": 3,
-      "title": "Henri Delphice Alain",
-      "script": "script/03-henri-delphice-alain.md",
-      "source_pages": [
-        14,
-        20
-      ],
+      "entry_id": "chapter-003",
+      "title": "Preface",
+      "script": "script/03-preface.md",
+      "source_label": "Printed page 82 | Source scan 89",
       "status": "script-ready",
       "audio_file": null
     },
     {
       "index": 4,
-      "title": "Moise \"Smokey\" Alain",
-      "script": "script/04-moise-smokey-alain.md",
-      "source_pages": [
-        21,
-        23
-      ],
+      "entry_id": "chapter-004",
+      "title": "Part I – Alain Family History",
+      "script": "script/04-part-i-alain-family-history.md",
+      "source_label": "Printed pages 82-85 | Source scans 89-92",
       "status": "script-ready",
       "audio_file": null
     },
     {
       "index": 5,
-      "title": "Louis and Clara Alain",
-      "script": "script/05-louis-and-clara-alain.md",
-      "source_pages": [
-        24,
-        63
-      ],
+      "entry_id": "chapter-005",
+      "title": "EDOUARD LESSARD",
+      "script": "script/05-edouard-lessard.md",
+      "source_label": "Printed pages 86-94 | Source scans 93-101",
       "status": "script-ready",
       "audio_file": null
     },
     {
       "index": 6,
-      "title": "Yvonne, Rolland, and Alain Family Stories",
-      "script": "script/06-yvonne-rolland-and-alain-family-stories.md",
-      "source_pages": [
-        64,
-        76
-      ],
+      "entry_id": "chapter-006",
+      "title": "Simon Allain – First Ancestor",
+      "script": "script/06-simon-allain-first-ancestor.md",
+      "source_label": "Printed pages 95-103 | Source scans 102-110",
       "status": "script-ready",
       "audio_file": null
     },
     {
       "index": 7,
-      "title": "Additional Alain and L'Heureux Stories",
-      "script": "script/07-additional-alain-and-l-heureux-stories.md",
-      "source_pages": [
-        77,
-        81
-      ],
+      "entry_id": "chapter-007",
+      "title": "MARTIN ALPHONSE LESSARD",
+      "script": "script/07-martin-alphonse-lessard.md",
+      "source_label": "Printed pages 104-106 | Source scans 111-113",
       "status": "script-ready",
       "audio_file": null
     },
     {
       "index": 8,
-      "title": "Lessard Family History",
-      "script": "script/08-lessard-family-history.md",
-      "source_pages": [
-        88,
-        95
-      ],
+      "entry_id": "chapter-008",
+      "title": "Henri Alain",
+      "script": "script/08-henri-alain.md",
+      "source_label": "Printed pages 107-111 | Source scans 114-118",
       "status": "script-ready",
       "audio_file": null
     },
     {
       "index": 9,
-      "title": "Lessard Family Stories",
-      "script": "script/09-lessard-family-stories.md",
-      "source_pages": [
-        96,
-        130
-      ],
+      "entry_id": "chapter-009",
+      "title": "Moise Alain",
+      "script": "script/09-moise-alain.md",
+      "source_label": "Printed pages 112-116 | Source scans 119-123",
       "status": "script-ready",
       "audio_file": null
     },
     {
       "index": 10,
-      "title": "Veillardville",
-      "script": "script/10-veillardville.md",
-      "source_pages": [
-        136,
-        142
-      ],
+      "entry_id": "chapter-010",
+      "title": "Louis Alain's Children's Stories",
+      "script": "script/10-louis-alain-s-children-s-stories.md",
+      "source_label": "Printed pages 117-123 | Source scans 124-130",
       "status": "script-ready",
       "audio_file": null
     },
     {
       "index": 11,
-      "title": "Memories and Personal Records",
-      "script": "script/11-memories-and-personal-records.md",
-      "source_pages": [
-        143,
-        152
-      ],
+      "entry_id": "chapter-011",
+      "title": "Additional",
+      "script": "script/11-additional.md",
+      "source_label": "Printed pages 124-126 | Source scans 131-133",
       "status": "script-ready",
       "audio_file": null
+    },
+    {
+      "index": 12,
+      "entry_id": "chapter-012",
+      "title": "Rolland Alain's Children's Stories",
+      "script": "script/12-rolland-alain-s-children-s-stories.md",
+      "source_label": "Printed page 127 | Source scan 134",
+      "status": "script-ready",
+      "audio_file": null
+    },
+    {
+      "index": 13,
+      "entry_id": "chapter-013",
+      "title": "Marie Paule (Alain) Menzies",
+      "script": "script/13-marie-paule-alain-menzies.md",
+      "source_label": "Printed page 128 | Source scan 135",
+      "status": "script-ready",
+      "audio_file": null
+    },
+    {
+      "index": 14,
+      "entry_id": "chapter-014",
+      "title": "Part V - Veillardville",
+      "script": "script/14-part-v-veillardville.md",
+      "source_label": "Printed pages 129-135 | Source scans 136-142",
+      "status": "script-ready",
+      "audio_file": null
+    },
+    {
+      "index": 15,
+      "entry_id": "chapter-015",
+      "title": "Part VI – Memories",
+      "script": "script/15-part-vi-memories.md",
+      "source_label": "Printed pages 136-142 | Source scans 143-149",
+      "status": "script-ready",
+      "audio_file": null
+    }
+  ],
+  "skipped_entries": [
+    {
+      "entry_id": "page-001",
+      "title": "Page 1",
+      "reason": "page-level material",
+      "source_label": "Printed page 1 | Source scan 8",
+      "table_count": 0
+    },
+    {
+      "entry_id": "page-002",
+      "title": "Page 2",
+      "reason": "page-level material",
+      "source_label": "Printed page 2 | Source scan 9",
+      "table_count": 0
+    },
+    {
+      "entry_id": "page-003",
+      "title": "Image 3",
+      "reason": "page-level material",
+      "source_label": "Source scan 3",
+      "table_count": 0
+    },
+    {
+      "entry_id": "page-004",
+      "title": "Page 3",
+      "reason": "page-level material",
+      "source_label": "Printed page 3 | Source scan 10",
+      "table_count": 0
+    },
+    {
+      "entry_id": "page-005",
+      "title": "Page iii",
+      "reason": "page-level material",
+      "source_label": "Source scan 4",
+      "table_count": 1
+    },
+    {
+      "entry_id": "page-006",
+      "title": "Page 4",
+      "reason": "page-level material",
+      "source_label": "Printed page 4 | Source scan 11",
+      "table_count": 0
+    },
+    {
+      "entry_id": "page-007",
+      "title": "Page iv",
+      "reason": "page-level material",
+      "source_label": "Source scan 5",
+      "table_count": 0
+    },
+    {
+      "entry_id": "page-008",
+      "title": "Page 5",
+      "reason": "page-level material",
+      "source_label": "Printed page 5 | Source scan 12",
+      "table_count": 0
+    },
+    {
+      "entry_id": "page-009",
+      "title": "Page v",
+      "reason": "page-level material",
+      "source_label": "Source scan 6",
+      "table_count": 0
+    },
+    {
+      "entry_id": "page-010",
+      "title": "Page 6",
+      "reason": "page-level material",
+      "source_label": "Printed page 6 | Source scan 13",
+      "table_count": 0
+    },
+    {
+      "entry_id": "page-011",
+      "title": "Page vi",
+      "reason": "page-level material",
+      "source_label": "Source scan 7",
+      "table_count": 0
+    },
+    {
+      "entry_id": "page-012",
+      "title": "Page 7",
+      "reason": "page-level material",
+      "source_label": "Printed page 7 | Source scan 14",
+      "table_count": 0
+    },
+    {
+      "entry_id": "page-013",
+      "title": "Page 8",
+      "reason": "page-level material",
+      "source_label": "Printed page 8 | Source scan 15",
+      "table_count": 0
+    },
+    {
+      "entry_id": "page-014",
+      "title": "Page 9",
+      "reason": "page-level material",
+      "source_label": "Printed page 9 | Source scan 16",
+      "table_count": 0
+    },
+    {
+      "entry_id": "page-015",
+      "title": "Page 10",
+      "reason": "page-level material",
+      "source_label": "Printed page 10 | Source scan 17",
+      "table_count": 0
+    },
+    {
+      "entry_id": "page-016",
+      "title": "Page 11",
+      "reason": "page-level material",
+      "source_label": "Printed page 11 | Source scan 18",
+      "table_count": 0
+    },
+    {
+      "entry_id": "page-017",
+      "title": "Page 12",
+      "reason": "page-level material",
+      "source_label": "Printed page 12 | Source scan 19",
+      "table_count": 0
+    },
+    {
+      "entry_id": "page-018",
+      "title": "Page 13",
+      "reason": "page-level material",
+      "source_label": "Printed page 13 | Source scan 20",
+      "table_count": 0
+    },
+    {
+      "entry_id": "page-019",
+      "title": "Page 14",
+      "reason": "page-level material",
+      "source_label": "Printed page 14 | Source scan 21",
+      "table_count": 0
+    },
+    {
+      "entry_id": "page-020",
+      "title": "Page 15",
+      "reason": "page-level material",
+      "source_label": "Printed page 15 | Source scan 22",
+      "table_count": 0
+    },
+    {
+      "entry_id": "page-021",
+      "title": "Page 16",
+      "reason": "page-level material",
+      "source_label": "Printed page 16 | Source scan 23",
+      "table_count": 0
+    },
+    {
+      "entry_id": "chapter-016",
+      "title": "Part VII – Personal Records",
+      "reason": "personal records tables",
+      "source_label": "Printed pages 143-144 | Source scans 150-151",
+      "table_count": 8
+    },
+    {
+      "entry_id": "chapter-017",
+      "title": "Bibliography",
+      "reason": "bibliography",
+      "source_label": "Printed pages 145-146 | Source scans 152-153",
+      "table_count": 0
+    },
+    {
+      "entry_id": "chapter-018",
+      "title": "Alain Lessard",
+      "reason": "cover and title pages",
+      "source_label": "Source scans 1-2",
+      "table_count": 0
     }
   ]
 }

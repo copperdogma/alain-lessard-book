@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_reviewed": "2026-07-01",
+  "last_reviewed": "2026-07-02",
   "sources": [
     {
       "id": "main-book-raw-scans",
@@ -32,6 +32,30 @@
       "id": "searchable-pdf",
       "path": "output/pdf/alain-lessard-book-searchable.pdf",
       "format": "pdf-with-ocr",
+      "status": "generated"
+    },
+    {
+      "id": "archival-searchable-pdf",
+      "path": "output/pdf/alain-lessard-book-archival-searchable.pdf",
+      "format": "pdf-with-ocr",
+      "status": "generated"
+    },
+    {
+      "id": "doc-web-html-bundle",
+      "path": "input/doc-web-html/alain-lessard-book-r1",
+      "format": "doc-web-html-provenance-bundle",
+      "status": "generated"
+    },
+    {
+      "id": "family-site-build",
+      "path": "build/family-site",
+      "format": "static-site-bundle",
+      "status": "generated"
+    },
+    {
+      "id": "audiobook-scripts",
+      "path": "audiobook/script",
+      "format": "markdown-narration-scripts",
       "status": "generated"
     }
   ]

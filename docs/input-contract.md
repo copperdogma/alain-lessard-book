@@ -48,10 +48,17 @@ The current intake boundary is local and file-based.
 
 ## `doc-web` Boundary
 
-`doc-web` can consume either `output/processed-pages/` or the final searchable
-PDF for future website intake. It does not replace this repo's scan cleanup and
-PDF construction path, because its maintained output contract is an
-HTML/provenance bundle rather than a PDF.
+`doc-web` consumes `output/processed-pages/` for website and audio intake. The
+active accepted bundle is:
+
+- Active marker: `input/doc-web-html/active-bundle.json`
+- Accepted snapshot: `input/doc-web-html/alain-lessard-book-r1/`
+- Manifest: `input/doc-web-html/alain-lessard-book-r1/manifest.json`
+- Provenance: `input/doc-web-html/alain-lessard-book-r1/provenance/blocks.jsonl`
+- Image crops: `input/doc-web-html/alain-lessard-book-r1/images/`
+
+This does not replace this repo's scan cleanup and PDF construction path,
+because `doc-web` emits an HTML/provenance bundle rather than a PDF.
 
 ## Supplemental Inputs
 

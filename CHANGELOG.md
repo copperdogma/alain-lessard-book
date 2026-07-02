@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026-07-02
+
+- Added the Alain `doc-web` runtime config, image-HTML recipe, import wrapper,
+  and Make targets for contract, run, import, and active-bundle validation.
+- Ran `doc-web` against `output/processed-pages/` and accepted
+  `input/doc-web-html/alain-lessard-book-r1/` with 39 entries, 1,738
+  provenance rows, and 155 extracted image crops.
+- Rebuilt the family site generator around the accepted `doc-web` bundle so
+  chapters preserve tables, figures, captions, source scan links, search, TOC,
+  archive downloads, and audio-script links.
+- Rebuilt the audiobook script generator from the `doc-web` HTML bundle and
+  kept table-heavy records, bibliography, cover/title pages, and page-level
+  reference material out of the audio lane.
+- Deployed the doc-web-powered site to DreamHost and verified the public host,
+  figure/caption pages, table pages, versioned search assets, and live search
+  results over HTTPS.
+
 ## 2026-07-01
 
 - Bootstrapped the project repo from the Onward methodology surface.

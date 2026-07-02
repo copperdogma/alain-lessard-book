@@ -10,3 +10,4 @@ Current priority: inventory supplemental scans and generate reviewed audio files
 
 - **Done** — `docs/stories/story-001-main-book-scan-to-searchable-pdf.md` — Main book scan to searchable PDF
 - **Done** — `docs/stories/story-002-dreamhost-hosted-subdomain-public-verification.md` — DreamHost hosted subdomain public verification
+- **Done** — `docs/stories/story-003-doc-web-powered-onward-style-site.md` — doc-web powered Onward-style site

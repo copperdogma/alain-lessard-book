@@ -79,9 +79,10 @@ and companion archive materials.
 ### C4 Website is live; companion materials and reviewed audio are still pending
 
 - Ideal: cleaned scans and OCR feed a structured, public, Onward-style book site
-- Constraint: the first static site is generated from the processed page images,
-  searchable PDF text, and audio-script manifest, then uploaded over the Onward
-  DreamHost SFTP path
+- Constraint: the static site is generated from the accepted `doc-web`
+  HTML/provenance bundle, copied processed page images, generated PDF
+  downloads, and audio-script manifest, then uploaded over the Onward DreamHost
+  SFTP path
 - Constraint: DreamHost assigned this hosted subdomain to origin
   `173.236.136.184`, not the older Onward origin IP
 - Limitation: the public site currently contains generated audio scripts but no
