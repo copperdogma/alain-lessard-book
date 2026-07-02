@@ -146,6 +146,48 @@
   ],
   "skipped_entries": [
     {
+      "entry_id": "chapter-018",
+      "title": "Alain Lessard",
+      "reason": "cover and title pages",
+      "source_label": "Source scans 1-2",
+      "table_count": 0
+    },
+    {
+      "entry_id": "page-003",
+      "title": "Image 3",
+      "reason": "page-level material",
+      "source_label": "Source scan 3",
+      "table_count": 0
+    },
+    {
+      "entry_id": "page-005",
+      "title": "Page iii",
+      "reason": "page-level material",
+      "source_label": "Source scan 4",
+      "table_count": 1
+    },
+    {
+      "entry_id": "page-007",
+      "title": "Page iv",
+      "reason": "page-level material",
+      "source_label": "Source scan 5",
+      "table_count": 0
+    },
+    {
+      "entry_id": "page-009",
+      "title": "Page v",
+      "reason": "page-level material",
+      "source_label": "Source scan 6",
+      "table_count": 0
+    },
+    {
+      "entry_id": "page-011",
+      "title": "Page vi",
+      "reason": "page-level material",
+      "source_label": "Source scan 7",
+      "table_count": 0
+    },
+    {
       "entry_id": "page-001",
       "title": "Page 1",
       "reason": "page-level material",
@@ -160,13 +202,6 @@
       "table_count": 0
     },
     {
-      "entry_id": "page-003",
-      "title": "Image 3",
-      "reason": "page-level material",
-      "source_label": "Source scan 3",
-      "table_count": 0
-    },
-    {
       "entry_id": "page-004",
       "title": "Page 3",
       "reason": "page-level material",
@@ -174,24 +209,10 @@
       "table_count": 0
     },
     {
-      "entry_id": "page-005",
-      "title": "Page iii",
-      "reason": "page-level material",
-      "source_label": "Source scan 4",
-      "table_count": 1
-    },
-    {
       "entry_id": "page-006",
       "title": "Page 4",
       "reason": "page-level material",
       "source_label": "Printed page 4 | Source scan 11",
-      "table_count": 0
-    },
-    {
-      "entry_id": "page-007",
-      "title": "Page iv",
-      "reason": "page-level material",
-      "source_label": "Source scan 5",
       "table_count": 0
     },
     {
@@ -202,24 +223,10 @@
       "table_count": 0
     },
     {
-      "entry_id": "page-009",
-      "title": "Page v",
-      "reason": "page-level material",
-      "source_label": "Source scan 6",
-      "table_count": 0
-    },
-    {
       "entry_id": "page-010",
       "title": "Page 6",
       "reason": "page-level material",
       "source_label": "Printed page 6 | Source scan 13",
-      "table_count": 0
-    },
-    {
-      "entry_id": "page-011",
-      "title": "Page vi",
-      "reason": "page-level material",
-      "source_label": "Source scan 7",
       "table_count": 0
     },
     {
@@ -304,13 +311,6 @@
       "title": "Bibliography",
       "reason": "bibliography",
       "source_label": "Printed pages 145-146 | Source scans 152-153",
-      "table_count": 0
-    },
-    {
-      "entry_id": "chapter-018",
-      "title": "Alain Lessard",
-      "reason": "cover and title pages",
-      "source_label": "Source scans 1-2",
       "table_count": 0
     }
   ]

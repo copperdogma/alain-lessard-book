@@ -1,5 +1,20 @@
 # Changelog
 
+## [2026-07-02-01] - Improve book website navigation
+
+### Added
+- Added a family-site validator for local and public static-site checks.
+
+### Changed
+- Reworked the book page contents around source-order parts and heading links
+  from the accepted `doc-web` bundle.
+- Removed per-heading page labels from the book contents so the TOC stays
+  focused on section and family-entry headings.
+
+### Fixed
+- Added sticky-header-safe hash navigation so deep links land with their
+  headings visible.
+
 ## 2026-07-02
 
 - Added the Alain `doc-web` runtime config, image-HTML recipe, import wrapper,

@@ -27,10 +27,11 @@ SITE_TITLE = "Alain Lessard"
 SITE_SUBTITLE = "Our First Ancestors and A Compilation of Stories of Their Descendants"
 PUBLIC_HOST = "https://alain-lessard.copper-dog.com"
 BOOK_YEAR = "1987"
-SITE_ASSET_VERSION = "20260702-docweb-r2"
+SITE_ASSET_VERSION = "20260702-docweb-r6"
 
 ARTICLE_RE = re.compile(r"<article\b[^>]*>(.*?)</article>", re.IGNORECASE | re.DOTALL)
 IMAGE_SRC_RE = re.compile(r'(<img\b[^>]*\bsrc=")images/', re.IGNORECASE)
+GENERIC_TOC_HEADING_RE = re.compile(r"^(?:Page\s+(?:\d+|[ivxlcdm]+)|Image\s+\d+)$", re.IGNORECASE)
 IMG_TAG_RE = re.compile(r"<img\b(?![^>]*\bloading=)", re.IGNORECASE)
 DECORATIVE_FIGURE_RE = re.compile(
     r'<figure\b[^>]*>\s*<img\b(?![^>]*\bsrc=)[^>]*alt="Decorative line break"[^>]*/?>\s*</figure>',
@@ -113,6 +114,27 @@ class Entry:
         )
 
 
+@dataclass(frozen=True)
+class Heading:
+    level: int
+    text: str
+    heading_id: str | None
+
+
+@dataclass(frozen=True)
+class HeadingMeta:
+    printed_page: int | None
+    printed_label: str
+    source_page: int | None
+
+
+@dataclass(frozen=True)
+class BookPart:
+    part_id: str
+    title: str
+    links: tuple[str, ...]
+
+
 class TextExtractor(HTMLParser):
     def __init__(self, skip_tags: Iterable[str] = ()) -> None:
         super().__init__(convert_charrefs=True)
@@ -142,6 +164,42 @@ class TextExtractor(HTMLParser):
     def handle_data(self, data: str) -> None:
         if not self.skip_stack and data.strip():
             self.parts.append(data)
+
+
+class HeadingExtractor(HTMLParser):
+    def __init__(self, levels: set[int]) -> None:
+        super().__init__(convert_charrefs=True)
+        self.levels = levels
+        self.active_level: int | None = None
+        self.active_id: str | None = None
+        self.active_parts: list[str] = []
+        self.headings: list[Heading] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        match = re.fullmatch(r"h([1-6])", tag.lower())
+        if not match:
+            return
+        level = int(match.group(1))
+        if level not in self.levels:
+            return
+        attrs_map = {name.lower(): value or "" for name, value in attrs}
+        self.active_level = level
+        self.active_id = attrs_map.get("id") or None
+        self.active_parts = []
+
+    def handle_endtag(self, tag: str) -> None:
+        if self.active_level is None or tag.lower() != f"h{self.active_level}":
+            return
+        text = re.sub(r"\s+", " ", "".join(self.active_parts)).strip()
+        if text:
+            self.headings.append(Heading(self.active_level, text, self.active_id))
+        self.active_level = None
+        self.active_id = None
+        self.active_parts = []
+
+    def handle_data(self, data: str) -> None:
+        if self.active_level is not None:
+            self.active_parts.append(data)
 
 
 def require_file(path: Path, label: str) -> None:
@@ -176,13 +234,10 @@ def load_bundle() -> Bundle:
 
 def ordered_entries(bundle: Bundle) -> list[Entry]:
     entries = [Entry.from_record(record) for record in bundle.manifest.get("entries", [])]
-    by_id = {entry.entry_id: entry for entry in entries}
-    ordered: list[Entry] = []
-    for entry_id in bundle.manifest.get("reading_order") or []:
-        if entry_id in by_id:
-            ordered.append(by_id.pop(entry_id))
-    ordered.extend(sorted(by_id.values(), key=lambda entry: (entry.order, entry.entry_id)))
-    return ordered
+    # The imported manifest is accepted source data, but this book's early
+    # front matter landed out of physical order. Website reading order follows
+    # source-scan order so page vi precedes printed page 1.
+    return sorted(entries, key=lambda entry: (min(entry.source_pages) if entry.source_pages else 9999, entry.order, entry.entry_id))
 
 
 def read_article_html(bundle: Bundle, entry: Entry) -> str:
@@ -218,6 +273,87 @@ def html_to_text(html: str, skip_tags: Iterable[str] = ()) -> str:
     if current:
         blocks.append(" ".join(current).strip())
     return "\n\n".join(block for block in blocks if block)
+
+
+def heading_records(html: str, levels: set[int] | None = None) -> list[Heading]:
+    parser = HeadingExtractor(levels or {1, 2})
+    parser.feed(html)
+    return parser.headings
+
+
+def is_toc_heading(text: str) -> bool:
+    normalized = re.sub(r"\s+", " ", text).strip()
+    return bool(normalized) and not GENERIC_TOC_HEADING_RE.fullmatch(normalized)
+
+
+def first_heading_title(article: str, fallback: str) -> str:
+    headings = heading_records(article, {1})
+    if not headings:
+        headings = heading_records(article, {2})
+    return headings[0].text if headings else fallback
+
+
+def display_title(bundle: Bundle, entry: Entry) -> str:
+    return first_heading_title(read_article_html(bundle, entry), entry.title)
+
+
+def load_heading_meta(bundle: Bundle) -> dict[str, HeadingMeta]:
+    if not bundle.provenance_path:
+        return {}
+    rows: dict[str, HeadingMeta] = {}
+    with bundle.provenance_path.open(encoding="utf-8") as handle:
+        for line in handle:
+            if not line.strip():
+                continue
+            record = json.loads(line)
+            if record.get("block_kind") != "heading" or not record.get("block_id"):
+                continue
+            printed_raw = record.get("source_printed_page_number")
+            printed_page = int(printed_raw) if isinstance(printed_raw, int) and 0 < printed_raw < 400 else None
+            source_raw = record.get("source_page_number")
+            rows[str(record["block_id"])] = HeadingMeta(
+                printed_page=printed_page,
+                printed_label=str(record.get("source_printed_page_label") or ""),
+                source_page=int(source_raw) if isinstance(source_raw, int) else None,
+            )
+    return rows
+
+
+PART_ORDER = (
+    ("front", "Front Matter"),
+    ("part-i", "Part I - Alain Family History"),
+    ("part-ii", "Part II - Alain Family Stories"),
+    ("part-iii", "Part III - Lessard Family History"),
+    ("part-iv", "Part IV - Lessard Family Stories"),
+    ("part-v", "Part V - Veillardville"),
+    ("part-vi", "Part VI - Memories"),
+    ("part-vii", "Part VII - Personal Records"),
+    ("back", "Bibliography and Index"),
+)
+
+
+def book_part_for(entry: Entry, meta: HeadingMeta | None) -> str:
+    source_page = meta.source_page if meta and meta.source_page is not None else (min(entry.source_pages) if entry.source_pages else None)
+    printed_page = meta.printed_page if meta else entry.printed_page_start
+    if source_page is not None and source_page <= 7:
+        return "front"
+    if printed_page is None:
+        return "front"
+    if 1 <= printed_page <= 6:
+        return "part-i"
+    if 7 <= printed_page <= 80:
+        return "part-ii"
+    if 81 <= printed_page <= 88:
+        return "part-iii"
+    if 89 <= printed_page <= 128:
+        return "part-iv"
+    if 129 <= printed_page <= 135:
+        return "part-v"
+    if 136 <= printed_page <= 142:
+        return "part-vi"
+    if 143 <= printed_page <= 144:
+        return "part-vii"
+    return "back"
 
 
 def excerpt_from_html(html: str, limit: int = 240) -> str:
@@ -332,16 +468,21 @@ def html_page(title: str, body: str, current: str = "") -> str:
 def render_chapter_card(bundle: Bundle, entry: Entry) -> str:
     article = read_article_html(bundle, entry)
     label = entry_meta_label(entry)
+    title = display_title(bundle, entry)
     return f"""<article class="entry-card">
   <p class="eyebrow">{escape(entry.kind.title())}{f" | {escape(label)}" if label else ""}</p>
-  <h3><a href="{escape(entry.path)}">{escape(entry.title)}</a></h3>
+  <h3><a href="{escape(entry.path)}">{escape(title)}</a></h3>
   <p>{escape(excerpt_from_html(article))}</p>
 </article>"""
 
 
+def home_feature_entries(entries: list[Entry]) -> list[Entry]:
+    skip_ids = {"chapter-018", "page-003", "page-005"}
+    return [entry for entry in entries if entry.entry_id not in skip_ids][:6]
+
+
 def render_home(bundle: Bundle, entries: list[Entry]) -> str:
-    chapters = [entry for entry in entries if entry.kind == "chapter"]
-    feature_cards = "\n".join(render_chapter_card(bundle, entry) for entry in chapters[:6])
+    feature_cards = "\n".join(render_chapter_card(bundle, entry) for entry in home_feature_entries(entries))
     table_count = sum(read_article_html(bundle, entry).lower().count("<table") for entry in entries)
     figure_count = sum(read_article_html(bundle, entry).lower().count("<figure") for entry in entries)
     body = f"""
@@ -367,8 +508,8 @@ def render_home(bundle: Bundle, entries: list[Entry]) -> str:
         <p>Names, places, and stories can be searched across the reading edition, and each entry links back to its source scans.</p>
       </article>
       <article>
-        <h2>Audio handoff</h2>
-        <p>Narrative chapters have audiobook scripts prepared separately from reference tables and indexes.</p>
+        <h2>Audio companion</h2>
+        <p>Narrative chapters can be prepared for listening, while tables, indexes, and records stay easy to read on the site.</p>
       </article>
     </section>
 
@@ -381,7 +522,7 @@ def render_home(bundle: Bundle, entries: list[Entry]) -> str:
     <section class="section-list">
       <div class="section-heading">
         <h2>Start Reading</h2>
-        <p>Browse the chapter entries or use the full table of contents on the reading page.</p>
+        <p>Begin with the front matter and early family-history sections, or use the complete contents on the reading page.</p>
       </div>
       <div class="cards">{feature_cards}</div>
     </section>
@@ -389,32 +530,77 @@ def render_home(bundle: Bundle, entries: list[Entry]) -> str:
     return html_page("Home", body, "Home")
 
 
-def render_toc(entries: list[Entry]) -> str:
+def render_toc(parts: list[BookPart]) -> str:
     lines = []
-    for entry in entries:
-        label = entry_meta_label(entry)
-        lines.append(
-            f'<li><a href="{escape(entry.path)}">{escape(entry.title)}</a>'
-            f'<span>{escape(label or entry.kind.title())}</span></li>'
-        )
+    for part in parts:
+        count = len(part.links)
+        label = "1 heading" if count == 1 else f"{count} headings"
+        lines.append(f'<li><a href="#{escape(part.part_id)}">{escape(part.title)}</a><span>{label}</span></li>')
     return "\n".join(lines)
 
 
+def build_book_parts(bundle: Bundle, entries: list[Entry]) -> list[BookPart]:
+    metadata = load_heading_meta(bundle)
+    links_by_part: dict[str, list[str]] = {part_id: [] for part_id, _ in PART_ORDER}
+    seen: set[tuple[str, str, str]] = set()
+    for entry in entries:
+        article = read_article_html(bundle, entry)
+        headings = [heading for heading in heading_records(article, {1, 2}) if is_toc_heading(heading.text)]
+        if not headings:
+            title = display_title(bundle, entry)
+            if not is_toc_heading(title):
+                continue
+            part_id = book_part_for(entry, None)
+            href = entry.path
+            key = (part_id, href, title)
+            if key not in seen:
+                seen.add(key)
+                links_by_part[part_id].append(
+                    f'<li class="heading-level-1"><a href="{escape(href)}">{escape(title)}</a></li>'
+                )
+            continue
+        for heading in headings:
+            meta = metadata.get(heading.heading_id or "")
+            part_id = book_part_for(entry, meta)
+            href = f"{entry.path}#{heading.heading_id}" if heading.heading_id else entry.path
+            key = (part_id, href, heading.text)
+            if key in seen:
+                continue
+            seen.add(key)
+            links_by_part.setdefault(part_id, []).append(
+                f'<li class="heading-level-{heading.level}"><a href="{escape(href)}">{escape(heading.text)}</a></li>'
+            )
+    parts: list[BookPart] = []
+    for part_id, title in PART_ORDER:
+        links = tuple(links_by_part.get(part_id) or ())
+        if links:
+            parts.append(BookPart(part_id, title, links))
+    return parts
+
+
+def render_part_sections(parts: list[BookPart]) -> str:
+    rendered = []
+    for part in parts:
+        count = len(part.links)
+        label = "1 heading" if count == 1 else f"{count} headings"
+        rendered.append(
+            f"""<section class="part-section" id="{escape(part.part_id)}">
+  <div class="part-heading">
+    <h2>{escape(part.title)}</h2>
+    <p>{label}</p>
+  </div>
+  <ol class="part-links">{''.join(part.links)}</ol>
+</section>"""
+        )
+    return "\n".join(rendered)
+
+
 def render_book(bundle: Bundle, entries: list[Entry]) -> str:
-    chapters = [entry for entry in entries if entry.kind == "chapter"]
-    pages = [entry for entry in entries if entry.kind == "page"]
-    chapter_cards = "\n".join(render_chapter_card(bundle, entry) for entry in chapters)
-    page_cards = "\n".join(
-        f"""<article class="compact-entry">
-  <a href="{escape(entry.path)}">{escape(entry.title)}</a>
-  <span>{escape(entry_meta_label(entry) or "Source page")}</span>
-</article>"""
-        for entry in pages
-    )
+    parts = build_book_parts(bundle, entries)
     body = f"""
     <section class="page-title">
       <h1>Read the Book</h1>
-      <p>Search the text, browse the table of contents, and open chapters with their photographs, captions, and tables in place.</p>
+      <p>Search the text, browse the book parts, and jump directly to family entries, photographs, captions, and tables.</p>
     </section>
     <section class="book-tools">
       <label class="search-label" for="site-search">Search the book</label>
@@ -424,13 +610,10 @@ def render_book(bundle: Bundle, entries: list[Entry]) -> str:
     <section class="book-layout">
       <aside class="toc-panel">
         <h2>Contents</h2>
-        <ol>{render_toc(entries)}</ol>
+        <ol>{render_toc(parts)}</ol>
       </aside>
       <div class="entry-list">
-        <h2>Chapters</h2>
-        <div class="cards">{chapter_cards}</div>
-        <h2>Page Entries</h2>
-        <div class="compact-grid">{page_cards}</div>
+        {render_part_sections(parts)}
       </div>
     </section>
     <script src="assets/search.js?v={SITE_ASSET_VERSION}"></script>
@@ -456,9 +639,11 @@ def render_entry_page(bundle: Bundle, entries: list[Entry], index: int) -> str:
     entry = entries[index]
     article = read_article_html(bundle, entry)
     label = entry_meta_label(entry)
+    title = display_title(bundle, entry)
     body = f"""
     <section class="entry-header">
       <p class="eyebrow">{escape(entry.kind.title())}{f" | {escape(label)}" if label else ""}</p>
+      <h1>{escape(title)}</h1>
     </section>
     {entry_nav(entries, index)}
     <section class="reader-shell">
@@ -473,7 +658,7 @@ def render_entry_page(bundle: Bundle, entries: list[Entry], index: int) -> str:
     </section>
     {entry_nav(entries, index)}
 """
-    return html_page(entry.title, body, "Read")
+    return html_page(title, body, "Read")
 
 
 def render_archive(bundle: Bundle, entries: list[Entry]) -> str:
@@ -488,23 +673,22 @@ def render_archive(bundle: Bundle, entries: list[Entry]) -> str:
   <p>{size_mb:.1f} MiB.</p>
 </article>"""
             )
-    provenance_link = (
-        '<li><a href="data/block-provenance.jsonl">Block provenance data</a></li>' if bundle.provenance_path else ""
-    )
+    doc_web_image_count = len(list((bundle.root / "images").glob("*")))
+    provenance_link = '<li><a href="data/block-provenance.jsonl">Source trace data</a></li>' if bundle.provenance_path else ""
     body = f"""
     <section class="page-title">
       <h1>Archive</h1>
-      <p>Downloads and source records for the family book edition.</p>
+      <p>Download the PDFs and review the source records that keep the family book traceable.</p>
     </section>
     <section class="cards">{''.join(pdf_cards)}</section>
     <section class="archive-grid">
       <article>
-        <h2>Structured Reading Files</h2>
+        <h2>Book Data</h2>
         <ul>
-          <li><a href="data/structured-manifest.json">Reading manifest</a></li>
+          <li><a href="data/structured-manifest.json">Reading inventory</a></li>
           {provenance_link}
           <li>{len(entries)} reading entries</li>
-          <li>{len(bundle.manifest.get("asset_roots", []))} asset roots</li>
+          <li>{doc_web_image_count} photograph and illustration crops</li>
         </ul>
       </article>
       <article>
@@ -514,6 +698,18 @@ def render_archive(bundle: Bundle, entries: list[Entry]) -> str:
     </section>
 """
     return html_page("Archive", body, "Archive")
+
+
+def friendly_skip_group(reason: str, count: int) -> str:
+    labels = {
+        "page-level material": "Opening pages and page-by-page material stay in the reading edition.",
+        "personal records tables": "Personal records remain readable as tables.",
+        "bibliography": "The bibliography remains in the archive.",
+        "cover and title pages": "Cover and title pages remain in the archive.",
+    }
+    fallback = f"{reason.title()} stays in the readable archive."
+    noun = "entry" if count == 1 else "entries"
+    return f"{labels.get(reason, fallback)} <span>{count} {noun}</span>"
 
 
 def render_audiobook() -> str:
@@ -532,8 +728,12 @@ def render_audiobook() -> str:
 </article>"""
         for entry in entries
     )
+    skipped_counts: dict[str, int] = {}
+    for item in skipped:
+        reason = str(item.get("reason") or "reference material")
+        skipped_counts[reason] = skipped_counts.get(reason, 0) + 1
     skipped_rows = "\n".join(
-        f"<li>{escape(str(item.get('title')))} <span>{escape(str(item.get('reason')))}</span></li>" for item in skipped
+        f"<li>{friendly_skip_group(escape(reason), count)}</li>" for reason, count in sorted(skipped_counts.items())
     )
     body = f"""
     <section class="page-title">
@@ -608,11 +808,12 @@ def write_search_index(output_dir: Path, bundle: Bundle, entries: list[Entry]) -
     rows = []
     for entry in entries:
         article = read_article_html(bundle, entry)
+        title = display_title(bundle, entry)
         rows.append(
             {
                 "entry_id": entry.entry_id,
                 "kind": entry.kind,
-                "title": entry.title,
+                "title": title,
                 "url": entry.path,
                 "source_label": entry_meta_label(entry),
                 "text": re.sub(r"\s+", " ", html_to_text(article)).strip(),
@@ -693,6 +894,7 @@ SITE_CSS = """
 
 html {
   font-size: 100%;
+  scroll-padding-top: 6.5rem;
 }
 
 body {
@@ -889,11 +1091,29 @@ img {
 .source-panel,
 .book-tools,
 .toc-panel,
-.compact-entry {
+.compact-entry,
+.part-section {
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
+}
+
+.entry-list,
+.toc-panel,
+.cards,
+.entry-card,
+.compact-entry,
+.part-section,
+.part-links {
+  min-width: 0;
+}
+
+.entry-card,
+.compact-entry,
+.toc-panel,
+.part-links {
+  overflow-wrap: anywhere;
 }
 
 .intro-grid article,
@@ -901,7 +1121,8 @@ img {
 .entry-card,
 .source-panel,
 .book-tools,
-.toc-panel {
+.toc-panel,
+.part-section {
   padding: 1rem;
 }
 
@@ -909,7 +1130,9 @@ img {
 .archive-grid h2,
 .section-heading h2,
 .page-title h1,
+.entry-header h1,
 .entry-list h2,
+.part-heading h2,
 .source-panel h2 {
   margin: 0 0 0.55rem;
   line-height: 1.15;
@@ -984,6 +1207,12 @@ img {
 
 .page-title h1 {
   font-size: 2.2rem;
+}
+
+.entry-header h1 {
+  max-width: 54rem;
+  font-size: 2.2rem;
+  overflow-wrap: anywhere;
 }
 
 .page-title p {
@@ -1072,6 +1301,55 @@ img {
   margin-top: 0;
 }
 
+.part-section {
+  margin-bottom: 1rem;
+  scroll-margin-top: 6.5rem;
+}
+
+.part-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.part-heading p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.part-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.1rem 1rem;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.part-links li {
+  padding: 0.35rem 0;
+  border-bottom: 1px solid #edf0eb;
+}
+
+.part-links li.heading-level-2 {
+  padding-left: 0.9rem;
+}
+
+.part-links li.heading-level-2 a::before {
+  content: "";
+  display: inline-block;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-right: 0.4rem;
+  border-left: 1px solid var(--muted);
+  border-bottom: 1px solid var(--muted);
+  transform: translateY(-0.12rem);
+}
+
 .compact-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1141,6 +1419,11 @@ img {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   line-height: 1.25;
   letter-spacing: 0;
+  scroll-margin-top: 6.5rem;
+}
+
+.book-article [id] {
+  scroll-margin-top: 6.5rem;
 }
 
 .book-article h1 {
@@ -1249,6 +1532,7 @@ img {
   .stat-band,
   .book-layout,
   .compact-grid,
+  .part-links,
   .reader-shell {
     grid-template-columns: 1fr;
   }
@@ -1272,7 +1556,7 @@ SEARCH_JS = """
   const results = document.querySelector("#search-results");
   if (!input || !results) return;
 
-  const response = await fetch("search-index.json?v=20260702-docweb-r2");
+  const response = await fetch("search-index.json?v=20260702-docweb-r6");
   const index = await response.json();
 
   function snippet(text, term) {

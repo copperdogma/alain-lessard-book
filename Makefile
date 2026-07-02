@@ -5,8 +5,9 @@ FAMILY_SITE_OUTPUT ?= build/family-site
 AUDIOBOOK_SCRIPT_OUTPUT ?= audiobook/script
 DOC_WEB_RUN_ID ?= alain-lessard-book-r1
 DOC_WEB_SNAPSHOT_ID ?= $(DOC_WEB_RUN_ID)
+PUBLIC_BASE ?=
 
-.PHONY: skills-sync skills-check methodology-compile methodology-check scan-intake-report process-scans build-image-pdf ocr-pdf archival-image-pdf archival-pdf scan-pdf-all doc-web-contract doc-web-run doc-web-import-run doc-web-validate-active build-audiobook-script build-family-site deploy-static render-pdf-checks validate-pdf
+.PHONY: skills-sync skills-check methodology-compile methodology-check scan-intake-report process-scans build-image-pdf ocr-pdf archival-image-pdf archival-pdf scan-pdf-all doc-web-contract doc-web-run doc-web-import-run doc-web-validate-active build-audiobook-script build-family-site validate-family-site deploy-static render-pdf-checks validate-pdf
 
 skills-sync:
 	./scripts/sync-agent-skills.sh
@@ -57,6 +58,9 @@ build-audiobook-script:
 
 build-family-site: build-audiobook-script
 	$(PYTHON) scripts/build_family_site.py --output "$(FAMILY_SITE_OUTPUT)"
+
+validate-family-site:
+	$(PYTHON) scripts/validate_family_site.py --build-dir "$(FAMILY_SITE_OUTPUT)" $(if $(PUBLIC_BASE),--public-base "$(PUBLIC_BASE)",)
 
 deploy-static:
 	$(PYTHON) scripts/deploy_static_site.py --source "$(FAMILY_SITE_OUTPUT)"
