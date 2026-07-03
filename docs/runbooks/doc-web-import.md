@@ -42,6 +42,22 @@ The family-site build wraps each imported `doc-web` entry in the repo's public
 site chrome while preserving the article HTML, figure crops, captions, table
 HTML, and source page metadata.
 
+## Companion Documents
+
+The two supplemental documents found inside the book use a separate accepted
+`doc-web` bundle root so the main book's active bundle marker stays stable:
+
+```bash
+make companion-doc-web
+make validate-companion-doc-web
+make build-family-site
+```
+
+The accepted companion bundles live under
+`input/doc-web-html/companion-documents/`. The family-site builder reads those
+bundles for the companion HTML pages while the downloadable companion PDFs
+continue to come from `scripts/process_supplemental_scans.py`.
+
 ## Upstream References
 
 From the sibling checkout at `/Users/cam/Documents/Projects/doc-web`, the

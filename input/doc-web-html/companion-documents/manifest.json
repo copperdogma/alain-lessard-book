@@ -1,0 +1,42 @@
+{
+  "schema_version": "alain_lessard_companion_doc_web_bundles_v1",
+  "generated_at": "2026-07-03T00:49:54-06:00",
+  "recipe": "configs/doc-web/recipe-companion-document-images-html-mvp.yaml",
+  "document_count": 2,
+  "documents": [
+    {
+      "slug": "alains-song",
+      "title": "Alain's Song",
+      "description": "A six-page song sheet found tucked into the Alain Lessard book.",
+      "run_id": "alain-companion-alains-song-doc-web-r1",
+      "bundle_root": "input/doc-web-html/companion-documents/alains-song",
+      "manifest": "input/doc-web-html/companion-documents/alains-song/manifest.json",
+      "provenance": "input/doc-web-html/companion-documents/alains-song/provenance/blocks.jsonl",
+      "entry_count": 1,
+      "provenance_row_count": 48,
+      "image_count": 0,
+      "reading_order": [
+        "chapter-001"
+      ]
+    },
+    {
+      "slug": "growing-up-on-the-farm",
+      "title": "Growing Up on the Farm: A Tribute to Mom and Dad",
+      "description": "A thirteen-page tribute poem found tucked into the Alain Lessard book.",
+      "run_id": "alain-companion-growing-up-on-the-farm-doc-web-r1",
+      "bundle_root": "input/doc-web-html/companion-documents/growing-up-on-the-farm",
+      "manifest": "input/doc-web-html/companion-documents/growing-up-on-the-farm/manifest.json",
+      "provenance": "input/doc-web-html/companion-documents/growing-up-on-the-farm/provenance/blocks.jsonl",
+      "entry_count": 5,
+      "provenance_row_count": 134,
+      "image_count": 0,
+      "reading_order": [
+        "chapter-001",
+        "chapter-002",
+        "chapter-003",
+        "chapter-004",
+        "chapter-005"
+      ]
+    }
+  ]
+}

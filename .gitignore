@@ -11,6 +11,7 @@ build/
 .runtime/
 tmp/
 output/processed-pages/
+output/supplemental-documents/
 output/pdf/
 audiobook/**/*.mp3
 audiobook/ElevenLabs_*/

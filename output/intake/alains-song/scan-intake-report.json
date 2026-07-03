@@ -1,0 +1,289 @@
+{
+  "schema_version": "book_scan_intake_report_v1",
+  "generated_at": "2026-07-02T10:19:13-06:00",
+  "input_dir": "/Users/cam/Documents/Projects/alain-lessard-book/input/raw scans/Alain's Song",
+  "extensions": [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".tif",
+    ".tiff"
+  ],
+  "summary": {
+    "count": 6,
+    "suffixes": {
+      ".jpg": 6
+    },
+    "dimensions": {
+      "2550x3264": 2,
+      "2550x3272": 2,
+      "2550x3268": 1,
+      "2550x3260": 1
+    },
+    "modes": {
+      "RGB": 6
+    },
+    "components": {
+      "3": 6
+    },
+    "dpi": {
+      "300.0x300.0": 6
+    },
+    "platen_side_signals": {
+      "none": 6
+    },
+    "rgb_channel_check": {
+      "checked": 6,
+      "identical": 6,
+      "non_identical": 0,
+      "non_identical_examples": [],
+      "first_image_non_identical": false,
+      "after_first_all_identical": true
+    },
+    "bytes": {
+      "min": 2456797,
+      "max": 2740237,
+      "total": 15564058
+    },
+    "recommendations": [
+      "Treat RGB images with identical channels as grayscale content unless visual review says otherwise.",
+      "Normalize processed pages to one target canvas before PDF assembly."
+    ]
+  },
+  "records": [
+    {
+      "path": "IMG_20260702_0001.jpg",
+      "absolute_path": "/Users/cam/Documents/Projects/alain-lessard-book/input/raw scans/Alain's Song/IMG_20260702_0001.jpg",
+      "suffix": ".jpg",
+      "bytes": 2521601,
+      "mode": "RGB",
+      "components": 3,
+      "size": [
+        2550,
+        3264
+      ],
+      "width": 2550,
+      "height": 3264,
+      "dpi": [
+        "300.0",
+        "300.0"
+      ],
+      "exif": {
+        "make": "Canon",
+        "model": "Canon TS3400 series",
+        "orientation": 1,
+        "x_resolution": "300.0",
+        "y_resolution": "300.0",
+        "resolution_unit": 2,
+        "software": "IJ Scan Utility",
+        "datetime": "2026/07/02 09:54:25"
+      },
+      "rgb_channels_identical": true,
+      "dark_band_signal": {
+        "side": "none",
+        "top_score": 0.14,
+        "bottom_score": 0.11939,
+        "top_peak_y": 1137,
+        "bottom_peak_y": 2328,
+        "threshold": 0.65,
+        "image_width": 2550,
+        "image_height": 3264
+      }
+    },
+    {
+      "path": "IMG_20260702_0002.jpg",
+      "absolute_path": "/Users/cam/Documents/Projects/alain-lessard-book/input/raw scans/Alain's Song/IMG_20260702_0002.jpg",
+      "suffix": ".jpg",
+      "bytes": 2607835,
+      "mode": "RGB",
+      "components": 3,
+      "size": [
+        2550,
+        3264
+      ],
+      "width": 2550,
+      "height": 3264,
+      "dpi": [
+        "300.0",
+        "300.0"
+      ],
+      "exif": {
+        "make": "Canon",
+        "model": "Canon TS3400 series",
+        "orientation": 1,
+        "x_resolution": "300.0",
+        "y_resolution": "300.0",
+        "resolution_unit": 2,
+        "software": "IJ Scan Utility",
+        "datetime": "2026/07/02 09:55:20"
+      },
+      "rgb_channels_identical": true,
+      "dark_band_signal": {
+        "side": "none",
+        "top_score": 0.127102,
+        "bottom_score": 0.104532,
+        "top_peak_y": 350,
+        "bottom_peak_y": 2384,
+        "threshold": 0.65,
+        "image_width": 2550,
+        "image_height": 3264
+      }
+    },
+    {
+      "path": "IMG_20260702_0003.jpg",
+      "absolute_path": "/Users/cam/Documents/Projects/alain-lessard-book/input/raw scans/Alain's Song/IMG_20260702_0003.jpg",
+      "suffix": ".jpg",
+      "bytes": 2624480,
+      "mode": "RGB",
+      "components": 3,
+      "size": [
+        2550,
+        3272
+      ],
+      "width": 2550,
+      "height": 3272,
+      "dpi": [
+        "300.0",
+        "300.0"
+      ],
+      "exif": {
+        "make": "Canon",
+        "model": "Canon TS3400 series",
+        "orientation": 1,
+        "x_resolution": "300.0",
+        "y_resolution": "300.0",
+        "resolution_unit": 2,
+        "software": "IJ Scan Utility",
+        "datetime": "2026/07/02 09:56:39"
+      },
+      "rgb_channels_identical": true,
+      "dark_band_signal": {
+        "side": "none",
+        "top_score": 0.141525,
+        "bottom_score": 0.112593,
+        "top_peak_y": 329,
+        "bottom_peak_y": 2355,
+        "threshold": 0.65,
+        "image_width": 2550,
+        "image_height": 3272
+      }
+    },
+    {
+      "path": "IMG_20260702_0004.jpg",
+      "absolute_path": "/Users/cam/Documents/Projects/alain-lessard-book/input/raw scans/Alain's Song/IMG_20260702_0004.jpg",
+      "suffix": ".jpg",
+      "bytes": 2740237,
+      "mode": "RGB",
+      "components": 3,
+      "size": [
+        2550,
+        3268
+      ],
+      "width": 2550,
+      "height": 3268,
+      "dpi": [
+        "300.0",
+        "300.0"
+      ],
+      "exif": {
+        "make": "Canon",
+        "model": "Canon TS3400 series",
+        "orientation": 1,
+        "x_resolution": "300.0",
+        "y_resolution": "300.0",
+        "resolution_unit": 2,
+        "software": "IJ Scan Utility",
+        "datetime": "2026/07/02 09:57:01"
+      },
+      "rgb_channels_identical": true,
+      "dark_band_signal": {
+        "side": "none",
+        "top_score": 0.138301,
+        "bottom_score": 0.11146,
+        "top_peak_y": 861,
+        "bottom_peak_y": 2450,
+        "threshold": 0.65,
+        "image_width": 2550,
+        "image_height": 3268
+      }
+    },
+    {
+      "path": "IMG_20260702_0005.jpg",
+      "absolute_path": "/Users/cam/Documents/Projects/alain-lessard-book/input/raw scans/Alain's Song/IMG_20260702_0005.jpg",
+      "suffix": ".jpg",
+      "bytes": 2613108,
+      "mode": "RGB",
+      "components": 3,
+      "size": [
+        2550,
+        3260
+      ],
+      "width": 2550,
+      "height": 3260,
+      "dpi": [
+        "300.0",
+        "300.0"
+      ],
+      "exif": {
+        "make": "Canon",
+        "model": "Canon TS3400 series",
+        "orientation": 1,
+        "x_resolution": "300.0",
+        "y_resolution": "300.0",
+        "resolution_unit": 2,
+        "software": "IJ Scan Utility",
+        "datetime": "2026/07/02 09:58:19"
+      },
+      "rgb_channels_identical": true,
+      "dark_band_signal": {
+        "side": "none",
+        "top_score": 0.138519,
+        "bottom_score": 0.131416,
+        "top_peak_y": 421,
+        "bottom_peak_y": 2555,
+        "threshold": 0.65,
+        "image_width": 2550,
+        "image_height": 3260
+      }
+    },
+    {
+      "path": "IMG_20260702_0006.jpg",
+      "absolute_path": "/Users/cam/Documents/Projects/alain-lessard-book/input/raw scans/Alain's Song/IMG_20260702_0006.jpg",
+      "suffix": ".jpg",
+      "bytes": 2456797,
+      "mode": "RGB",
+      "components": 3,
+      "size": [
+        2550,
+        3272
+      ],
+      "width": 2550,
+      "height": 3272,
+      "dpi": [
+        "300.0",
+        "300.0"
+      ],
+      "exif": {
+        "make": "Canon",
+        "model": "Canon TS3400 series",
+        "orientation": 1,
+        "x_resolution": "300.0",
+        "y_resolution": "300.0",
+        "resolution_unit": 2,
+        "software": "IJ Scan Utility",
+        "datetime": "2026/07/02 09:59:37"
+      },
+      "rgb_channels_identical": true,
+      "dark_band_signal": {
+        "side": "none",
+        "top_score": 0.120479,
+        "bottom_score": 0.003965,
+        "top_peak_y": 378,
+        "bottom_peak_y": 2903,
+        "threshold": 0.65,
+        "image_width": 2550,
+        "image_height": 3272
+      }
+    }
+  ]
+}

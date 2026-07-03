@@ -1,0 +1,123 @@
+{
+  "schema_version": "doc_web_bundle_manifest_v1",
+  "module_id": "build_chapter_html_v1",
+  "run_id": "alain-companion-growing-up-on-the-farm-doc-web-r1",
+  "created_at": "2026-07-03T06:49:52.460368Z",
+  "document_id": "alain-lessard-companion-documents",
+  "title": "Alain Lessard Companion Documents",
+  "creator": null,
+  "source_artifact": "04_extract_page_numbers_html_v1/pages_html_with_page_numbers.jsonl",
+  "index_path": "index.html",
+  "entries": [
+    {
+      "entry_id": "chapter-001",
+      "kind": "chapter",
+      "title": "Growing Up On The Farm A Tribute To Mom And Dad",
+      "path": "chapter-001.html",
+      "order": 1,
+      "prev_entry_id": null,
+      "next_entry_id": "chapter-002",
+      "source_pages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "printed_pages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "printed_page_start": 1,
+      "printed_page_end": 5
+    },
+    {
+      "entry_id": "chapter-002",
+      "kind": "chapter",
+      "title": "SUMMER DAYS",
+      "path": "chapter-002.html",
+      "order": 2,
+      "prev_entry_id": "chapter-001",
+      "next_entry_id": "chapter-003",
+      "source_pages": [
+        6
+      ],
+      "printed_pages": [
+        6
+      ],
+      "printed_page_start": 6,
+      "printed_page_end": 6
+    },
+    {
+      "entry_id": "chapter-003",
+      "kind": "chapter",
+      "title": "WINTER DAYS",
+      "path": "chapter-003.html",
+      "order": 3,
+      "prev_entry_id": "chapter-002",
+      "next_entry_id": "chapter-004",
+      "source_pages": [
+        7,
+        8
+      ],
+      "printed_pages": [
+        7,
+        8
+      ],
+      "printed_page_start": 7,
+      "printed_page_end": 8
+    },
+    {
+      "entry_id": "chapter-004",
+      "kind": "chapter",
+      "title": "SCHOOL AT WHITE POPLAR",
+      "path": "chapter-004.html",
+      "order": 4,
+      "prev_entry_id": "chapter-003",
+      "next_entry_id": "chapter-005",
+      "source_pages": [
+        9,
+        10
+      ],
+      "printed_pages": [
+        9,
+        10
+      ],
+      "printed_page_start": 9,
+      "printed_page_end": 10
+    },
+    {
+      "entry_id": "chapter-005",
+      "kind": "chapter",
+      "title": "FAMILY LIFE",
+      "path": "chapter-005.html",
+      "order": 5,
+      "prev_entry_id": "chapter-004",
+      "next_entry_id": null,
+      "source_pages": [
+        11,
+        12,
+        13
+      ],
+      "printed_pages": [
+        11,
+        12,
+        13
+      ],
+      "printed_page_start": 11,
+      "printed_page_end": 13
+    }
+  ],
+  "reading_order": [
+    "chapter-001",
+    "chapter-002",
+    "chapter-003",
+    "chapter-004",
+    "chapter-005"
+  ],
+  "asset_roots": [],
+  "provenance_path": "provenance/blocks.jsonl"
+}

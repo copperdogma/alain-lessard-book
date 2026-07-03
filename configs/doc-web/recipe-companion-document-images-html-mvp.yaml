@@ -1,0 +1,93 @@
+# Alain companion documents: cleaned page images to readable HTML.
+#
+# This keeps the main-book doc-web recipe separate. Companion documents are
+# short song/poem sheets, so the recipe uses OCR plus chapter building without
+# the table-rescue loop needed by the larger family-history book.
+
+input:
+  images: output/supplemental-documents/alains-song/processed-pages
+
+stages:
+  - id: images_to_manifest
+    stage: extract
+    module: images_dir_to_manifest_v1
+    out: pages_images_manifest.jsonl
+    params:
+      input_dir: output/supplemental-documents/alains-song/processed-pages
+
+  - id: ocr_ai
+    stage: extract
+    module: ocr_ai_gpt51_v1
+    needs: [images_to_manifest]
+    inputs:
+      pages: images_to_manifest
+    out: pages_html.jsonl
+    params:
+      model: gemini-3.1-pro-preview
+      retry_model: gpt-5.1
+      max_output_tokens: 65536
+      max_long_side: 2048
+      concurrency: 3
+      skip_blank_pages: true
+      ocr_hints: |
+        - Preserve text exactly as printed; do not correct spelling or normalize punctuation.
+        - Preserve stanza breaks, line breaks, headings, refrains, and bylines as seen in the image.
+        - These are family companion documents found inside the Alain Lessard book.
+        - For song or poem text, use readable paragraph/stanza HTML and <br> for line breaks inside stanzas.
+        - Do not invent missing lines or repair uncertain words beyond what is visible.
+
+  - id: crop_illustrations
+    stage: extract
+    module: crop_illustrations_guided_v1
+    needs: [ocr_ai]
+    inputs:
+      ocr_manifest: ocr_ai
+    out: illustration_manifest.jsonl
+    params:
+      transparency: false
+      output_format: jpeg
+      jpeg_quality: 92
+      detection_mode: layout
+      white_threshold: 252
+      min_nonwhite_ratio: 0.02
+      max_text_ratio: 0.02
+      min_area_ratio: 0.001
+      min_width: 120
+      min_height: 120
+      padding_percent: 0.08
+      trim_caption: false
+
+  - id: extract_page_numbers
+    stage: transform
+    module: extract_page_numbers_html_v1
+    needs: [ocr_ai]
+    inputs:
+      pages: ocr_ai
+    out: pages_html_with_page_numbers.jsonl
+
+  - id: portionize_headings
+    stage: portionize
+    module: portionize_headings_html_v1
+    needs: [extract_page_numbers]
+    inputs:
+      pages: extract_page_numbers
+    out: portions_non_toc.jsonl
+    params:
+      heading_tags: h1,h2,h3
+      allow_unnumbered: true
+      fallback_mode: single-document
+      fallback_title: Companion Document
+
+  - id: build_chapters
+    stage: build
+    module: build_chapter_html_v1
+    needs: [extract_page_numbers, portionize_headings, crop_illustrations]
+    inputs:
+      pages: extract_page_numbers
+      portions: portionize_headings
+      illustration_manifest: crop_illustrations
+    out: chapters_manifest.jsonl
+    params:
+      images_subdir: images
+      book_title: "Alain Lessard Companion Documents"
+      book_author: ""

@@ -62,6 +62,47 @@ because `doc-web` emits an HTML/provenance bundle rather than a PDF.
 
 ## Supplemental Inputs
 
-Supplemental scans mentioned by the user are not present yet. Add them under
-`input/raw scans/` with a named subfolder and update this contract before
-processing them.
+The supplemental scans found tucked into the book are now present. The user
+confirmed on 2026-07-02 that these are all of the secondary documents for this
+edition.
+
+### Alain's Song
+
+- Path: `input/raw scans/Alain's Song/`
+- Format: JPG
+- Count observed on 2026-07-02: 6 files
+- Filename pattern: `IMG_20260702_####.jpg`
+- Dimensions: `2550x3260` to `2550x3272`
+- DPI: 300
+- Intake report: `output/intake/alains-song/scan-intake-report.md`
+
+### Growing Up on the Farm
+
+- Path: `input/raw scans/Growing Up on the Farm/`
+- Format: JPG
+- Count observed on 2026-07-02: 13 files
+- Filename pattern: `IMG_20260702_####.jpg`
+- Dimensions: `2550x3268` to `2550x3292`
+- DPI: 300
+- Intake report: `output/intake/growing-up-on-the-farm/scan-intake-report.md`
+
+Both supplemental scan sets are encoded as RGB JPEGs with identical channels,
+so they are processed as grayscale pages. Intake found no scanner-platen bands
+requiring crop logic; the supplemental pipeline normalizes the pages to the
+same `2550x3371` canvas used by the main book.
+
+## Supplemental Generated Outputs
+
+- Supplemental manifest: `output/supplemental-documents/manifest.json`
+- Supplemental processed pages:
+  `output/supplemental-documents/<document>/processed-pages/page-###.jpg`
+- Supplemental OCR text:
+  `output/supplemental-documents/<document>/ocr-text.txt`
+- Alain's Song distribution PDF:
+  `output/pdf/alains-song-searchable.pdf`
+- Alain's Song archival PDF:
+  `output/pdf/alains-song-archival-searchable.pdf`
+- Growing Up on the Farm distribution PDF:
+  `output/pdf/growing-up-on-the-farm-searchable.pdf`
+- Growing Up on the Farm archival PDF:
+  `output/pdf/growing-up-on-the-farm-archival-searchable.pdf`

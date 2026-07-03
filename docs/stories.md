@@ -4,7 +4,7 @@
 
 ## Recommended Order
 
-Current priority: inventory supplemental scans and generate reviewed audio files when source material is available.
+Current priority: generate reviewed audio files when ready. The complete known supplemental scan set is inventoried and included in the archive surface.
 
 ## Current Stories
 

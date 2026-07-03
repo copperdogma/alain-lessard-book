@@ -15,10 +15,10 @@
       "id": "supplemental-scans",
       "label": "Supplemental scans",
       "path": "input/raw scans",
-      "format": "mixed",
-      "status": "not-present-yet",
-      "observed_count": 0,
-      "notes": "User mentioned a couple of minor companion items still need scanning."
+      "format": "jpg-sequence-folders",
+      "status": "present",
+      "observed_count": 19,
+      "notes": "Complete known supplemental set: 6 scans in `Alain's Song` and 13 scans in `Growing Up on the Farm`. User confirmed there are no more secondary documents."
     }
   ],
   "generated_artifacts": [
@@ -37,6 +37,24 @@
     {
       "id": "archival-searchable-pdf",
       "path": "output/pdf/alain-lessard-book-archival-searchable.pdf",
+      "format": "pdf-with-ocr",
+      "status": "generated"
+    },
+    {
+      "id": "supplemental-documents-manifest",
+      "path": "output/supplemental-documents/manifest.json",
+      "format": "json-manifest-plus-ocr-text",
+      "status": "generated"
+    },
+    {
+      "id": "supplemental-searchable-pdfs",
+      "path": "output/pdf/{alains-song,growing-up-on-the-farm}-searchable.pdf",
+      "format": "pdf-with-ocr",
+      "status": "generated"
+    },
+    {
+      "id": "supplemental-archival-searchable-pdfs",
+      "path": "output/pdf/{alains-song,growing-up-on-the-farm}-archival-searchable.pdf",
       "format": "pdf-with-ocr",
       "status": "generated"
     },

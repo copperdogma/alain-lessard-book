@@ -14,15 +14,21 @@ and generated artifacts.
 The project should consume named, inspectable upstream inputs rather than a
 folder of undocumented local files.
 
-### C1 Main-book scans exist, but supplemental materials are not all present
+### C1 Source inventory now includes all known supplemental materials
 
 - Ideal: all book and companion source material arrives with complete metadata
-- Constraint: begin with the 153 main-book JPG scans in `input/raw scans/main book/`
-- Limitation: the user noted that a couple of minor companion items still need
-  to be scanned
-- Limitation type: source availability
-- Evolution signal: all supplemental items have source files and inventory rows
-- Residual form: keep a thin source manifest and delete temporary notes
+- Constraint: begin with the 153 main-book JPG scans in
+  `input/raw scans/main book/`
+- Constraint: the complete known supplemental set is now present as
+  `input/raw scans/Alain's Song/` and
+  `input/raw scans/Growing Up on the Farm/`
+- Limitation: future unknown family materials may still arrive outside this
+  edition's current source contract
+- Limitation type: source inventory
+- Evolution signal: any newly discovered item receives its own intake report,
+  manifest row, PDF, and website archive entry
+- Residual form: keep the source manifest and intake reports as the handoff
+  record
 
 ## spec:2 Scan Cleanup & PDF Construction
 
@@ -76,21 +82,20 @@ searchable, and navigable outside the PDF.
 The chosen site stack should support chapter reading, indexes, source downloads,
 and companion archive materials.
 
-### C4 Website is live; companion materials and reviewed audio are still pending
+### C4 Website is live; reviewed audio is still pending
 
 - Ideal: cleaned scans and OCR feed a structured, public, Onward-style book site
 - Constraint: the static site is generated from the accepted `doc-web`
   HTML/provenance bundle, copied processed page images, generated PDF
-  downloads, and audio-script manifest, then uploaded over the Onward DreamHost
-  SFTP path
+  downloads, supplemental-document PDFs, and audio-script manifest, then
+  uploaded over the Onward DreamHost SFTP path
 - Constraint: DreamHost assigned this hosted subdomain to origin
   `173.236.136.184`, not the older Onward origin IP
 - Limitation: the public site currently contains generated audio scripts but no
-  reviewed narrated MP3 files, and supplemental companion scans are still
-  pending
-- Limitation type: source availability
-- Evolution signal: supplemental items are scanned and inventoried, then
-  reviewed audio files are generated and published where narration is useful
+  reviewed narrated MP3 files
+- Limitation type: production readiness
+- Evolution signal: reviewed audio files are generated and published where
+  narration is useful
 - Residual form: keep the static generator, deploy helper, and infrastructure
   note; delete only temporary DNS workaround notes
 

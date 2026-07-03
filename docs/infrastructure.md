@@ -104,23 +104,29 @@ curl -I http://alain-lessard.copper-dog.com
 Observed result: Cloudflare edge IPs resolve; the homepage, book page, chapter
 page, and searchable PDF return `HTTP/2 200`; HTTP returns `301` to HTTPS.
 
-Fresh public verification on 2026-07-02 after the `doc-web` rebuild:
+Fresh public verification on 2026-07-02 after the `doc-web` rebuild and
+supplemental-document archive update:
 
 ```bash
 make deploy-static
 curl -I https://alain-lessard.copper-dog.com/
 curl -I https://alain-lessard.copper-dog.com/chapter-001.html
 curl -I https://alain-lessard.copper-dog.com/chapter-016.html
+curl -I 'https://alain-lessard.copper-dog.com/downloads/alains-song-searchable.pdf?v=20260702-docweb-r8'
+curl -I 'https://alain-lessard.copper-dog.com/downloads/growing-up-on-the-farm-searchable.pdf?v=20260702-docweb-r8'
 curl -fsSL https://alain-lessard.copper-dog.com/book.html
-curl -fsSL 'https://alain-lessard.copper-dog.com/search-index.json?v=20260702-docweb-r2'
+curl -fsSL 'https://alain-lessard.copper-dog.com/search-index.json?v=20260702-docweb-r8'
 ```
 
 Observed result: the homepage, figure-heavy chapter, and table-heavy personal
-records chapter return `HTTP/2 200`. The live book page references
-`assets/search.js?v=20260702-docweb-r2`, that script fetches
-`search-index.json?v=20260702-docweb-r2`, the public search index has 39 entries
-and no stale `pages/` URLs, and a live browser search for "Veillardville"
-returns 12 results with the first result linking to `chapter-014.html`.
+records chapter return `HTTP/2 200`; the supplemental reader PDFs for
+`Alain's Song` and `Growing Up on the Farm` also return `HTTP/2 200` on the
+versioned URLs. The live home page references `assets/site.css?v=20260702-docweb-r8`,
+the live book page references `assets/search.js?v=20260702-docweb-r8`, that
+script fetches `search-index.json?v=20260702-docweb-r8`, the public search
+index has 41 entries and no stale `pages/` URLs, and companion search rows
+return the versioned reader PDF URLs. Versioned companion PDF links are required
+because Cloudflare can retain stale bare PDF URLs for the cache window.
 
 ## Deploy Shape
 

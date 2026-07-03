@@ -1,13 +1,14 @@
 BUNDLED_PYTHON := /Users/cam/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3
 PYTHON ?= $(shell if [ -x "$(BUNDLED_PYTHON)" ]; then echo "$(BUNDLED_PYTHON)"; else command -v python3; fi)
 SCAN_INPUT ?= input/raw scans/main book
+SCAN_INTAKE_OUTPUT ?= output/intake
 FAMILY_SITE_OUTPUT ?= build/family-site
 AUDIOBOOK_SCRIPT_OUTPUT ?= audiobook/script
 DOC_WEB_RUN_ID ?= alain-lessard-book-r1
 DOC_WEB_SNAPSHOT_ID ?= $(DOC_WEB_RUN_ID)
 PUBLIC_BASE ?=
 
-.PHONY: skills-sync skills-check methodology-compile methodology-check scan-intake-report process-scans build-image-pdf ocr-pdf archival-image-pdf archival-pdf scan-pdf-all doc-web-contract doc-web-run doc-web-import-run doc-web-validate-active build-audiobook-script build-family-site validate-family-site deploy-static render-pdf-checks validate-pdf
+.PHONY: skills-sync skills-check methodology-compile methodology-check scan-intake-report process-scans build-image-pdf ocr-pdf archival-image-pdf archival-pdf scan-pdf-all supplemental-docs validate-supplemental-docs render-supplemental-pdf-checks doc-web-contract doc-web-run doc-web-import-run doc-web-validate-active companion-doc-web validate-companion-doc-web build-audiobook-script build-family-site validate-family-site deploy-static render-pdf-checks validate-pdf
 
 skills-sync:
 	./scripts/sync-agent-skills.sh
@@ -22,7 +23,7 @@ methodology-check:
 	$(PYTHON) scripts/methodology_graph.py check
 
 scan-intake-report:
-	$(PYTHON) scripts/inspect_scan_set.py "$(SCAN_INPUT)"
+	$(PYTHON) scripts/inspect_scan_set.py "$(SCAN_INPUT)" --output-dir "$(SCAN_INTAKE_OUTPUT)"
 
 process-scans:
 	$(PYTHON) scripts/process_book_scans.py process
@@ -41,6 +42,15 @@ archival-pdf: archival-image-pdf
 
 scan-pdf-all: ocr-pdf archival-pdf
 
+supplemental-docs:
+	$(PYTHON) scripts/process_supplemental_scans.py all
+
+validate-supplemental-docs:
+	$(PYTHON) scripts/process_supplemental_scans.py validate
+
+render-supplemental-pdf-checks:
+	$(PYTHON) scripts/process_supplemental_scans.py render-checks
+
 doc-web-contract:
 	$(PYTHON) scripts/doc_web_import.py contract
 
@@ -53,10 +63,16 @@ doc-web-import-run:
 doc-web-validate-active:
 	$(PYTHON) scripts/doc_web_import.py validate-bundle --bundle-path "input/doc-web-html/$(DOC_WEB_SNAPSHOT_ID)"
 
+companion-doc-web: supplemental-docs
+	$(PYTHON) scripts/build_supplemental_doc_web.py run --force
+
+validate-companion-doc-web:
+	$(PYTHON) scripts/build_supplemental_doc_web.py validate
+
 build-audiobook-script:
 	$(PYTHON) scripts/build_audiobook_script.py --output "$(AUDIOBOOK_SCRIPT_OUTPUT)"
 
-build-family-site: build-audiobook-script
+build-family-site: build-audiobook-script supplemental-docs
 	$(PYTHON) scripts/build_family_site.py --output "$(FAMILY_SITE_OUTPUT)"
 
 validate-family-site:

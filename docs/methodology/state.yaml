@@ -8,14 +8,14 @@
     "tests/fixtures/formats/_coverage-matrix.json"
   ],
   "categories": {
-    "spec:1": { "substrate": "partial", "last_reviewed": "2026-07-02" },
+    "spec:1": { "substrate": "exists", "last_reviewed": "2026-07-02" },
     "spec:2": { "substrate": "exists", "last_reviewed": "2026-07-02" },
     "spec:3": { "substrate": "exists", "last_reviewed": "2026-07-02" },
     "spec:4": { "substrate": "exists", "last_reviewed": "2026-07-02" },
     "spec:5": { "substrate": "exists", "last_reviewed": "2026-07-02" }
   },
   "compromises": {
-    "C1": { "phase": "climb", "last_reviewed": "2026-07-01" },
+    "C1": { "phase": "hold", "last_reviewed": "2026-07-02" },
     "C2": { "phase": "hold", "last_reviewed": "2026-07-01" },
     "C3": { "phase": "hold", "last_reviewed": "2026-07-01" },
     "C4": { "phase": "hold", "last_reviewed": "2026-07-02" },
@@ -27,13 +27,11 @@
     "notes": "Canonical machine-readable inventory of source scans, doc-web bundle, generated site, audio-script, and PDF artifact surfaces."
   },
   "roadmap": {
-    "active_focus": [
-      "campaign:supplemental-materials"
-    ],
+    "active_focus": [],
     "sequencing_bias": [
       {
-        "target": "campaign:supplemental-materials",
-          "reason": "The main-book PDF, doc-web website path, and public deployment are established; the user noted a couple of companion items still need to be scanned, and reviewed audio MP3 files are not yet present."
+        "target": "campaign:reviewed-audio-files",
+          "reason": "The main-book PDF, doc-web website path, public deployment, and complete supplemental source set are established; reviewed audio MP3 files are not yet present."
       }
     ],
     "campaigns": [
@@ -63,9 +61,9 @@
       },
       {
         "id": "supplemental-materials",
-        "status": "pending",
+        "status": "done",
         "story_refs": [],
-        "notes": "The minor companion materials mentioned by the user still need source scans and inventory rows before they can join the site/archive surface."
+        "notes": "The complete known companion set is present under `input/raw scans/Alain's Song/` and `input/raw scans/Growing Up on the Farm/`; generated searchable PDFs and archive/search entries are now part of the normal build surface."
       }
     ]
   },
@@ -74,7 +72,7 @@
       {
         "id": "recommended-order",
         "title": "Recommended Order",
-        "markdown": "Current priority: inventory supplemental scans and generate reviewed audio files when source material is available."
+        "markdown": "Current priority: generate reviewed audio files when ready. The complete known supplemental scan set is inventoried and included in the archive surface."
       }
     ],
     "uncategorized_label": "Legacy / Uncategorized Stories"

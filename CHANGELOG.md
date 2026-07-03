@@ -1,5 +1,31 @@
 # Changelog
 
+## [2026-07-02-02] - Add supplemental documents to archive
+
+### Added
+- Added deterministic processing for the two supplemental scan folders,
+  producing reader and archival searchable PDFs for each document.
+- Added the companion documents to the family-site Archive page, download
+  bundle, and search index.
+- Added readable HTML pages for each companion document from accepted
+  `doc-web` bundles, with source page images and links to the reader and
+  archival PDFs.
+
+### Changed
+- Updated source inventory, methodology state, and validation to treat the
+  supplemental scan set as complete.
+- Simplified home-page Start Reading cards by removing printed-page and
+  source-scan metadata labels.
+- Added home-page companion-document links and tightened supplemental cleanup:
+  folded song sheets now get adaptive background normalization, while typed
+  pages get black/white normalization with deskew.
+- Versioned companion PDF links in the home page, archive page, and search
+  index so refreshed PDFs bypass stale CDN caches immediately.
+- Updated companion-document search rows to open the new HTML pages instead of
+  the PDF downloads.
+- Added a companion `doc-web` recipe and Make targets for running and
+  validating the two accepted companion-document HTML bundles.
+
 ## [2026-07-02-01] - Improve book website navigation
 
 ### Added

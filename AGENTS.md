@@ -102,4 +102,7 @@ tables, TOC, and search. The 2026-07-02 SFTP deploy uploaded the rebuilt bundle
 to DreamHost at `/home/onward_user/alain-lessard.copper-dog.com`; public HTTPS
 verification passes for the homepage, book/search page, figure-heavy chapter,
 table-heavy personal-records chapter, doc-web crops, and versioned search
-index. Final supplemental scans and reviewed audio MP3 files are still pending.
+index. The complete known supplemental scan set is present under
+`input/raw scans/Alain's Song/` and
+`input/raw scans/Growing Up on the Farm/`; reviewed audio MP3 files are still
+pending.

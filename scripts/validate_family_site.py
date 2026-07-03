@@ -18,17 +18,30 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_BUILD_DIR = ROOT / "build" / "family-site"
-ASSET_VERSION = "20260702-docweb-r6"
+ASSET_VERSION = "20260703-companion-docweb-r1"
 EXPECTED_ENTRY_COUNT = 39
-EXPECTED_HTML_PAGE_COUNT = 43
+EXPECTED_SEARCH_ROW_COUNT = 41
+EXPECTED_SUPPLEMENTAL_DOCUMENT_COUNT = 2
+EXPECTED_HTML_PAGE_COUNT = 45
 EXPECTED_DOC_WEB_IMAGES = 155
 EXPECTED_SCAN_IMAGES = 153
-EXPECTED_FIGURES = 155
+EXPECTED_FIGURES = 174
 EXPECTED_FIGCAPTIONS_MIN = 140
 EXPECTED_TABLES = 12
 EXPECTED_PERSONAL_RECORD_TABLES = 8
+EXPECTED_COMPANION_DOCUMENTS = (
+    ("alains-song", "companion-alains-song.html", "Alain's Song", 6),
+    ("growing-up-on-the-farm", "companion-growing-up-on-the-farm.html", "Growing Up on the Farm", 13),
+)
 
-SITE_COPY_FILES = ("index.html", "book.html", "archive.html", "audiobook.html")
+SITE_COPY_FILES = (
+    "index.html",
+    "book.html",
+    "archive.html",
+    "audiobook.html",
+    "companion-alains-song.html",
+    "companion-growing-up-on-the-farm.html",
+)
 READER_FACING_BANNED_PHRASES = (
     "audio handoff",
     "block provenance",
@@ -248,6 +261,7 @@ def check_required_pages(build_dir: Path, validation: Validation) -> None:
     validation.require(len(reading_order) == EXPECTED_ENTRY_COUNT, f"Expected {EXPECTED_ENTRY_COUNT} reading-order entries, found {len(reading_order)}")
     required = {"index.html", "book.html", "archive.html", "audiobook.html"}
     required.update(str(entry.get("path")) for entry in entries if isinstance(entry, dict) and entry.get("path"))
+    required.update(filename for _, filename, _, _ in EXPECTED_COMPANION_DOCUMENTS)
     for page in sorted(required):
         validation.require((build_dir / page).exists(), f"Required page is missing: {page}")
 
@@ -258,7 +272,12 @@ def check_search_index(build_dir: Path, validation: Validation) -> None:
     if not isinstance(index, list):
         validation.error("Search index is not a JSON list")
         return
-    validation.require(len(index) == EXPECTED_ENTRY_COUNT, f"Expected {EXPECTED_ENTRY_COUNT} search rows, found {len(index)}")
+    validation.require(len(index) == EXPECTED_SEARCH_ROW_COUNT, f"Expected {EXPECTED_SEARCH_ROW_COUNT} search rows, found {len(index)}")
+    supplemental_rows = [row for row in index if isinstance(row, dict) and str(row.get("entry_id") or "").startswith("supplemental-")]
+    validation.require(len(supplemental_rows) == EXPECTED_SUPPLEMENTAL_DOCUMENT_COUNT, f"Expected {EXPECTED_SUPPLEMENTAL_DOCUMENT_COUNT} supplemental search rows, found {len(supplemental_rows)}")
+    for row in supplemental_rows:
+        url = str(row.get("url") or "")
+        validation.require(url.startswith("companion-") and url.endswith(".html"), f"Supplemental search row should point at an HTML page, found {url}")
     for row_number, row in enumerate(index, start=1):
         if not isinstance(row, dict):
             validation.error(f"Search row {row_number} is not an object")
@@ -269,7 +288,8 @@ def check_search_index(build_dir: Path, validation: Validation) -> None:
         validation.require(bool(title), f"Search row {row_number} has no title")
         validation.require(bool(url), f"Search row {row_number} has no URL")
         validation.require("pages/" not in url, f"Search row {row_number} uses stale pages/ URL: {url}")
-        validation.require((build_dir / url).exists(), f"Search row {row_number} points at missing page: {url}")
+        parsed_url = urlparse(url)
+        validation.require((build_dir / unquote(parsed_url.path)).exists(), f"Search row {row_number} points at missing page: {url}")
         validation.require(bool(text.strip()), f"Search row {row_number} has empty searchable text: {title or url}")
 
 
@@ -349,6 +369,30 @@ def check_tables_figures_and_copy(build_dir: Path, parsed: dict[Path, PageParser
     validation.require("tables, indexes, and dense records stay" in audiobook_text, "Audiobook page should clearly explain why tables are not narrated")
     validation.require("page 1 page-level material" not in audiobook_text, "Audiobook page should not list raw page-level skip rows")
 
+    home_html = (build_dir / "index.html").read_text(encoding="utf-8")
+    home_text = parsed[build_dir / "index.html"].visible_text if (build_dir / "index.html") in parsed else ""
+    validation.require("Companion Documents" in home_text, "index.html should expose companion documents")
+    validation.require("Alain's Song" in home_text, "index.html should link Alain's Song")
+    validation.require("Growing Up on the Farm" in home_text, "index.html should link Growing Up on the Farm")
+    validation.require(
+        f'href="downloads/alains-song-searchable.pdf?v={ASSET_VERSION}"' in home_html,
+        "index.html should link the Alain's Song reader PDF",
+    )
+    validation.require(
+        f'href="downloads/growing-up-on-the-farm-searchable.pdf?v={ASSET_VERSION}"' in home_html,
+        "index.html should link the Growing Up on the Farm reader PDF",
+    )
+    validation.require('href="companion-alains-song.html"' in home_html, "index.html should link the Alain's Song HTML page")
+    validation.require('href="companion-growing-up-on-the-farm.html"' in home_html, "index.html should link the Growing Up on the Farm HTML page")
+    start_reading_match = re.search(r"<h2>Start Reading</h2>.*?</section>", home_html, flags=re.IGNORECASE | re.DOTALL)
+    if start_reading_match:
+        start_reading_html = start_reading_match.group(0)
+        validation.require("Printed page" not in start_reading_html, "Home Start Reading cards should not show printed-page metadata")
+        validation.require("Source scan" not in start_reading_html, "Home Start Reading cards should not show source-scan metadata")
+        validation.require('class="eyebrow">Page' not in start_reading_html, "Home Start Reading cards should not show generic Page labels")
+    else:
+        validation.error("Home page is missing the Start Reading section")
+
     book_path = build_dir / "book.html"
     book_html = book_path.read_text(encoding="utf-8") if book_path.exists() else ""
     book_text = parsed[book_path].visible_text if book_path in parsed else ""
@@ -358,6 +402,14 @@ def check_tables_figures_and_copy(build_dir: Path, parsed: dict[Path, PageParser
     validation.require("HENRI DELPHICE ALAIN" in book_text, "book.html should expose Part II family-entry headings")
     validation.require("MOISE (SMOKEY) ALAIN" in book_text, "book.html should expose Moise Alain as a jump target")
     validation.require("Page Entries" not in book_text, "book.html should not split the contents into generic Page Entries")
+    archive_text = parsed[build_dir / "archive.html"].visible_text if (build_dir / "archive.html") in parsed else ""
+    archive_html = (build_dir / "archive.html").read_text(encoding="utf-8") if (build_dir / "archive.html").exists() else ""
+    validation.require("Companion Documents" in archive_text, "archive.html should expose companion documents")
+    validation.require("Alain's Song" in archive_text, "archive.html should list Alain's Song")
+    validation.require("Growing Up on the Farm" in archive_text, "archive.html should list Growing Up on the Farm")
+    validation.require('href="companion-alains-song.html"' in archive_html, "archive.html should link the Alain's Song HTML page")
+    validation.require('href="companion-growing-up-on-the-farm.html"' in archive_html, "archive.html should link the Growing Up on the Farm HTML page")
+    validation.require("Supplemental items can be added" not in archive_text, "archive.html should not describe companion documents as pending")
     generic_toc_links = re.findall(r'<li class="heading-level-[12]"><a href="[^"]+">((?:Page|Image) [^<]+)</a>', book_html)
     validation.require(not generic_toc_links, f"book.html TOC should not expose generic page/image labels: {generic_toc_links[:8]}")
     part_link_blocks = re.findall(r'<ol class="part-links">(.*?)</ol>', book_html, flags=re.IGNORECASE | re.DOTALL)
@@ -378,6 +430,48 @@ def check_asset_version(build_dir: Path, validation: Validation) -> None:
     search_js = (build_dir / "assets" / "search.js").read_text(encoding="utf-8")
     validation.require(f"assets/search.js?v={ASSET_VERSION}" in book_html, "book.html does not reference the current search.js asset version")
     validation.require(f"search-index.json?v={ASSET_VERSION}" in search_js, "search.js does not fetch the current search-index asset version")
+
+
+def check_supplemental_downloads(build_dir: Path, validation: Validation) -> None:
+    downloads = build_dir / "downloads"
+    expected = (
+        "alains-song-searchable.pdf",
+        "alains-song-archival-searchable.pdf",
+        "growing-up-on-the-farm-searchable.pdf",
+        "growing-up-on-the-farm-archival-searchable.pdf",
+    )
+    for filename in expected:
+        path = downloads / filename
+        validation.require(path.exists(), f"Missing supplemental download: downloads/{filename}")
+        if path.exists():
+            validation.require(path.stat().st_size > 100_000, f"Supplemental download is unexpectedly small: downloads/{filename}")
+
+
+def check_companion_document_pages(build_dir: Path, parsed: dict[Path, PageParser], validation: Validation) -> None:
+    for slug, filename, title, page_count in EXPECTED_COMPANION_DOCUMENTS:
+        page = build_dir / filename
+        parser = parsed.get(page)
+        validation.require(page.exists(), f"Missing companion document HTML page: {filename}")
+        if not parser:
+            continue
+        html = page.read_text(encoding="utf-8")
+        text = parser.visible_text
+        validation.require(title in text, f"{filename} should expose the companion document title")
+        validation.require("Readable Text" in text, f"{filename} should expose a readable text section")
+        validation.require("Source Pages" in text, f"{filename} should expose source page images")
+        validation.require("Reader PDF" in text and "Archival PDF" in text, f"{filename} should keep PDF download links")
+        validation.require('class="doc-web-entry"' in html, f"{filename} should render accepted doc-web entry HTML")
+        validation.require("<pre>" not in html, f"{filename} should not fall back to the old raw OCR transcript renderer")
+        validation.require(
+            f'href="downloads/{slug}-searchable.pdf?v={ASSET_VERSION}"' in html,
+            f"{filename} should link the reader PDF with the current asset version",
+        )
+        validation.require(
+            f'href="downloads/{slug}-archival-searchable.pdf?v={ASSET_VERSION}"' in html,
+            f"{filename} should link the archival PDF with the current asset version",
+        )
+        image_refs = re.findall(rf'src="images/companion/{re.escape(slug)}/page-\d{{3}}\.jpg"', html)
+        validation.require(len(image_refs) == page_count, f"{filename} should include {page_count} companion page images, found {len(image_refs)}")
 
 
 def public_url(base: str, ref: str) -> str:
@@ -438,7 +532,7 @@ def check_public_site(build_dir: Path, public_base: str, refs: Iterable[str], va
         )
         with urlopen(search_request, timeout=timeout) as response:
             public_index = json.loads(response.read().decode("utf-8"))
-        validation.require(len(public_index) == EXPECTED_ENTRY_COUNT, f"Public search index has {len(public_index)} rows, expected {EXPECTED_ENTRY_COUNT}")
+        validation.require(len(public_index) == EXPECTED_SEARCH_ROW_COUNT, f"Public search index has {len(public_index)} rows, expected {EXPECTED_SEARCH_ROW_COUNT}")
         stale_urls = [row.get("url") for row in public_index if isinstance(row, dict) and "pages/" in str(row.get("url") or "")]
         validation.require(not stale_urls, f"Public search index has stale pages/ URLs: {stale_urls[:5]}")
     except Exception as exc:  # noqa: BLE001 - public verification should surface the exact failure.
@@ -457,8 +551,10 @@ def run_validation(build_dir: Path, public_base: str | None, timeout: float) -> 
     check_search_index(build_dir, validation)
     check_assets_and_images(build_dir, parsed, validation)
     check_tables_figures_and_copy(build_dir, parsed, validation)
+    check_supplemental_downloads(build_dir, validation)
+    check_companion_document_pages(build_dir, parsed, validation)
     check_asset_version(build_dir, validation)
-    validation.note(f"Checked {len(parsed)} HTML pages, {len(public_refs)} local references, and {EXPECTED_ENTRY_COUNT} search rows.")
+    validation.note(f"Checked {len(parsed)} HTML pages, {len(public_refs)} local references, and {EXPECTED_SEARCH_ROW_COUNT} search rows.")
 
     if public_base:
         check_public_site(build_dir, public_base, public_refs, validation, timeout)

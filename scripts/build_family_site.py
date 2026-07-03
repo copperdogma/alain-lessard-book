@@ -20,6 +20,8 @@ PROCESSED_DIR = ROOT / "output" / "processed-pages"
 PDF_DIR = ROOT / "output" / "pdf"
 DISTRIBUTION_PDF = PDF_DIR / "alain-lessard-book-searchable.pdf"
 ARCHIVAL_PDF = PDF_DIR / "alain-lessard-book-archival-searchable.pdf"
+SUPPLEMENTAL_MANIFEST_PATH = ROOT / "output" / "supplemental-documents" / "manifest.json"
+COMPANION_DOC_WEB_MANIFEST_PATH = ROOT / "input" / "doc-web-html" / "companion-documents" / "manifest.json"
 DEFAULT_OUTPUT_DIR = ROOT / "build" / "family-site"
 AUDIOBOOK_MANIFEST_PATH = ROOT / "audiobook" / "manifest.json"
 
@@ -27,7 +29,7 @@ SITE_TITLE = "Alain Lessard"
 SITE_SUBTITLE = "Our First Ancestors and A Compilation of Stories of Their Descendants"
 PUBLIC_HOST = "https://alain-lessard.copper-dog.com"
 BOOK_YEAR = "1987"
-SITE_ASSET_VERSION = "20260702-docweb-r6"
+SITE_ASSET_VERSION = "20260703-companion-docweb-r1"
 
 ARTICLE_RE = re.compile(r"<article\b[^>]*>(.*?)</article>", re.IGNORECASE | re.DOTALL)
 IMAGE_SRC_RE = re.compile(r'(<img\b[^>]*\bsrc=")images/', re.IGNORECASE)
@@ -135,6 +137,22 @@ class BookPart:
     links: tuple[str, ...]
 
 
+@dataclass(frozen=True)
+class SupplementalSiteDocument:
+    slug: str
+    title: str
+    description: str
+    page_count: int
+    text_path: Path
+    processed_dir: Path
+    doc_web_bundle_root: Path
+    doc_web_manifest_path: Path
+    doc_web_provenance_path: Path
+    doc_web_image_count: int
+    distribution_pdf: Path
+    archival_pdf: Path
+
+
 class TextExtractor(HTMLParser):
     def __init__(self, skip_tags: Iterable[str] = ()) -> None:
         super().__init__(convert_charrefs=True)
@@ -232,6 +250,63 @@ def load_bundle() -> Bundle:
     )
 
 
+def load_companion_doc_web_records() -> dict[str, dict]:
+    require_file(COMPANION_DOC_WEB_MANIFEST_PATH, "companion doc-web manifest")
+    manifest = json.loads(COMPANION_DOC_WEB_MANIFEST_PATH.read_text(encoding="utf-8"))
+    records = manifest.get("documents") or []
+    by_slug: dict[str, dict] = {}
+    for record in records:
+        slug = str(record.get("slug") or "")
+        if slug:
+            by_slug[slug] = record
+    return by_slug
+
+
+def load_supplemental_documents() -> list[SupplementalSiteDocument]:
+    if not SUPPLEMENTAL_MANIFEST_PATH.exists():
+        return []
+    manifest = json.loads(SUPPLEMENTAL_MANIFEST_PATH.read_text(encoding="utf-8"))
+    companion_records = load_companion_doc_web_records()
+    documents: list[SupplementalSiteDocument] = []
+    for record in manifest.get("documents", []):
+        slug = str(record["slug"])
+        companion_record = companion_records.get(slug)
+        if not companion_record:
+            raise SystemExit(f"Missing companion doc-web bundle record for {slug}")
+        pdfs = record.get("pdfs") or {}
+        distribution_pdf = ROOT / str(pdfs.get("distribution") or "")
+        archival_pdf = ROOT / str(pdfs.get("archival") or "")
+        text_path = ROOT / str(record.get("text") or "")
+        processed_dir = ROOT / str(record.get("processed_dir") or "")
+        doc_web_bundle_root = ROOT / str(companion_record.get("bundle_root") or "")
+        doc_web_manifest_path = ROOT / str(companion_record.get("manifest") or "")
+        doc_web_provenance_path = ROOT / str(companion_record.get("provenance") or "")
+        require_file(distribution_pdf, f"supplemental distribution PDF for {record.get('slug')}")
+        require_file(archival_pdf, f"supplemental archival PDF for {record.get('slug')}")
+        require_file(text_path, f"supplemental OCR text for {record.get('slug')}")
+        require_file(processed_dir, f"supplemental processed pages for {record.get('slug')}")
+        require_file(doc_web_bundle_root, f"companion doc-web bundle for {slug}")
+        require_file(doc_web_manifest_path, f"companion doc-web manifest for {slug}")
+        require_file(doc_web_provenance_path, f"companion doc-web provenance for {slug}")
+        documents.append(
+            SupplementalSiteDocument(
+                slug=slug,
+                title=str(record["title"]),
+                description=str(record.get("description") or ""),
+                page_count=int(record.get("page_count") or 0),
+                text_path=text_path,
+                processed_dir=processed_dir,
+                doc_web_bundle_root=doc_web_bundle_root,
+                doc_web_manifest_path=doc_web_manifest_path,
+                doc_web_provenance_path=doc_web_provenance_path,
+                doc_web_image_count=int(companion_record.get("image_count") or 0),
+                distribution_pdf=distribution_pdf,
+                archival_pdf=archival_pdf,
+            )
+        )
+    return documents
+
+
 def ordered_entries(bundle: Bundle) -> list[Entry]:
     entries = [Entry.from_record(record) for record in bundle.manifest.get("entries", [])]
     # The imported manifest is accepted source data, but this book's early
@@ -243,12 +318,16 @@ def ordered_entries(bundle: Bundle) -> list[Entry]:
 def read_article_html(bundle: Bundle, entry: Entry) -> str:
     source = bundle.root / entry.path
     require_file(source, f"doc-web entry {entry.entry_id}")
+    return read_doc_web_article(source, image_prefix="images/doc-web")
+
+
+def read_doc_web_article(source: Path, *, image_prefix: str) -> str:
     html = source.read_text(encoding="utf-8")
     match = ARTICLE_RE.search(html)
     if not match:
         raise SystemExit(f"Could not find article body in {source}")
     article = match.group(1).strip()
-    article = IMAGE_SRC_RE.sub(r"\1images/doc-web/", article)
+    article = IMAGE_SRC_RE.sub(lambda match: f"{match.group(1)}{image_prefix}/", article)
     article = IMG_TAG_RE.sub('<img loading="lazy" decoding="async"', article)
     article = DECORATIVE_FIGURE_RE.sub('<hr class="decorative-break">', article)
     article = NO_SRC_IMG_RE.sub("", article)
@@ -467,13 +546,61 @@ def html_page(title: str, body: str, current: str = "") -> str:
 
 def render_chapter_card(bundle: Bundle, entry: Entry) -> str:
     article = read_article_html(bundle, entry)
-    label = entry_meta_label(entry)
     title = display_title(bundle, entry)
     return f"""<article class="entry-card">
-  <p class="eyebrow">{escape(entry.kind.title())}{f" | {escape(label)}" if label else ""}</p>
   <h3><a href="{escape(entry.path)}">{escape(title)}</a></h3>
   <p>{escape(excerpt_from_html(article))}</p>
 </article>"""
+
+
+def supplemental_download_href(pdf: Path) -> str:
+    return f"downloads/{pdf.name}?v={SITE_ASSET_VERSION}"
+
+
+def supplemental_html_filename(document: SupplementalSiteDocument) -> str:
+    return f"companion-{document.slug}.html"
+
+
+def supplemental_html_href(document: SupplementalSiteDocument) -> str:
+    return supplemental_html_filename(document)
+
+
+def supplemental_page_paths(document: SupplementalSiteDocument) -> list[Path]:
+    pages = sorted(document.processed_dir.glob("page-*.jpg"))
+    if not pages:
+        raise SystemExit(f"No processed companion pages found for {document.slug}: {document.processed_dir}")
+    if document.page_count and len(pages) != document.page_count:
+        raise SystemExit(f"{document.slug} has {len(pages)} processed companion pages, expected {document.page_count}")
+    return pages
+
+
+def supplemental_page_image_href(document: SupplementalSiteDocument, page: Path) -> str:
+    return f"images/companion/{document.slug}/{page.name}"
+
+
+def render_supplemental_cards(supplemental_documents: list[SupplementalSiteDocument]) -> str:
+    cards = []
+    for document in supplemental_documents:
+        distribution_size = document.distribution_pdf.stat().st_size / 1024 / 1024
+        archival_size = document.archival_pdf.stat().st_size / 1024 / 1024
+        page_label = "1 page" if document.page_count == 1 else f"{document.page_count} pages"
+        html_href = supplemental_html_href(document)
+        distribution_href = supplemental_download_href(document.distribution_pdf)
+        archival_href = supplemental_download_href(document.archival_pdf)
+        cards.append(
+            f"""<article class="entry-card">
+  <p class="eyebrow">{escape(page_label)}</p>
+  <h3><a href="{html_href}">{escape(document.title)}</a></h3>
+  <p>{escape(document.description)}</p>
+  <div class="card-actions">
+    <a class="button primary" href="{html_href}">Read HTML</a>
+    <a class="button" href="{distribution_href}">Reader PDF</a>
+    <a class="button" href="{archival_href}">Archival PDF</a>
+  </div>
+  <p>{distribution_size:.1f} MiB reader PDF; {archival_size:.1f} MiB archival PDF.</p>
+</article>"""
+        )
+    return "".join(cards)
 
 
 def home_feature_entries(entries: list[Entry]) -> list[Entry]:
@@ -481,10 +608,22 @@ def home_feature_entries(entries: list[Entry]) -> list[Entry]:
     return [entry for entry in entries if entry.entry_id not in skip_ids][:6]
 
 
-def render_home(bundle: Bundle, entries: list[Entry]) -> str:
+def render_home(bundle: Bundle, entries: list[Entry], supplemental_documents: list[SupplementalSiteDocument]) -> str:
     feature_cards = "\n".join(render_chapter_card(bundle, entry) for entry in home_feature_entries(entries))
+    supplemental_cards = render_supplemental_cards(supplemental_documents)
     table_count = sum(read_article_html(bundle, entry).lower().count("<table") for entry in entries)
     figure_count = sum(read_article_html(bundle, entry).lower().count("<figure") for entry in entries)
+    supplemental_section = ""
+    if supplemental_cards:
+        supplemental_section = f"""
+    <section class="section-list companion-home">
+      <div class="section-heading">
+        <h2>Companion Documents</h2>
+        <p>The two documents found tucked into the book are available as readable HTML pages and searchable PDFs.</p>
+      </div>
+      <div class="cards">{supplemental_cards}</div>
+    </section>
+"""
     body = f"""
     <section class="hero">
       <div class="hero-inner">
@@ -504,8 +643,8 @@ def render_home(bundle: Bundle, entries: list[Entry]) -> str:
         <p>The scanned book is available as connected web chapters, with photographs, captions, and tables kept in the flow of the text.</p>
       </article>
       <article>
-        <h2>Search and source pages</h2>
-        <p>Names, places, and stories can be searched across the reading edition, and each entry links back to its source scans.</p>
+        <h2>Search and companion documents</h2>
+        <p>Names, places, stories, and the companion documents found inside the book can be searched from one place.</p>
       </article>
       <article>
         <h2>Audio companion</h2>
@@ -517,7 +656,10 @@ def render_home(bundle: Bundle, entries: list[Entry]) -> str:
       <div><strong>{len(entries)}</strong><span>reading entries</span></div>
       <div><strong>{figure_count}</strong><span>figures and captions</span></div>
       <div><strong>{table_count}</strong><span>structured tables</span></div>
+      <div><strong>{len(supplemental_documents)}</strong><span>companion documents</span></div>
     </section>
+
+    {supplemental_section}
 
     <section class="section-list">
       <div class="section-heading">
@@ -661,26 +803,122 @@ def render_entry_page(bundle: Bundle, entries: list[Entry], index: int) -> str:
     return html_page(title, body, "Read")
 
 
-def render_archive(bundle: Bundle, entries: list[Entry]) -> str:
+def render_companion_source_figures(document: SupplementalSiteDocument) -> str:
+    figures = []
+    for index, page in enumerate(supplemental_page_paths(document), start=1):
+        href = supplemental_page_image_href(document, page)
+        figures.append(
+            f"""<figure class="companion-page">
+  <a href="{href}"><img loading="lazy" decoding="async" src="{href}" alt="{escape(document.title)} source page {index}"></a>
+  <figcaption>Source page {index}</figcaption>
+</figure>"""
+        )
+    return "\n".join(figures)
+
+
+def companion_doc_web_article_html(document: SupplementalSiteDocument) -> str:
+    manifest = json.loads(document.doc_web_manifest_path.read_text(encoding="utf-8"))
+    entries = {
+        str(entry.get("entry_id")): entry
+        for entry in manifest.get("entries") or []
+        if isinstance(entry, dict) and entry.get("entry_id")
+    }
+    reading_order = [str(entry_id) for entry_id in manifest.get("reading_order") or []]
+    if not reading_order:
+        reading_order = sorted(entries, key=lambda entry_id: int(entries[entry_id].get("order") or 0))
+    if not reading_order:
+        raise SystemExit(f"Companion doc-web bundle has no readable entries: {document.doc_web_manifest_path}")
+
+    image_prefix = f"images/companion-doc-web/{document.slug}"
+    rendered = []
+    for entry_id in reading_order:
+        entry = entries.get(entry_id)
+        if not entry:
+            raise SystemExit(f"Companion doc-web reading order references missing entry {entry_id}: {document.doc_web_manifest_path}")
+        source = document.doc_web_bundle_root / str(entry.get("path") or "")
+        require_file(source, f"companion doc-web entry {document.slug}/{entry_id}")
+        article = read_doc_web_article(source, image_prefix=image_prefix)
+        rendered.append(f'<section class="doc-web-entry">{article}</section>')
+    return "\n".join(rendered)
+
+
+def render_companion_document(document: SupplementalSiteDocument) -> str:
+    page_label = "1 source page" if document.page_count == 1 else f"{document.page_count} source pages"
+    article = companion_doc_web_article_html(document)
+    distribution_href = supplemental_download_href(document.distribution_pdf)
+    archival_href = supplemental_download_href(document.archival_pdf)
+    body = f"""
+    <section class="entry-header companion-header">
+      <p class="eyebrow">Companion document | {escape(page_label)}</p>
+      <h1>{escape(document.title)}</h1>
+      <p>{escape(document.description)}</p>
+      <div class="card-actions">
+        <a class="button" href="archive.html">Archive</a>
+        <a class="button" href="{distribution_href}">Reader PDF</a>
+        <a class="button" href="{archival_href}">Archival PDF</a>
+      </div>
+    </section>
+    <section class="reader-shell companion-shell">
+      <aside class="source-panel">
+        <h2>Document Files</h2>
+        <p>{escape(page_label)} preserved from the sheets found inside the book.</p>
+        <div class="card-actions">
+          <a class="button" href="{distribution_href}">Reader PDF</a>
+          <a class="button" href="{archival_href}">Archival PDF</a>
+        </div>
+      </aside>
+      <article class="book-article companion-document">
+        <h2>Readable Text</h2>
+        {article}
+      </article>
+    </section>
+    <section class="section-list companion-sources">
+      <div class="section-heading">
+        <h2>Source Pages</h2>
+        <p>The cleaned page images are included here for side-by-side review against the readable text.</p>
+      </div>
+      <div class="companion-source-grid">{render_companion_source_figures(document)}</div>
+    </section>
+"""
+    return html_page(document.title, body, "Archive")
+
+
+def render_archive(bundle: Bundle, entries: list[Entry], supplemental_documents: list[SupplementalSiteDocument]) -> str:
     pdf_cards = []
-    for label, pdf in (("Reader PDF", DISTRIBUTION_PDF), ("Archival PDF", ARCHIVAL_PDF)):
+    for label, title, pdf in (
+        ("Reader PDF", "Main book reader PDF", DISTRIBUTION_PDF),
+        ("Archival PDF", "Main book archival PDF", ARCHIVAL_PDF),
+    ):
         if pdf.exists():
             size_mb = pdf.stat().st_size / 1024 / 1024
             pdf_cards.append(
                 f"""<article class="entry-card">
   <p class="eyebrow">{label}</p>
-  <h3><a href="downloads/{pdf.name}">{pdf.name}</a></h3>
-  <p>{size_mb:.1f} MiB.</p>
+  <h3><a href="downloads/{pdf.name}">{title}</a></h3>
+  <p>{size_mb:.1f} MiB. Searchable PDF download.</p>
 </article>"""
             )
+    supplemental_cards = render_supplemental_cards(supplemental_documents)
     doc_web_image_count = len(list((bundle.root / "images").glob("*")))
     provenance_link = '<li><a href="data/block-provenance.jsonl">Source trace data</a></li>' if bundle.provenance_path else ""
+    supplemental_section = ""
+    if supplemental_cards:
+        supplemental_section = f"""
+    <section class="section-list">
+      <div class="section-heading">
+        <h2>Companion Documents</h2>
+        <p>The two documents found inside the book are included as readable HTML pages and searchable PDFs alongside the main book.</p>
+      </div>
+      <div class="cards">{supplemental_cards}</div>
+    </section>
+"""
     body = f"""
     <section class="page-title">
       <h1>Archive</h1>
       <p>Download the PDFs and review the source records that keep the family book traceable.</p>
     </section>
-    <section class="cards">{''.join(pdf_cards)}</section>
+    <section class="cards archive-downloads">{''.join(pdf_cards)}</section>
+    {supplemental_section}
     <section class="archive-grid">
       <article>
         <h2>Book Data</h2>
@@ -693,7 +931,7 @@ def render_archive(bundle: Bundle, entries: list[Entry]) -> str:
       </article>
       <article>
         <h2>Source Scans</h2>
-        <p>Each chapter and page entry links back to the scans that produced it. Supplemental items can be added as they are scanned.</p>
+        <p>Each chapter and page entry links back to the scans that produced it. The companion documents are preserved as separate PDFs because they were found tucked into the book rather than printed as part of it.</p>
       </article>
     </section>
 """
@@ -740,7 +978,7 @@ def render_audiobook() -> str:
       <h1>Audiobook</h1>
       <p>Onward-style narration scripts are prepared for story chapters. Tables, indexes, and dense records stay in the readable archive.</p>
     </section>
-    <section class="cards">{script_rows or '<p>No narration scripts have been generated yet.</p>'}</section>
+    <section class="cards archive-downloads">{script_rows or '<p>No narration scripts have been generated yet.</p>'}</section>
     <section class="archive-grid">
       <article>
         <h2>Reference Material</h2>
@@ -780,11 +1018,40 @@ def copy_doc_web_images(bundle: Bundle, output_dir: Path) -> None:
     shutil.copytree(source, destination, dirs_exist_ok=True)
 
 
-def copy_downloads(output_dir: Path) -> None:
+def copy_supplemental_images(output_dir: Path, supplemental_documents: list[SupplementalSiteDocument]) -> None:
+    root = output_dir / "images" / "companion"
+    for document in supplemental_documents:
+        destination = root / document.slug
+        destination.mkdir(parents=True, exist_ok=True)
+        for source in supplemental_page_paths(document):
+            target = destination / source.name
+            with Image.open(source) as image:
+                image = image.convert("RGB")
+                max_width = 1400
+                if image.width > max_width:
+                    ratio = max_width / image.width
+                    image = image.resize((max_width, round(image.height * ratio)), Image.Resampling.LANCZOS)
+                image.save(target, quality=86, optimize=True, progressive=True)
+
+
+def copy_companion_doc_web_images(output_dir: Path, supplemental_documents: list[SupplementalSiteDocument]) -> None:
+    root = output_dir / "images" / "companion-doc-web"
+    for document in supplemental_documents:
+        source = document.doc_web_bundle_root / "images"
+        if not source.exists():
+            continue
+        destination = root / document.slug
+        shutil.copytree(source, destination, dirs_exist_ok=True)
+
+
+def copy_downloads(output_dir: Path, supplemental_documents: list[SupplementalSiteDocument]) -> None:
     downloads_dir = output_dir / "downloads"
     downloads_dir.mkdir(parents=True, exist_ok=True)
     for source in (DISTRIBUTION_PDF, ARCHIVAL_PDF):
         if source.exists():
+            shutil.copy2(source, downloads_dir / source.name)
+    for document in supplemental_documents:
+        for source in (document.distribution_pdf, document.archival_pdf):
             shutil.copy2(source, downloads_dir / source.name)
 
 
@@ -804,7 +1071,7 @@ def write_audio_scripts(output_dir: Path) -> None:
     shutil.copytree(source, destination, dirs_exist_ok=True)
 
 
-def write_search_index(output_dir: Path, bundle: Bundle, entries: list[Entry]) -> None:
+def write_search_index(output_dir: Path, bundle: Bundle, entries: list[Entry], supplemental_documents: list[SupplementalSiteDocument]) -> None:
     rows = []
     for entry in entries:
         article = read_article_html(bundle, entry)
@@ -819,10 +1086,22 @@ def write_search_index(output_dir: Path, bundle: Bundle, entries: list[Entry]) -
                 "text": re.sub(r"\s+", " ", html_to_text(article)).strip(),
             }
         )
+    for document in supplemental_documents:
+        article = companion_doc_web_article_html(document)
+        rows.append(
+            {
+                "entry_id": f"supplemental-{document.slug}",
+                "kind": "companion document",
+                "title": document.title,
+                "url": supplemental_html_href(document),
+                "source_label": "1 page" if document.page_count == 1 else f"{document.page_count} pages",
+                "text": re.sub(r"\s+", " ", f"{document.title} {document.description} {html_to_text(article)}").strip(),
+            }
+        )
     (output_dir / "search-index.json").write_text(json.dumps(rows, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def write_build_summary(output_dir: Path, bundle: Bundle, entries: list[Entry]) -> None:
+def write_build_summary(output_dir: Path, bundle: Bundle, entries: list[Entry], supplemental_documents: list[SupplementalSiteDocument]) -> None:
     summary = {
         "schema_version": "alain_family_site_build_summary_v1",
         "bundle_snapshot_id": bundle.active.get("snapshotId"),
@@ -830,6 +1109,13 @@ def write_build_summary(output_dir: Path, bundle: Bundle, entries: list[Entry]) 
         "entry_count": len(entries),
         "chapter_count": sum(1 for entry in entries if entry.kind == "chapter"),
         "page_entry_count": sum(1 for entry in entries if entry.kind == "page"),
+        "supplemental_document_count": len(supplemental_documents),
+        "supplemental_html_count": len(supplemental_documents),
+        "supplemental_doc_web_entry_count": sum(
+            len(json.loads(document.doc_web_manifest_path.read_text(encoding="utf-8")).get("entries") or [])
+            for document in supplemental_documents
+        ),
+        "supplemental_doc_web_image_count": sum(document.doc_web_image_count for document in supplemental_documents),
         "figure_count": sum(read_article_html(bundle, entry).lower().count("<figure") for entry in entries),
         "table_count": sum(read_article_html(bundle, entry).lower().count("<table") for entry in entries),
         "public_host": PUBLIC_HOST,
@@ -842,24 +1128,30 @@ def write_build_summary(output_dir: Path, bundle: Bundle, entries: list[Entry]) 
 def build(output_dir: Path) -> None:
     bundle = load_bundle()
     entries = ordered_entries(bundle)
+    supplemental_documents = load_supplemental_documents()
     clean_dir(output_dir)
     write_site_assets(output_dir)
     write_scan_images(output_dir)
     copy_doc_web_images(bundle, output_dir)
-    copy_downloads(output_dir)
+    copy_supplemental_images(output_dir, supplemental_documents)
+    copy_companion_doc_web_images(output_dir, supplemental_documents)
+    copy_downloads(output_dir, supplemental_documents)
     copy_structured_data(bundle, output_dir)
     write_audio_scripts(output_dir)
 
-    (output_dir / "index.html").write_text(render_home(bundle, entries), encoding="utf-8")
+    (output_dir / "index.html").write_text(render_home(bundle, entries, supplemental_documents), encoding="utf-8")
     (output_dir / "book.html").write_text(render_book(bundle, entries), encoding="utf-8")
-    (output_dir / "archive.html").write_text(render_archive(bundle, entries), encoding="utf-8")
+    (output_dir / "archive.html").write_text(render_archive(bundle, entries, supplemental_documents), encoding="utf-8")
     (output_dir / "audiobook.html").write_text(render_audiobook(), encoding="utf-8")
+    for document in supplemental_documents:
+        (output_dir / supplemental_html_filename(document)).write_text(render_companion_document(document), encoding="utf-8")
     for index, entry in enumerate(entries):
         (output_dir / entry.path).write_text(render_entry_page(bundle, entries, index), encoding="utf-8")
-    write_search_index(output_dir, bundle, entries)
-    write_build_summary(output_dir, bundle, entries)
+    write_search_index(output_dir, bundle, entries, supplemental_documents)
+    write_build_summary(output_dir, bundle, entries, supplemental_documents)
     print(f"built family site: {output_dir}")
     print(f"entries: {len(entries)}")
+    print(f"supplemental documents: {len(supplemental_documents)}")
 
 
 def cli_main() -> int:
@@ -1025,6 +1317,7 @@ img {
 }
 
 .hero-actions,
+.card-actions,
 .reader-nav {
   display: flex;
   align-items: center;
@@ -1141,7 +1434,7 @@ img {
 
 .stat-band {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.8rem;
   padding: 1.1rem 0 0.5rem;
 }
@@ -1188,11 +1481,21 @@ img {
   gap: 1rem;
 }
 
+.archive-downloads {
+  width: min(72rem, calc(100% - 2.8rem));
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .entry-card h3 {
   margin: 0 0 0.55rem;
   font-size: 1.08rem;
   line-height: 1.25;
   letter-spacing: 0;
+}
+
+.entry-card a {
+  overflow-wrap: anywhere;
 }
 
 .entry-card p:last-child {
@@ -1503,6 +1806,44 @@ img {
   padding-left: 1.5rem;
 }
 
+.companion-document .doc-web-entry + .doc-web-entry {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.companion-document .doc-web-entry > :first-child {
+  margin-top: 0;
+}
+
+.companion-source-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.companion-page {
+  margin: 0;
+  padding: 0.75rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.companion-page img {
+  display: block;
+  width: 100%;
+  border-radius: 4px;
+}
+
+.companion-page figcaption {
+  margin-top: 0.45rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
 .site-footer {
   padding: 2rem 1.4rem;
   color: var(--muted);
@@ -1531,9 +1872,10 @@ img {
   .cards,
   .stat-band,
   .book-layout,
-  .compact-grid,
-  .part-links,
-  .reader-shell {
+    .compact-grid,
+    .part-links,
+    .reader-shell,
+    .companion-source-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1556,7 +1898,7 @@ SEARCH_JS = """
   const results = document.querySelector("#search-results");
   if (!input || !results) return;
 
-  const response = await fetch("search-index.json?v=20260702-docweb-r6");
+  const response = await fetch("search-index.json?v=__SITE_ASSET_VERSION__");
   const index = await response.json();
 
   function snippet(text, term) {
@@ -1600,7 +1942,7 @@ SEARCH_JS = """
 
   input.addEventListener("input", (event) => render(event.target.value));
 })();
-"""
+""".replace("__SITE_ASSET_VERSION__", SITE_ASSET_VERSION)
 
 
 if __name__ == "__main__":

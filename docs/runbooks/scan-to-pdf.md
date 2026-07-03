@@ -12,6 +12,8 @@ project-specific constants and crop rules.
 ## Inputs
 
 - `input/raw scans/main book/*.jpg`
+- `input/raw scans/Alain's Song/*.jpg`
+- `input/raw scans/Growing Up on the Farm/*.jpg`
 
 ## Outputs
 
@@ -21,7 +23,13 @@ project-specific constants and crop rules.
 - `tmp/pdfs/alain-lessard-book-archival-image-only.pdf`
 - `output/pdf/alain-lessard-book-searchable.pdf`
 - `output/pdf/alain-lessard-book-archival-searchable.pdf`
+- `output/pdf/alains-song-searchable.pdf`
+- `output/pdf/alains-song-archival-searchable.pdf`
+- `output/pdf/growing-up-on-the-farm-searchable.pdf`
+- `output/pdf/growing-up-on-the-farm-archival-searchable.pdf`
+- `output/supplemental-documents/manifest.json`
 - `tmp/pdfs/rendered/`
+- `tmp/pdfs/supplemental/rendered/`
 
 ## Commands
 
@@ -30,6 +38,9 @@ make scan-intake-report
 make scan-pdf-all
 make validate-pdf
 make render-pdf-checks
+make supplemental-docs
+make validate-supplemental-docs
+make render-supplemental-pdf-checks
 ```
 
 ## Processing Rules
@@ -53,6 +64,14 @@ make render-pdf-checks
 - OCR is added by OCRmyPDF after image-only PDF assembly.
 - OCRmyPDF writes title, author, subject, and keyword metadata during the OCR
   pass, following the metadata discipline from the Onward scan project.
+- The supplemental documents use the same `2550x3371` page canvas, but their
+  intake reports show no platen bands; they are normalized and OCRed without
+  the main-book alternating-band crop rule.
+- Supplemental scan cleanup is profile-based. Folded black-and-white sheets
+  such as `Alain's Song` use adaptive background normalization so creases and
+  paper texture fall away while typed content stays dark. Clean typed pages
+  such as `Growing Up on the Farm` use black-and-white normalization with
+  automatic text-line deskew.
 
 ## Onward Source Process
 
@@ -91,3 +110,6 @@ Validation should include:
   keywords
 - extracted text exists on OCR-heavy sample pages
 - rendered PNG samples show the platen bands removed and page content legible
+- supplemental manifests record two documents and 19 total pages
+- supplemental PDFs have 6 and 13 pages, matching their raw scan folders
+- rendered supplemental PDF samples are upright, legible, and not clipped

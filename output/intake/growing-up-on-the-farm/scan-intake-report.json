@@ -1,0 +1,563 @@
+{
+  "schema_version": "book_scan_intake_report_v1",
+  "generated_at": "2026-07-02T10:19:13-06:00",
+  "input_dir": "/Users/cam/Documents/Projects/alain-lessard-book/input/raw scans/Growing Up on the Farm",
+  "extensions": [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".tif",
+    ".tiff"
+  ],
+  "summary": {
+    "count": 13,
+    "suffixes": {
+      ".jpg": 13
+    },
+    "dimensions": {
+      "2550x3276": 6,
+      "2550x3280": 3,
+      "2550x3272": 2,
+      "2550x3268": 1,
+      "2550x3292": 1
+    },
+    "modes": {
+      "RGB": 13
+    },
+    "components": {
+      "3": 13
+    },
+    "dpi": {
+      "300.0x300.0": 13
+    },
+    "platen_side_signals": {
+      "none": 13
+    },
+    "rgb_channel_check": {
+      "checked": 13,
+      "identical": 13,
+      "non_identical": 0,
+      "non_identical_examples": [],
+      "first_image_non_identical": false,
+      "after_first_all_identical": true
+    },
+    "bytes": {
+      "min": 624076,
+      "max": 894017,
+      "total": 10952115
+    },
+    "recommendations": [
+      "Treat RGB images with identical channels as grayscale content unless visual review says otherwise.",
+      "Normalize processed pages to one target canvas before PDF assembly."
+    ]
+  },
+  "records": [
+    {
+      "path": "IMG_20260702_0001.jpg",
+      "absolute_path": "/Users/cam/Documents/Projects/alain-lessard-book/input/raw scans/Growing Up on the Farm/IMG_20260702_0001.jpg",
+      "suffix": ".jpg",
+      "bytes": 894017,
+      "mode": "RGB",
+      "components": 3,
+      "size": [
+        2550,
+        3276
+      ],
+      "width": 2550,
+      "height": 3276,
+      "dpi": [
+        "300.0",
+        "300.0"
+      ],
+      "exif": {
+        "make": "Canon",
+        "model": "Canon TS3400 series",
+        "orientation": 1,
+        "x_resolution": "300.0",
+        "y_resolution": "300.0",
+        "resolution_unit": 2,
+        "software": "IJ Scan Utility",
+        "datetime": "2026/07/02 10:00:46"
+      },
+      "rgb_channels_identical": true,
+      "dark_band_signal": {
+        "side": "none",
+        "top_score": 0.273856,
+        "bottom_score": 0.109542,
+        "top_peak_y": 547,
+        "bottom_peak_y": 2286,
+        "threshold": 0.65,
+        "image_width": 2550,
+        "image_height": 3276
+      }
+    },
+    {
+      "path": "IMG_20260702_0002.jpg",
+      "absolute_path": "/Users/cam/Documents/Projects/alain-lessard-book/input/raw scans/Growing Up on the Farm/IMG_20260702_0002.jpg",
+      "suffix": ".jpg",
+      "bytes": 893277,
+      "mode": "RGB",
+      "components": 3,
+      "size": [
+        2550,
+        3268
+      ],
+      "width": 2550,
+      "height": 3268,
+      "dpi": [
+        "300.0",
+        "300.0"
+      ],
+      "exif": {
+        "make": "Canon",
+        "model": "Canon TS3400 series",
+        "orientation": 1,
+        "x_resolution": "300.0",
+        "y_resolution": "300.0",
+        "resolution_unit": 2,
+        "software": "IJ Scan Utility",
+        "datetime": "2026/07/02 10:01:16"
+      },
+      "rgb_channels_identical": true,
+      "dark_band_signal": {
+        "side": "none",
+        "top_score": 0.11878,
+        "bottom_score": 0.135033,
+        "top_peak_y": 388,
+        "bottom_peak_y": 2477,
+        "threshold": 0.65,
+        "image_width": 2550,
+        "image_height": 3268
+      }
+    },
+    {
+      "path": "IMG_20260702_0003.jpg",
+      "absolute_path": "/Users/cam/Documents/Projects/alain-lessard-book/input/raw scans/Growing Up on the Farm/IMG_20260702_0003.jpg",
+      "suffix": ".jpg",
+      "bytes": 863649,
+      "mode": "RGB",
+      "components": 3,
+      "size": [
+        2550,
+        3272
+      ],
+      "width": 2550,
+      "height": 3272,
+      "dpi": [
+        "300.0",
+        "300.0"
+      ],
+      "exif": {
+        "make": "Canon",
+        "model": "Canon TS3400 series",
+        "orientation": 1,
+        "x_resolution": "300.0",
+        "y_resolution": "300.0",
+        "resolution_unit": 2,
+        "software": "IJ Scan Utility",
+        "datetime": "2026/07/02 10:01:53"
+      },
+      "rgb_channels_identical": true,
+      "dark_band_signal": {
+        "side": "none",
+        "top_score": 0.130109,
+        "bottom_score": 0.127495,
+        "top_peak_y": 486,
+        "bottom_peak_y": 2725,
+        "threshold": 0.65,
+        "image_width": 2550,
+        "image_height": 3272
+      }
+    },
+    {
+      "path": "IMG_20260702_0004.jpg",
+      "absolute_path": "/Users/cam/Documents/Projects/alain-lessard-book/input/raw scans/Growing Up on the Farm/IMG_20260702_0004.jpg",
+      "suffix": ".jpg",
+      "bytes": 880201,
+      "mode": "RGB",
+      "components": 3,
+      "size": [
+        2550,
+        3276
+      ],
+      "width": 2550,
+      "height": 3276,
+      "dpi": [
+        "300.0",
+        "300.0"
+      ],
+      "exif": {
+        "make": "Canon",
+        "model": "Canon TS3400 series",
+        "orientation": 1,
+        "x_resolution": "300.0",
+        "y_resolution": "300.0",
+        "resolution_unit": 2,
+        "software": "IJ Scan Utility",
+        "datetime": "2026/07/02 10:02:44"
+      },
+      "rgb_channels_identical": true,
+      "dark_band_signal": {
+        "side": "none",
+        "top_score": 0.145795,
+        "bottom_score": 0.134946,
+        "top_peak_y": 724,
+        "bottom_peak_y": 2726,
+        "threshold": 0.65,
+        "image_width": 2550,
+        "image_height": 3276
+      }
+    },
+    {
+      "path": "IMG_20260702_0005.jpg",
+      "absolute_path": "/Users/cam/Documents/Projects/alain-lessard-book/input/raw scans/Growing Up on the Farm/IMG_20260702_0005.jpg",
+      "suffix": ".jpg",
+      "bytes": 867855,
+      "mode": "RGB",
+      "components": 3,
+      "size": [
+        2550,
+        3272
+      ],
+      "width": 2550,
+      "height": 3272,
+      "dpi": [
+        "300.0",
+        "300.0"
+      ],
+      "exif": {
+        "make": "Canon",
+        "model": "Canon TS3400 series",
+        "orientation": 1,
+        "x_resolution": "300.0",
+        "y_resolution": "300.0",
+        "resolution_unit": 2,
+        "software": "IJ Scan Utility",
+        "datetime": "2026/07/02 10:03:28"
+      },
+      "rgb_channels_identical": true,
+      "dark_band_signal": {
+        "side": "none",
+        "top_score": 0.140697,
+        "bottom_score": 0.124183,
+        "top_peak_y": 868,
+        "bottom_peak_y": 2261,
+        "threshold": 0.65,
+        "image_width": 2550,
+        "image_height": 3272
+      }
+    },
+    {
+      "path": "IMG_20260702_0006.jpg",
+      "absolute_path": "/Users/cam/Documents/Projects/alain-lessard-book/input/raw scans/Growing Up on the Farm/IMG_20260702_0006.jpg",
+      "suffix": ".jpg",
+      "bytes": 883958,
+      "mode": "RGB",
+      "components": 3,
+      "size": [
+        2550,
+        3276
+      ],
+      "width": 2550,
+      "height": 3276,
+      "dpi": [
+        "300.0",
+        "300.0"
+      ],
+      "exif": {
+        "make": "Canon",
+        "model": "Canon TS3400 series",
+        "orientation": 1,
+        "x_resolution": "300.0",
+        "y_resolution": "300.0",
+        "resolution_unit": 2,
+        "software": "IJ Scan Utility",
+        "datetime": "2026/07/02 10:03:55"
+      },
+      "rgb_channels_identical": true,
+      "dark_band_signal": {
+        "side": "none",
+        "top_score": 0.127582,
+        "bottom_score": 0.134989,
+        "top_peak_y": 888,
+        "bottom_peak_y": 2827,
+        "threshold": 0.65,
+        "image_width": 2550,
+        "image_height": 3276
+      }
+    },
+    {
+      "path": "IMG_20260702_0007.jpg",
+      "absolute_path": "/Users/cam/Documents/Projects/alain-lessard-book/input/raw scans/Growing Up on the Farm/IMG_20260702_0007.jpg",
+      "suffix": ".jpg",
+      "bytes": 885195,
+      "mode": "RGB",
+      "components": 3,
+      "size": [
+        2550,
+        3276
+      ],
+      "width": 2550,
+      "height": 3276,
+      "dpi": [
+        "300.0",
+        "300.0"
+      ],
+      "exif": {
+        "make": "Canon",
+        "model": "Canon TS3400 series",
+        "orientation": 1,
+        "x_resolution": "300.0",
+        "y_resolution": "300.0",
+        "resolution_unit": 2,
+        "software": "IJ Scan Utility",
+        "datetime": "2026/07/02 10:04:26"
+      },
+      "rgb_channels_identical": true,
+      "dark_band_signal": {
+        "side": "none",
+        "top_score": 0.172549,
+        "bottom_score": 0.121438,
+        "top_peak_y": 1138,
+        "bottom_peak_y": 2581,
+        "threshold": 0.65,
+        "image_width": 2550,
+        "image_height": 3276
+      }
+    },
+    {
+      "path": "IMG_20260702_0008.jpg",
+      "absolute_path": "/Users/cam/Documents/Projects/alain-lessard-book/input/raw scans/Growing Up on the Farm/IMG_20260702_0008.jpg",
+      "suffix": ".jpg",
+      "bytes": 842829,
+      "mode": "RGB",
+      "components": 3,
+      "size": [
+        2550,
+        3292
+      ],
+      "width": 2550,
+      "height": 3292,
+      "dpi": [
+        "300.0",
+        "300.0"
+      ],
+      "exif": {
+        "make": "Canon",
+        "model": "Canon TS3400 series",
+        "orientation": 1,
+        "x_resolution": "300.0",
+        "y_resolution": "300.0",
+        "resolution_unit": 2,
+        "software": "IJ Scan Utility",
+        "datetime": "2026/07/02 10:04:54"
+      },
+      "rgb_channels_identical": true,
+      "dark_band_signal": {
+        "side": "none",
+        "top_score": 0.135163,
+        "bottom_score": 0.135991,
+        "top_peak_y": 1140,
+        "bottom_peak_y": 2484,
+        "threshold": 0.65,
+        "image_width": 2550,
+        "image_height": 3292
+      }
+    },
+    {
+      "path": "IMG_20260702_0009.jpg",
+      "absolute_path": "/Users/cam/Documents/Projects/alain-lessard-book/input/raw scans/Growing Up on the Farm/IMG_20260702_0009.jpg",
+      "suffix": ".jpg",
+      "bytes": 771984,
+      "mode": "RGB",
+      "components": 3,
+      "size": [
+        2550,
+        3276
+      ],
+      "width": 2550,
+      "height": 3276,
+      "dpi": [
+        "300.0",
+        "300.0"
+      ],
+      "exif": {
+        "make": "Canon",
+        "model": "Canon TS3400 series",
+        "orientation": 1,
+        "x_resolution": "300.0",
+        "y_resolution": "300.0",
+        "resolution_unit": 2,
+        "software": "IJ Scan Utility",
+        "datetime": "2026/07/02 10:05:21"
+      },
+      "rgb_channels_identical": true,
+      "dark_band_signal": {
+        "side": "none",
+        "top_score": 0.123878,
+        "bottom_score": 0.126536,
+        "top_peak_y": 488,
+        "bottom_peak_y": 2328,
+        "threshold": 0.65,
+        "image_width": 2550,
+        "image_height": 3276
+      }
+    },
+    {
+      "path": "IMG_20260702_0010.jpg",
+      "absolute_path": "/Users/cam/Documents/Projects/alain-lessard-book/input/raw scans/Growing Up on the Farm/IMG_20260702_0010.jpg",
+      "suffix": ".jpg",
+      "bytes": 876404,
+      "mode": "RGB",
+      "components": 3,
+      "size": [
+        2550,
+        3280
+      ],
+      "width": 2550,
+      "height": 3280,
+      "dpi": [
+        "300.0",
+        "300.0"
+      ],
+      "exif": {
+        "make": "Canon",
+        "model": "Canon TS3400 series",
+        "orientation": 1,
+        "x_resolution": "300.0",
+        "y_resolution": "300.0",
+        "resolution_unit": 2,
+        "software": "IJ Scan Utility",
+        "datetime": "2026/07/02 10:05:51"
+      },
+      "rgb_channels_identical": true,
+      "dark_band_signal": {
+        "side": "none",
+        "top_score": 0.116993,
+        "bottom_score": 0.1461,
+        "top_peak_y": 728,
+        "bottom_peak_y": 2829,
+        "threshold": 0.65,
+        "image_width": 2550,
+        "image_height": 3280
+      }
+    },
+    {
+      "path": "IMG_20260702_0011.jpg",
+      "absolute_path": "/Users/cam/Documents/Projects/alain-lessard-book/input/raw scans/Growing Up on the Farm/IMG_20260702_0011.jpg",
+      "suffix": ".jpg",
+      "bytes": 831774,
+      "mode": "RGB",
+      "components": 3,
+      "size": [
+        2550,
+        3276
+      ],
+      "width": 2550,
+      "height": 3276,
+      "dpi": [
+        "300.0",
+        "300.0"
+      ],
+      "exif": {
+        "make": "Canon",
+        "model": "Canon TS3400 series",
+        "orientation": 1,
+        "x_resolution": "300.0",
+        "y_resolution": "300.0",
+        "resolution_unit": 2,
+        "software": "IJ Scan Utility",
+        "datetime": "2026/07/02 10:06:20"
+      },
+      "rgb_channels_identical": true,
+      "dark_band_signal": {
+        "side": "none",
+        "top_score": 0.107495,
+        "bottom_score": 0.125926,
+        "top_peak_y": 624,
+        "bottom_peak_y": 2228,
+        "threshold": 0.65,
+        "image_width": 2550,
+        "image_height": 3276
+      }
+    },
+    {
+      "path": "IMG_20260702_0012.jpg",
+      "absolute_path": "/Users/cam/Documents/Projects/alain-lessard-book/input/raw scans/Growing Up on the Farm/IMG_20260702_0012.jpg",
+      "suffix": ".jpg",
+      "bytes": 836896,
+      "mode": "RGB",
+      "components": 3,
+      "size": [
+        2550,
+        3280
+      ],
+      "width": 2550,
+      "height": 3280,
+      "dpi": [
+        "300.0",
+        "300.0"
+      ],
+      "exif": {
+        "make": "Canon",
+        "model": "Canon TS3400 series",
+        "orientation": 1,
+        "x_resolution": "300.0",
+        "y_resolution": "300.0",
+        "resolution_unit": 2,
+        "software": "IJ Scan Utility",
+        "datetime": "2026/07/02 10:06:49"
+      },
+      "rgb_channels_identical": true,
+      "dark_band_signal": {
+        "side": "none",
+        "top_score": 0.122004,
+        "bottom_score": 0.129063,
+        "top_peak_y": 478,
+        "bottom_peak_y": 2729,
+        "threshold": 0.65,
+        "image_width": 2550,
+        "image_height": 3280
+      }
+    },
+    {
+      "path": "IMG_20260702_0013.jpg",
+      "absolute_path": "/Users/cam/Documents/Projects/alain-lessard-book/input/raw scans/Growing Up on the Farm/IMG_20260702_0013.jpg",
+      "suffix": ".jpg",
+      "bytes": 624076,
+      "mode": "RGB",
+      "components": 3,
+      "size": [
+        2550,
+        3280
+      ],
+      "width": 2550,
+      "height": 3280,
+      "dpi": [
+        "300.0",
+        "300.0"
+      ],
+      "exif": {
+        "make": "Canon",
+        "model": "Canon TS3400 series",
+        "orientation": 1,
+        "x_resolution": "300.0",
+        "y_resolution": "300.0",
+        "resolution_unit": 2,
+        "software": "IJ Scan Utility",
+        "datetime": "2026/07/02 10:07:34"
+      },
+      "rgb_channels_identical": true,
+      "dark_band_signal": {
+        "side": "none",
+        "top_score": 0.124793,
+        "bottom_score": 0.011373,
+        "top_peak_y": 887,
+        "bottom_peak_y": 3027,
+        "threshold": 0.65,
+        "image_width": 2550,
+        "image_height": 3280
+      }
+    }
+  ]
+}
