@@ -29,7 +29,8 @@ SITE_TITLE = "Alain Lessard"
 SITE_SUBTITLE = "Our First Ancestors and A Compilation of Stories of Their Descendants"
 PUBLIC_HOST = "https://alain-lessard.copper-dog.com"
 BOOK_YEAR = "1987"
-SITE_ASSET_VERSION = "20260703-companion-docweb-r1"
+SITE_ASSET_VERSION = "20260703-companion-toc-r2"
+COMPANION_CONTEXT_NOTE = "This document was not part of the main book; it was found tucked inside it."
 
 ARTICLE_RE = re.compile(r"<article\b[^>]*>(.*?)</article>", re.IGNORECASE | re.DOTALL)
 IMAGE_SRC_RE = re.compile(r'(<img\b[^>]*\bsrc=")images/', re.IGNORECASE)
@@ -41,6 +42,8 @@ DECORATIVE_FIGURE_RE = re.compile(
 )
 NO_SRC_IMG_RE = re.compile(r"<img\b(?![^>]*\bsrc=)[^>]*>", re.IGNORECASE)
 TABLE_RE = re.compile(r"(<table\b.*?</table>)", re.IGNORECASE | re.DOTALL)
+P_TAG_RE = re.compile(r"(<p\b[^>]*>)(.*?)(</p>)", re.IGNORECASE | re.DOTALL)
+SECTION_HEADING_RE = re.compile(r"(<h[12]\b[^>]*>.*?</h[12]>)", re.IGNORECASE | re.DOTALL)
 BLOCK_TAGS = {
     "address",
     "article",
@@ -333,6 +336,46 @@ def read_doc_web_article(source: Path, *, image_prefix: str) -> str:
     article = NO_SRC_IMG_RE.sub("", article)
     article = TABLE_RE.sub(r'<div class="table-scroll">\1</div>', article)
     return article
+
+
+def normalize_alains_song_refrains(article: str) -> str:
+    def replace_paragraph(match: re.Match[str]) -> str:
+        opening, content, closing = match.groups()
+        plain_content = re.sub(r"<br\s*/?>", " ", content, flags=re.IGNORECASE)
+        plain_content = re.sub(r"</?strong>", "", plain_content, flags=re.IGNORECASE)
+        plain_content = re.sub(r"<[^>]+>", " ", plain_content)
+        if not re.match(r"^\s*REFRAIN:?\b", plain_content, flags=re.IGNORECASE):
+            return match.group(0)
+        normalized_content = re.sub(r"</?strong>", "", content, flags=re.IGNORECASE).strip()
+        return f"{opening}<strong>{normalized_content}</strong>{closing}"
+
+    return P_TAG_RE.sub(replace_paragraph, article)
+
+
+def sectionize_article_by_headings(article: str, *, section_class: str) -> str:
+    sections: list[str] = []
+    current: list[str] = []
+    cursor = 0
+    for match in SECTION_HEADING_RE.finditer(article):
+        leading = article[cursor:match.start()]
+        if current:
+            current.append(leading)
+            section_body = "".join(current).strip()
+            if section_body:
+                sections.append(f'<section class="{section_class}">{section_body}</section>')
+        elif leading.strip():
+            sections.append(f'<section class="{section_class}">{leading.strip()}</section>')
+        current = [match.group(1)]
+        cursor = match.end()
+
+    if current:
+        current.append(article[cursor:])
+        section_body = "".join(current).strip()
+        if section_body:
+            sections.append(f'<section class="{section_class}">{section_body}</section>')
+    elif article.strip():
+        sections.append(f'<section class="{section_class}">{article.strip()}</section>')
+    return "\n".join(sections)
 
 
 def html_to_text(html: str, skip_tags: Iterable[str] = ()) -> str:
@@ -830,7 +873,7 @@ def companion_doc_web_article_html(document: SupplementalSiteDocument) -> str:
         raise SystemExit(f"Companion doc-web bundle has no readable entries: {document.doc_web_manifest_path}")
 
     image_prefix = f"images/companion-doc-web/{document.slug}"
-    rendered = []
+    article_parts = []
     for entry_id in reading_order:
         entry = entries.get(entry_id)
         if not entry:
@@ -838,13 +881,42 @@ def companion_doc_web_article_html(document: SupplementalSiteDocument) -> str:
         source = document.doc_web_bundle_root / str(entry.get("path") or "")
         require_file(source, f"companion doc-web entry {document.slug}/{entry_id}")
         article = read_doc_web_article(source, image_prefix=image_prefix)
-        rendered.append(f'<section class="doc-web-entry">{article}</section>')
-    return "\n".join(rendered)
+        if document.slug == "alains-song":
+            article = normalize_alains_song_refrains(article)
+        article_parts.append(article)
+
+    note = f'<p class="companion-context-note">{escape(COMPANION_CONTEXT_NOTE)}</p>'
+    if document.slug == "growing-up-on-the-farm":
+        article = sectionize_article_by_headings("\n".join(article_parts), section_class="companion-story-section")
+        return f"{note}\n{article}"
+    return "\n".join([note] + [f'<section class="doc-web-entry">{article}</section>' for article in article_parts])
+
+
+def companion_document_toc_html(document: SupplementalSiteDocument, article: str) -> str:
+    if document.slug != "growing-up-on-the-farm":
+        return ""
+    links = []
+    for heading in heading_records(article, {1, 2}):
+        if not heading.heading_id or not is_toc_heading(heading.text):
+            continue
+        links.append(
+            f'<li class="heading-level-{heading.level}"><a href="#{escape(heading.heading_id)}">{escape(heading.text)}</a></li>'
+        )
+    if not links:
+        return ""
+    return f"""
+        <nav class="companion-toc" aria-label="{escape(document.title)} contents">
+          <h2>Contents</h2>
+          <ol>
+            {"".join(links)}
+          </ol>
+        </nav>"""
 
 
 def render_companion_document(document: SupplementalSiteDocument) -> str:
     page_label = "1 source page" if document.page_count == 1 else f"{document.page_count} source pages"
     article = companion_doc_web_article_html(document)
+    companion_toc = companion_document_toc_html(document, article)
     distribution_href = supplemental_download_href(document.distribution_pdf)
     archival_href = supplemental_download_href(document.archival_pdf)
     body = f"""
@@ -866,9 +938,9 @@ def render_companion_document(document: SupplementalSiteDocument) -> str:
           <a class="button" href="{distribution_href}">Reader PDF</a>
           <a class="button" href="{archival_href}">Archival PDF</a>
         </div>
+        {companion_toc}
       </aside>
       <article class="book-article companion-document">
-        <h2>Readable Text</h2>
         {article}
       </article>
     </section>
@@ -953,15 +1025,15 @@ def friendly_skip_group(reason: str, count: int) -> str:
 def render_audiobook() -> str:
     if AUDIOBOOK_MANIFEST_PATH.exists():
         manifest = json.loads(AUDIOBOOK_MANIFEST_PATH.read_text(encoding="utf-8"))
-        entries = manifest.get("entries", [])
+        entries = manifest.get("tracks") or manifest.get("entries", [])
         skipped = manifest.get("skipped_entries", [])
     else:
         entries = []
         skipped = []
     script_rows = "\n".join(
         f"""<article class="entry-card">
-  <p class="eyebrow">Script {int(entry["index"]):02d}</p>
-  <h3><a href="{escape(str(entry["script"]))}">{escape(str(entry["title"]))}</a></h3>
+  <p class="eyebrow">Script {int(entry.get("track_number") or entry.get("index")):02d}</p>
+  <h3><a href="{escape(str(entry.get("script_path") or entry.get("script")))}">{escape(str(entry["title"]))}</a></h3>
   <p>{escape(str(entry.get("source_label") or ""))}</p>
 </article>"""
         for entry in entries
@@ -1812,8 +1884,48 @@ img {
   border-top: 1px solid var(--line);
 }
 
+.companion-document .companion-story-section + .companion-story-section {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
 .companion-document .doc-web-entry > :first-child {
   margin-top: 0;
+}
+
+.companion-document .companion-story-section > :first-child {
+  margin-top: 0;
+}
+
+.companion-context-note {
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.companion-toc {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.companion-toc h2 {
+  margin-top: 0;
+}
+
+.companion-toc ol {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.companion-toc li {
+  margin: 0 0 0.5rem;
+}
+
+.companion-toc a {
+  overflow-wrap: anywhere;
 }
 
 .companion-source-grid {

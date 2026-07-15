@@ -1,18 +1,4 @@
-# 10. Louis Alain's Children's Stories
-
-Source: Printed pages 117-123 | Source scans 124-130
-
-Narration note: This script is prepared for an Onward-style family audiobook. Dense genealogy tables, indexes, source lists, and personal-record forms are intentionally kept out of the audio lane and remain available in the website and PDFs.
-
----
-
-In the coming months, I plan to quit my job and take an early retirement. For the past few years I have been working two eight-hour shifts; as well, my health has not been good since I had back surgery for a ruptured disk in '75.
-
-Recently, I purchased a van and I hope to travel. It would be nice to see Canada in short trips and to spend the winters in the south - Florida in particular.
-
-[Ed.'s Note: Therese is presently living in Vernon, B.C.]
-
-MAE (STRASSER) DALY
+# Mae (Strasser) Daly
 
 My parents, Louis and Rachel, were married August 13, 1927. She wore a green gown which, she used to tell me, was understood at that time that if you wore green, you were ashamed to be seen. You see, Mom was considered an outcast in Delmas, Saskatchewan, because she didn't wear the widow's weeds and remarried much too soon after her first husband, Joe Lessard, had died. He died May 1, 1924.
 
@@ -86,19 +72,19 @@ One day in 1957 Bishop Klein called on us. He said he had been asked by the form
 
 We had been introduced to Christian Family Movement by Grant and Vivian Maxwell in Saskatoon. Now, in Ottawa, we became active in a local group. Later we replaced the Maxwells on the programme writing committee for C.F.M. We served as chair couple for several years and later were the Canadian representative couple in International C.F.M., which resulted in quite a bit of travel.
 
-From 1969, I became interested in a very spe-cial Music Education philosophy and in 1972 founded the Kodaly Institute of Canada. I was its Executive Director for ten years. Later, I changed my direction and put my energy into a music school in Ottawa.
+From 1969, I became interested in a very special Music Education philosophy and in 1972 founded the Kodaly Institute of Canada. I was its Executive Director for ten years. Later, I changed my direction and put my energy into a music school in Ottawa.
 
-Over the years Bernie has been involved in a number of jobs – always with the Church. Shortly after our move to Ottawa, the upcoming Vatican Council II was announced. The Cana-dian Bishops asked Bernie if he would cover the council as a newspaper person. So, over the next few years, he travelled to Rome to attend all four sessions, a total of one year in all. I was fortunate to go in the third year as a pilgrim for three weeks. I met, among other people, the first woman observer at the Vatican Council, Mlle. Vinet.
+Over the years Bernie has been involved in a number of jobs – always with the Church. Shortly after our move to Ottawa, the upcoming Vatican Council II was announced. The Canadian Bishops asked Bernie if he would cover the council as a newspaper person. So, over the next few years, he travelled to Rome to attend all four sessions, a total of one year in all. I was fortunate to go in the third year as a pilgrim for three weeks. I met, among other people, the first woman observer at the Vatican Council, Mlle. Vinet.
 
-Once the council was over, Bernie returned home to Ottawa and to studies for his Master's degree in Sociology. He became the director of the newly established Family Life Bureau. Then he was again approached by the Canadian Bishops, this time to ask if he would become a member of a six-man advisory team. Bernie accepted. Three of the team were English and three were French while their educational back-grounds were of varied disciplines (i.e. sociology, theology, among others). The team was respon-sible for preparing statements and, at times, crit-icizing the Government's position on issues like birth control, abortion and immigration policies.
+Once the council was over, Bernie returned home to Ottawa and to studies for his Master's degree in Sociology. He became the director of the newly established Family Life Bureau. Then he was again approached by the Canadian Bishops, this time to ask if he would become a member of a six-man advisory team. Bernie accepted. Three of the team were English and three were French while their educational backgrounds were of varied disciplines (i.e. sociology, theology, among others). The team was responsible for preparing statements and, at times, criticizing the Government's position on issues like birth control, abortion and immigration policies.
 
 Since then, Bernie took an active part in Pope John Paul II's visit to Canada as the Assistant Co-ordinator, a task that took a year and a half. Here we shall let Bernie share with you:
 
-"A few words here cannot add anything to the September days of Pope John Paul II's visit which so gripped the lives of Canadians. I had been scheduled to spend the visit at a co-ordina-tion centre in Ottawa but, two days into the tour, was called to duties in the party travelling with the Pope. The work to be done was at the back of the plane, on the bus in the motorcade, and behind the papal altars from St. John's to Ottawa – never very close to the papal stateroom or the various red carpets but still part of that great adventure. A lot of the work had to do with seeing to it that translations of the Pope's talks got through on time to media centres, the host broadcaster, the simultaneous translators, the host diocese, and the special service for people with hearing impairments. This afforded a privileged opportunity to work with and get to know a number of the Pope's personal staff, who put in extremely long, hard hours. And there was a never-to-be-repeated close-up view of some two million Canadians in festive excitement, in rain, fog, wind, and under a brilliant sun. One lasting memory is of how gently they touched, Pope and people, as they reached out to each other. Whereas in the planning stage there had been much pushing, shoving, grasping and striving for more time and space, during the actual visit this side of us seemed to yield to generosity and, above all, gentleness. There was crowd control, but also the crowds themselves were controlled, considerate, convivial; and they and Pope John Paul II exchanged thousands of tender touches."
+"A few words here cannot add anything to the September days of Pope John Paul II's visit which so gripped the lives of Canadians. I had been scheduled to spend the visit at a coordination centre in Ottawa but, two days into the tour, was called to duties in the party travelling with the Pope. The work to be done was at the back of the plane, on the bus in the motorcade, and behind the papal altars from St. John's to Ottawa – never very close to the papal stateroom or the various red carpets but still part of that great adventure. A lot of the work had to do with seeing to it that translations of the Pope's talks got through on time to media centres, the host broadcaster, the simultaneous translators, the host diocese, and the special service for people with hearing impairments. This afforded a privileged opportunity to work with and get to know a number of the Pope's personal staff, who put in extremely long, hard hours. And there was a never-to-be-repeated close-up view of some two million Canadians in festive excitement, in rain, fog, wind, and under a brilliant sun. One lasting memory is of how gently they touched, Pope and people, as they reached out to each other. Whereas in the planning stage there had been much pushing, shoving, grasping and striving for more time and space, during the actual visit this side of us seemed to yield to generosity and, above all, gentleness. There was crowd control, but also the crowds themselves were controlled, considerate, convivial; and they and Pope John Paul II exchanged thousands of tender touches."
 
-"Of course, there was no chance to get to know him personally, but one couldn't work and live in that setting without gaining some impres-sions of him as a person. First among these is of his controlled, disciplined sense of presence. When he knelt before the Blessed Sacrament, so undistracted was his prayerfulness that crowded cathedrals echoing with handclapping and bus-tling fell absolutely silent, as if a power cord had been unplugged. A sick or elderly person felt he saw only them when they chatted. It must only be by being so attentive to what he is doing at the time, be it his work, prayer, rest or meals, that he is able to maintain such a pace."
+"Of course, there was no chance to get to know him personally, but one couldn't work and live in that setting without gaining some impressions of him as a person. First among these is of his controlled, disciplined sense of presence. When he knelt before the Blessed Sacrament, so undistracted was his prayerfulness that crowded cathedrals echoing with handclapping and bustling fell absolutely silent, as if a power cord had been unplugged. A sick or elderly person felt he saw only them when they chatted. It must only be by being so attentive to what he is doing at the time, be it his work, prayer, rest or meals, that he is able to maintain such a pace."
 
-"As part of all the arrangements, the Cana-dian Bishops chartered the plane to carry the Pope, his party and some international jour-nalists back to Rome. There was room for a few others to have the honour of going along, among them the two of us."
+"As part of all the arrangements, the Canadian Bishops chartered the plane to carry the Pope, his party and some international journalists back to Rome. There was room for a few others to have the honour of going along, among them the two of us."
 
 Following the Papal visit Bernie took on new responsibilities, that of CCCB assistant general secretary (English sector). This is quite an honour as it is the first time a lay person has been given the opportunity to serve in this capacity. As well, Bernie presently serves on the Board of Directors of St. Thomas More College in Saskatoon which requires that he attend a yearly board meeting. He still has six months sabbatical coming and, in the not-so-distant future, the possibility of retirement.
 
@@ -106,48 +92,16 @@ We presently reside at Wilson's Corners, Quebec, and have recently renovated our
 
 Our family has grown. They are:
 
-Tom and Robin who live in Lunenburg, Nova Scotia with their children: Jesse, Brennan and twins, Elynyd and Kieran, born July 2, 1986.
+**Tom** and Robin who live in Lunenburg, Nova Scotia with their children: Jesse, Brennan and twins, Elynyd and Kieran, born July 2, 1986.
 
-Pat with her husband, Giorgio Grappolini, and children: John, Michelle, Luisa and Julia live in Sherwood Park, Alberta, where Giorgio is employed in the oil industry.
+**Pat** with her husband, Giorgio Grappolini, and children: John, Michelle, Luisa and Julia live in Sherwood Park, Alberta, where Giorgio is employed in the oil industry.
 
-Mary Anne and Joe Burke live in Ottawa, Ontario, with their three children: Thomasina, Hannah and Moira.
+**Mary Anne** and Joe Burke live in Ottawa, Ontario, with their three children: Thomasina, Hannah and Moira.
 
-Michael married Lisa Slinkard and they are living in California. He has a son, Patrick.
+**Michael** married Lisa Slinkard and they are living in California. He has a son, Patrick.
 
-Teresa is a member of Canada's Armed Forces and lives in Trenton, Ontario, with daughter, Tiana.
+**Teresa** is a member of Canada's Armed Forces and lives in Trenton, Ontario, with daughter, Tiana.
 
-Timothy is employed out West.
+**Timothy** is employed out West.
 
 In 1974, Rachel Strasser received a plaque from the Saskatchewan Wheat Pool on behalf of her first husband, Joe Lessard, who was an original member in 1924. The plaque was given to members. 1924 - 1974 (50 years).
-
-RECIPES
-
-Alma Alain often made "Les Tourtieres." The following recipe was submitted by her daughter, Edithe Lessard.
-
-Les Tourtieres (Pork Meat Pies)
-
-Take a raw pork shoulder and trim off excess fat. Slice into thin slices about 1/4 inch thick. Then cube these slices.
-
-To the above mixture, add the following to taste: onions salt and pepper cloves or all-spice
-
-Barely cover with cold water and bring to a boil. Simmer 45 minutes or until mixture thickens. Set aside to cool while preparing pastry as follows:
-
-Pastry
-
-Cut lard and butter into dry ingredients. Add water and mix as for pastry.
-
-Prepare bottom crust, then pour in the meat filling. Place the top crust over and bake at 350° F. till pastry is brown.
-
-* * * *
-
-Les Tourtieres were served in French homes during the Christmas season.
-
-In the Alain home, Alma served pork pies both at Christmas and at New Year's. She served them hot -- alone or with gravy.
-
-* * * *
-
-Cream of Tomato Soup
-
-Cook tomatoes and sugar for a few minutes. Mash tomatoes and add soda to neutralize acid in tomatoes. Add tomatoes slowly to milk, butter and seasoning. Have tomatoes and milk at same temperature or soup may curdle. Serve immediately.
-
-Rachel Strasser was known for her tomato soup.

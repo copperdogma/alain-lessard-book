@@ -1,90 +1,10 @@
-# 05. EDOUARD LESSARD
+# Joseph Déridé Lessard
 
-Source: Printed pages 86-94 | Source scans 93-101
-
-Narration note: This script is prepared for an Onward-style family audiobook. Dense genealogy tables, indexes, source lists, and personal-record forms are intentionally kept out of the audio lane and remain available in the website and PDFs.
-
----
-
-EDOUARD LESSARD
-
-Submitted by Eva (Lessard) Prince
-
-Edouard had married earlier. They had no children and his first wife died. Then he married Valérie Allard. There was quite a difference in their ages.
-
-My grandparents, Edouard and Valérie, were both born in the parish of St. Alexis des Monts in the District of Trois Rivières, Conté de Maskinongé, Québec, Canada and lived there for some years. Having heard of the development of Western United States and wishing that their sons would take to farming, they decided to move by train to Red Lake Falls County, Minnesota. When they arrived, they took up land through the Homestead Act in 1886.
-
-They settled in Lambert Township, built a small home and got a few cows, horses, a couple of hogs and chickens. They also planned out a piece of land by the house for a large garden.
-
-This was a French family – not one could speak or write English. The older ones went working for people around Lambert and those of school age started school. It must have been very hard for both teachers and pupils; however, they managed very slowly at first. Some of the older children did not have time to learn English as they had to help out making some wages to get the farm going (buying lumber, horses, machinery and some grain the first year).
-
-Later on the other children learned to read only English because, in the northern States especially, French was not taught in schools except perhaps in high schools or colleges. My grandmother, Valérie, had never learned to either read or write French or English as, when she was young, there were no schools around and they were too poor to go elsewhere, but she had learned her prayers by memory. She also learned cooking and was a real good cook.
-
-There were lumber camps in Minnesota and the older boys worked there for many winters – some, like my father, even after they were married. My father had four horses all well shod to work through the winter hauling logs out of the bush.
-
-One evening when father was home from camp, our family went to visit Grandma and Grandpa Lessard. We stayed for supper. The food was on the table; it was time to eat. There was other company that evening, a couple of men who could not speak French. Grandma wanted to tell these folks that after they had eaten, she and Grandpa were going to visit the Caribeau family, folks who had come from the same parish in Quebec as they had, and the men were invited to go along but she had difficulty putting her message across. She was able to gesture putting your hat and coat on and she could say "visit." Then she wanted to tell them that she was going to go along with them, too. So she said in her broken English, "all tee-gai-dere" (meaning altogether).
-
-Although my grandparents – both Lessard and Bernier – weren't religious, there was always prayer in their homes. The family would gather to pray and if some of the children would get up before time, the parents would remind them "à genoux – à genoux." They believed in God and went to Church each Sunday. Very often they would walk the mile and a half to attend Mass.
-
-Now here are all the children; my father was the oldest:
-
-Alfred married Lucias Bernier in September 1905 in Lambert, Minnesota. Their children: Eva b. August 24, 1906 in Minnesota m. Charles Prince 1925 Lawrence b. July 7, 1915 in Minnesota m. Reine Lavoie in 1940 Lucille b. July 8, 1918 in Saskatchewan m. Rémi Arcand of Chilliwack, B.C. Emma b. May 17, 1920 in Saskatchewan m. Phillippe Gagne of Noranda, Quebec
-
-Alzéma married Cléophasse Asselin. They lived close to Oklee, Minnesota. Their children are: Doria Omer Eugène They also raised her sister's baby girl, Gloria Landreville.
-
-Parmélia married Louis Bernier – deceased. Their children are: Edmond Bernier resides in Oklee, Minnesota Emma Knotts lives in Yuma, Arizona Parmélia remarried Butcher (pronounced Boucher)
-
-Charlie married Rose Asselin. They are both deceased. They had always resided on the old homestead in Lambert Township, Minnesota. Their family of fourteen children is as follows:
-
-Raymond b. 1920 m. Maryann Nistler 1949 George Delores Walt Theresa Maurice Marie Harold Yvonne Ken Terry Vern Sharon Marcella (Not necessarily in that order.)
-
-5. Joseph Déridé was born November 9, 1891, in St. Alexis des Monts, Quebec. He married Rachel Bernier on April 14, 1914 in Red Lake Falls, Minnesota.
-
-Their children are: George b. March 8, 1915 in, Minnesota d. May 17, 1924, North Battleford, Saskatchewan Gene Alfred b. December 16, 1916, in Oklee, Minnesota m. Edithe Marie Blandine Alain October 26, 1945 Joseph Noé Napoléon b. April 26, 1918, Delmas, Saskatchewan d. Clara Edith b. November 24, 1919, Delmas, Saskatchewan m. Louis Alfred Alain April 12, 1937 Martin Alphonse b. August 25, 1921 m. Floris Tarvis July 17, 1942 Joseph b. February 12, 1923 m. Helen Tapper June 26, 1947 Marie Jeanne Thérèse b. November 16, 1924, Delmas, Saskatchewan m. Al MacFarlane October 11, 1947
-
-Joseph Déridé Lessard was deceased on May 1, 1924, North Battleford, Saskatchewan. Rachel married Louis Strasser August 13, 1927, at Battleford, Saskatchewan. They had one child: Mae Strasser b. May 15, 1928 on home farm at Veillardville, Saskatchewan m. Bernard Daly October 9, 1948
-
-6. Philias D. was born in 1896 in St. Alexis des Monts, Québec. At the age of two he moved with his family to Lambert County, Minnesota. Philias married Rose Boisvert in 1921. They are both deceased. Rose was buried in September 1985 in New Jersey, U.S.A. Phil died in 1978.
-
-Their children are: Dora m. John Etcheverry Delores m. Hervé Nolin
-
-Eleanor m. Phillip Hardy Anna Mae m. Bob Taylor Alida m. Joe Cadrain Jeannette m. Dan Chesire Denis m. Audrey
-
-7. Marie Louise married Emile Landreville. She had been married a couple of years when her first baby, a little girl, was born. After arriving home with the baby, she suddenly felt very chilly. She asked her mother-in-law to please warm her up but they could not. Marie Louise passed away before the priest arrived to give her the last Sacraments.
-
-Gloria Landreville was raised by Alzéma and Cléophasse Asselin.
-
-8. Aldéa married Walter Sabourin. She died shortly after coming to Uncle Charlie's wedding. They had two sons.
-
-9. Annie (Sister Valeria) - [Editor's Note: Here, Eva tells us that Annie was almost her twin because Eva was only six weeks older than her.] Annie had never seen a nun until Mrs. George Charette passed away in Minnesota. At that time, her three daughters that were in religious life as nuns in Duluth, Minnesota, had come to their mother's funeral in Oklee.
-
-Aunt Annie contacted them and mentioned to them that she would like to enter their congregation. So, of course, they told her to come to Duluth and see the Superior and, sure enough, Aunt Annie entered the convent. She finished her studies and taught school a number of years until she required serious head surgery. She recovered but was not able to teach after that. She was given other tasks to do.
-
-10. Frank was born in Oklee, Minnesota, in 1903. He married Ruth Iverson in 1927. Frank died in March 1977. Ruth resides in North Battleford.
-
-Frank came to Saskatchewan in 1923 to visit his two older brothers, Fred and Joe, whom he worked for at harvest time. That winter Frank went back to Minnesota. The following spring he returned to work on the farms in the Prince-Fitzgerald district where his brothers were. We had nice neighbors where he would go and play ball with them. He got to know the girls also and pretty soon he told us he was going to marry Ruth Iverson.
-
-So my girlfriend became my aunt. They raised a family of five: Maurice Joseph b. 1928 Residing at Joseph Lloyd b. 1930 Residing on the home farm
-
-George Lionel b. 1933 Residing in Edmonton
-
-Myrtle Marie b. 1935 m. Earl Lawrence and is residing in Kelowna, B.C.
-
-Raymond Edward b. 1936 Residing at
-
-11. Albert is the youngest of the family. He was living in Oregon, U.S.A., for a number of years. He married and had a couple of children. Then they parted. His children go to visit him in Red Lake Falls, Minnesota, where he resides in a home for the aged.
-
-[Editor's Note: Of Edouard's children, three of them (Alfred, Parmélia and Joseph) married children of Siméon Bernier (Lucias, Louis and Rachel).]
-
-Part IV - Lessard Family Stories
-
-JOSEPH DÉRIDÉ LESSARD
-
-Joseph's story has been put together with the assistance of many people: his children, Gene, Clara and Martin; his niece Eva (Lessard) Prince; Mae and Bernard Daly. As well, a large portion of "The Joe Lessard Story" which was printed in Footsteps In Time (a history book of the Meota area) has been used.
+*Joseph's story has been put together with the assistance of many people: his children, Gene, Clara and Martin; his niece Eva (Lessard) Prince; Mae and Bernard Daly. As well, a large portion of "The Joe Lessard Story" which was printed in Footsteps In Time (a history book of the Meota area) has been used.*
 
 Joseph Déridé Lessard was born November 9, 1891 in St. Alexis des Monts, Québec, to Edouard and Valérie Allard. In 1896 Edouard moved with his family from the French Catholic parish set in the province of Québec to Minnesota, U.S.A. Not only was the move to a new country but it was also to an area newly settled, Lambert County. Although there were Norwegians who had arrived from Norway, the majority of the population was French and many other families like Edouard's had moved there from Canada.
 
-Lambert Township, still in existence today, was named for the many Lambert families who settled there. In fact, it was at the home of François Lambert on January 28, 1882, that a meeting was held to organize the township. The area was soon settled for when the 1910 Census was taken, there were ninety-three families with the total population of the Township at five hundred and thirty-three. 1.
+Lambert Township, still in existence today, was named for the many Lambert families who settled there. In fact, it was at the home of François Lambert on January 28, 1882, that a meeting was held to organize the township. The area was soon settled for when the 1910 Census was taken, there were ninety-three families with the total population of the Township at five hundred and thirty-three.
 
 Speaking only French, Joseph at six years of age and his brothers and sisters would likely have found the area both strange and interesting. There was a school for the children two and a half miles away. It was School District #76 and it was built on the N.W. boundary of Section 8.
 
@@ -102,11 +22,7 @@ Only a little is known about Rachel's childhood but we know she went to school i
 
 When Rachel was young, the school teacher boarded at her home, which proved later to be most beneficial. This teacher taught the Bernier children to read and write in the French language. Years later Rachel related the following to her granddaughter, Marlyne: "I won an award when I was nine years old for my achievements in French." The award was a small glass lion which she treasured throughout her life. At the time of her death, it was willed to her daughter, Therese.
 
-While Rachel was a young girl, she learned to sew. Unlike her oldest sister, Rachel had much patience. She took great care to follow the pattern and the finished product fit well. It also
-
-1. Information taken from The Oklee Community Story and/or A History of Red Lake County.
-
-looked good for Rachel took a personal pride in her work. If she wished to trim an article with another piece of material, the young seamstress made certain the material used was well matched. The finished garment was not to look as though it had been made at home. In fact, some time later, she and her niece, Rachel Toulouse, would view a dress in a store window and then they would copy the dress by drawing it on paper and proceed to make a pattern and sew it up. They then wore their new dress back to the dress shop where the store owner thought they had bought the dress at his shop. They had copied it so exactly that it was impossile to tell the difference! She had a great talent and a good eye for what could be made out of certain pieces of material.
+While Rachel was a young girl, she learned to sew. Unlike her oldest sister, Rachel had much patience. She took great care to follow the pattern and the finished product fit well. It also looked good for Rachel took a personal pride in her work. If she wished to trim an article with another piece of material, the young seamstress made certain the material used was well matched. The finished garment was not to look as though it had been made at home. In fact, some time later, she and her niece, Rachel Toulouse, would view a dress in a store window and then they would copy the dress by drawing it on paper and proceed to make a pattern and sew it up. They then wore their new dress back to the dress shop where the store owner thought they had bought the dress at his shop. They had copied it so exactly that it was impossile to tell the difference! She had a great talent and a good eye for what could be made out of certain pieces of material.
 
 Many years later, Rachel worked for a Father Proulx in Minnesota. He would drive her into Thief River Falls where she would buy yards of organdy and then return home to make dresses for her granddaughters. Father would laugh at her and say, "I'm paying her to cook for me and here she is sewing for her grandchildren." Then just as quickly he would turn to Rachel and say, "Go get the dresses and show them off." Rachel's talent and enjoyment for sewing did not diminish with the years.
 
@@ -126,15 +42,13 @@ The scissors caught the eye of another girl. Whenever Rachel would visit Eva, sh
 
 Before long this same young man began to notice Rachel. Their niece, Eva, wrote this about their courtship: "It seems as if Aunt Rachel knew when Uncle Joe would be back from camp in the spring. He would then come home with Dad and Uncle Joe would wash his buggy up nice and curry his horse, Bell. Then, after a stop at the barber shop, Joe would come along to give Rachel a buggy ride. They were as happy as a pair of birds on a branch."
 
-Years later, one of Rachel's daughters related the following: "The first time Joseph Lessard took out Rachel and her father had discovered that this young man had had his daughter out, he warned her that she was never to see that man again because he was an ivrogne - a drunkard. He said he didn't ever want to see him around his daughter. Sometime later she had a chance to see Joe and she told him this. He promised her he would never touch alcohol again if she would marry him. As a matter of fact, he never did with one exception - that was on their wedding day and, as I heard it, it was in fact Siméon Bernier, his father-in-law, who asked him to have a drink of wine to celebrate his wedding."
+Years later, one of Rachel's daughters related the following: "The first time Joseph Lessard took out Rachel and her father had discovered that this young man had had his daughter out, he warned her that she was never to see that man again because he was an *ivrogne* - a drunkard. He said he didn't ever want to see him around his daughter. Sometime later she had a chance to see Joe and she told him this. He promised her he would never touch alcohol again if she would marry him. As a matter of fact, he never did with one exception - that was on their wedding day and, as I heard it, it was in fact Siméon Bernier, his father-in-law, who asked him to have a drink of wine to celebrate his wedding."
 
 At twenty-three years of age, Joseph married Rachel, daughter of Siméon Bernier and Célinère Berry of St. Jospeh's Parish on April 14, 1914. They were married in Saint Joseph's Church at Red Lake Falls, in the State of Minnesota. Charles, Joseph's older brother, and a friend, Rosalma Gibeault, were their attendants.
 
 When they were first married, Joe did temporary work for the railroad at Thief River Falls, a little town not too far from Oklee. At that time the young couple lived in an upstairs suite. Her sister, Lucy, and daughter, Eva, travelled by train a distance of twenty-three miles or so from Red Lake Falls to pay them a visit.
 
-Joe did well on the railroad and became a roadwork master. However, this didn't last. We read in the Meota history book, Footsteps In Time, that "in the spring of 1917 his brother,
-
-Alfred (better known as Fred), who had been farming at Oklee, decided to move to Saskatchewan. After selling his livestock and some machinery, Fred travelled across the border as far as the Peace River looking for land. On the way back, he stopped at North Battleford where he met George Graves, who took him out to see a farm he had on the north bank of the North Saskatchewan River. After buying the land and buildings, Fred returned to Minnesota prepared to move his family to Saskatchewan. It was at this time that Joe also decided to move to Saskatchewan. He quit his job and loaded a railroad car with household goods, horses and machinery."
+Joe did well on the railroad and became a roadwork master. However, this didn't last. We read in the Meota history book, *Footsteps In Time*, that "in the spring of 1917 his brother, Alfred (better known as Fred), who had been farming at Oklee, decided to move to Saskatchewan. After selling his livestock and some machinery, Fred travelled across the border as far as the Peace River looking for land. On the way back, he stopped at North Battleford where he met George Graves, who took him out to see a farm he had on the north bank of the North Saskatchewan River. After buying the land and buildings, Fred returned to Minnesota prepared to move his family to Saskatchewan. It was at this time that Joe also decided to move to Saskatchewan. He quit his job and loaded a railroad car with household goods, horses and machinery."
 
 "Together the two brothers left. It was about the middle of August and, while Joe and Fred travelled with the boxcars filled with their belongings, the women and children went by passenger train - Rachel with her two boys, George and Gene, and Lucy with Eva and Lawrence."
 
@@ -160,11 +74,9 @@ Eva tells us that "For about two and a half years this old restaurant was home t
 
 “However, in Delmas this was the only reported death attributed to the ’flu. Before Mass each Sunday, the priest would lead the faithful in prayer asking God’s protection against the epidemic.” Eva concludes, “Everybody prayed and no one died except that little baby.”
 
-From Footsteps In Time we learn:
+From *Footsteps In Time* we learn:
 
-“In July, the crops froze and were salvaged for feed. More bad luck occurred when Joe broke his collar bone when the horse he was riding stepped in a badger hole and fell.”
-
-“1919 was called the ‘dustpan harvest year’ as the grain was so short that, to save the heads, a contraption was attached to the binder resembling a dustpan. Hay and straw were in short supply; winter came early and it was followed by a late spring. Cows went dry and chickens stopped laying on account of poor feed and the ranchers in the north lost cattle from starvation.”
+“In July, the crops froze and were salvaged for feed. More bad luck occurred when Joe broke his collar bone when the horse he was riding stepped in a badger hole and fell.” “1919 was called the ‘dustpan harvest year’ as the grain was so short that, to save the heads, a contraption was attached to the binder resembling a dustpan. Hay and straw were in short supply; winter came early and it was followed by a late spring. Cows went dry and chickens stopped laying on account of poor feed and the ranchers in the north lost cattle from starvation.”
 
 “That spring Joe and his family moved to their own place some four miles from Fred’s. Joe had bought his own land, a quarter section S.E. 21-46-18 from the C.P.R. Then he put some buildings on it. Although they were makeshift at first, they served the purpose. They cooked outside and slept in a granary. In July they had picked half a tub of Saskatoons and set them in the shade of the tent while they had dinner. Rachel went out to get some berries for dessert and found a sow having her fill so there were not many left for canning.”
 
@@ -200,4 +112,4 @@ In the spring of 1938, Rachel and her family moved to Tillsonburg, Ontario. Ther
 
 Over the years, Rachel worked at various jobs and in many places. Some of these were: housemother at the Nurses Residence of St. Paul's Hospital and the Sanitorium in Saskatoon, clerk at her brother Albert's store, and cook at the Union Hospital in Hudson Bay. She also worked as a housekeeper for several elderly people and for a few priests.
 
-In later years she was reunited with Louis and they lived together until the time of his death in
+In later years she was reunited with Louis and they lived together until the time of his death in 1970. Shortly after, Rachel took up residence in St. Joseph's Villa, Dundas, Ontario. Here she remained except for brief visits to various members of her family. In 1983 she suffered a stroke. She died in early 1985. Mae and Bernard share with us: “Grandma Strasser (Rachel) began her new life on January 16, as a quiet end came to about six weeks in a deep coma, the result of a second stroke soon after her 89th birthday. In accordance with local custom for the little rural cemetery at Kirkfield, Ontario, she was buried after the winter's frost had left the soil she loved, on a bright, breezy May afternoon, with children, grandchildren and great grandchildren present for the occasion.”

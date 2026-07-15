@@ -1,14 +1,6 @@
-# 15. Part VI – Memories
+# Part VI - Memories
 
-Source: Printed pages 136-142 | Source scans 143-149
-
-Narration note: This script is prepared for an Onward-style family audiobook. Dense genealogy tables, indexes, source lists, and personal-record forms are intentionally kept out of the audio lane and remain available in the website and PDFs.
-
----
-
-Part VI – Memories
-
-FIRST REUNION – 1973
+## First Reunion – 1973
 
 The first Alain Reunion was held in 1973 at the farm of Gene and Edithe Lessard. It was held at the end of July to celebrate Grandma's ninetieth birthday.
 
@@ -20,7 +12,7 @@ Grandma posed for the Hudson Bay Post-Review at the tea.
 
 Everyone agreed at this time that we should reunite regularly. As a five-year interval seemed suitable, 1978 was set for the next reunion.
 
-SECOND ALAIN FAMILY REUNION – 1978
+## Second Alain Family Reunion – 1978
 
 The eight children of Henry and Alma Alain held a family reunion at the farm of Gene and Edithe Lessard at the end of July 1978. The occasion not only commemorated Grandma's (Alma Alain) ninety-fifth birthday but also marked the fiftieth year of the family's settlement in the district.
 
@@ -34,7 +26,7 @@ Family members began arriving as early as the Wednesday for the event. A family 
 
 Although the B.C. relatives complained of the mosquitoes and cold weather, they enjoyed the festivities as much as the rest of us!
 
-THIRD REUNION - 1983
+## Third Reunion - 1983
 
 Rolland and Yvonne Alain's farm was the scene of the third family reunion. There were 120 family members and friends in attendance. Relatives from British Columbia, Alberta, Manitoba, the Northwest Territories and Saskatchewan came for the affair. Although many arrived at the farm ahead of time, the festivities were again planned for the long weekend, July 30, following Grandma's birthday. She would have been 100 years old this year. However, she had passed away in December of 1982.
 
@@ -44,7 +36,7 @@ The family hosted a Come and Go Tea for the community on Sunday afternoon. In th
 
 Besides the fun and frolic, family members were honored. Moise "Smokey" and Verna Alain were honored on their 50th Anniversary as well as Rolland and Yvonne on their 40th; niece Marlyne and Adolf Reindl of Saskatoon, their 25th; and cousin Marguerite and George Dion of North Battleford, their 45th.
 
-VEILLARDVILLE COUPLE CELEBRATE GOLDEN WEDDING ANNIVERSARY
+## Veillardville Couple Celebrate Golden Wedding Anniversary
 
 (A news item taken from the Hudson Bay Post-Review Wednesday, July 10, 1957)
 
@@ -64,7 +56,7 @@ Two daughters, Mrs. Yvonne Wyman, Vancouver, and Mrs. Bertha Marsollier, Flin Fl
 
 On Monday, open house was held at the Sr. Alain home, where many friends and relatives called to extend their best wishes to the happy couple. In the evening a large crowd of friends and relations gathered for presentations.
 
-50th Wedding Anniversary of Angus and Marie Paule Menzies
+## 50th Wedding Anniversary of Angus and Marie Paule Menzies
 
 Their 50th Wedding Anniversary celebration was a pleasant surprise for the guests of honor as family and friends gathered at the Lobstick Hall, Creighton, Manitoba, on August 7, 1982. Although the original plans called for strict secrecy, all was fine until one card arrived at their home with the words of "regret at not being able to attend your anniversary." That gave it all away!
 
@@ -72,9 +64,9 @@ The celebration was to be held on their front lawn but, alas, it poured buckets 
 
 Among the many gifts was a money tree, two small apple-head dolls dressed as Grandpa and Grandma, bouquets of flowers including a long-stemmed rose presented by each grandchild. It was a lovely celebration for a grand couple!
 
-MRS. A. ALAIN CELEBRATES 90TH BIRTHDAY
+## Mrs. A. Alain Celebrates 90Th Birthday
 
-[Copied from Hudson Bay Post-Review ... Wednesday, August 15, 1973]
+[Copied from Hudson Bay Post-Review... Wednesday, August 15, 1973]
 
 Mrs. Alma Alain, ninety years of age on July 31, 1973, was the guest of honor at a family supper on July 28 in the Veillardville Hall with eighty-six family members in attendance. On Sunday, July 29, a Come and Go Tea was held at the home of her daughter and son-in-law, Mr. and Mrs. Gene Lessard, where over eighty came to extend congratulations.
 
@@ -88,11 +80,11 @@ Present to help celebrate her birthday were her sister, Mrs. LeClare of North Ba
 
 The ladies of St. Anthony's Altar Society held a Bazaar each fall (for a short period of time). Among other things it featured a supper (see the menu in French), the wheel of fortune, cards, sale of handwork and the opportunity to socialize. One year a lady read tea leaves.
 
-Ration books were issued during the Second World War through the Government. Each family was limited to items such as sugar, coffee, gas, among others. In order to purchase such items a ration book was needed.
+*Ration books were issued* during the Second World War through the Government. Each family was limited to items such as sugar, coffee, gas, among others. In order to purchase such items a ration book was needed.
 
-OBITUARIES
+## Obituaries
 
-JOSEPH HENRY ALAIN
+## Joseph Henry Alain
 
 Funeral services were held Friday, December 22, 1967, from St. Dominic's Roman Catholic Church, Hudson Bay, for Joseph Henry Alain, of Veillardville, who had died December 19 in the Melfort Geriatric Centre at the age of 85. Rev. Fr. W.G. Timmermans officiated and the pallbearers were George Quinn, Leonard Thrussel, Philip Gagnon, Llewellyn Smith, John Szmul and Antoine Morin.
 
@@ -100,11 +92,13 @@ Born in St. Ubald, Quebec, January 25, 1882, the deceased had come to Saskatchew
 
 The Alains farmed at Ruddell for 7 years and then moved to Delmas where they resided for 18 years. In 1928, the family moved to the Veillardville district where they farmed until Mr. Alain retired. His death came after an illness lasting 7 years.
 
+Besides his wife, Mr. Alain leaves to mourn 4 sons, Moise and Roland, of Veillardville, Louis, of Vernon, B.C., and Paul, of Kamloops, B.C.; four daughters, Mrs. Gene Lessard (Edithe), of Veillardville, Mrs. Angus Menzies (Marie-Paule), Flin Flon, Man., Mrs. Paul Marsollier (Bertha), of Flin Flon, and Mrs. Harry Wyman, (Yvonne), of Vancouver, B.C., as well as two half-brothers, Joseph and Louis Fugere, of Quebec. There are 38 grandchildren and 24 great-grandchildren. With the exception of Mrs. Harry Wyman, all the deceased's children attended the funeral.
+
 Also attending the funeral from outside points were Mr. Joe L'Heureux, the deceased's brother-in-law, and two nephews from Jackfish; Sister Marcella, from Edmonton, Alberta, her sister Mrs. Adolf Reindl (Marlyse), from Saskatoon, and their brother, Bruce Alain, from Estevan.
 
 Burial was in the Hudson Bay Roman Catholic cemetery.
 
-ALMA MARIE ALAIN
+## Alma Marie Alain
 
 Funeral services for Alma Marie Alain, 99, a pioneer of the Veillardville district were held Tuesday, December 21, 1982 from St. Dominic's Roman Catholic Church, Hudson Bay, Sask. Mrs. Alain passed away in the Hudson Bay Union Hospital on December 15, where she had been a patient since May 11, 1978. Msgr. E. Ulinski officiated at the service and pallbearers were George Quinn, Ralph Murdoch, Martin Lessard, John Szmul, Leonard Thrussell and Donald Morin.
 
@@ -116,7 +110,7 @@ Immediate family members unable to attend the funeral were Mrs. Paul Marsollier,
 
 Burial was in the Hudson Bay Roman Catholic cemetery with Blair's Hudson Bay Funeral Chapel in charge of arrangements.
 
-ROLAND JOSEPH ALAIN
+## Roland Joseph Alain
 
 Roland Alain of Veillardville, Sask., passed away Thursday, November 13, 1986.
 

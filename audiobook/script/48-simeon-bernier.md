@@ -1,16 +1,6 @@
-# 11. Additional
+# Simeon Bernier
 
-Source: Printed pages 124-126 | Source scans 131-133
-
-Narration note: This script is prepared for an Onward-style family audiobook. Dense genealogy tables, indexes, source lists, and personal-record forms are intentionally kept out of the audio lane and remain available in the website and PDFs.
-
----
-
-Additional
-
-SIMEON BERNIER
-
-This story was written with the assistance of Eva (Lessard) Prince, a granddaughter of Siméon and Célinère. As well, further information was gleaned from the books, The Oklee Community Story and A History of Red Lake County.
+*This story was written with the assistance of Eva (Lessard) Prince, a granddaughter of Siméon and Célinère. As well, further information was gleaned from the books, The Oklee Community Story and A History of Red Lake County.*
 
 Siméon Bernier and his wife Célinère are listed in the 1910 Census of Lambert County, U.S.A., having come from Canada. They spoke French but could neither read nor write. They took out a homestead on the S.W. portion of Section 8, Township 150 west of Range 41 in Lambert County, Minnesota, U.S.A.
 
@@ -22,26 +12,8 @@ There was a river which ran through Lambert Township and crossed Siméon's land.
 
 One day Siméon purchased a violin for his crippled lad. Within a matter of a few hours, Albert had mastered a couple of tunes. The fiddle became a special part of Albert's life and he shared his gift of music with all. Years later it was said that Albert played like Don Messer, a renowned Canadian fiddler.
 
-Besides farming the land, Siméon had several cows. Prairie grass grew well and hay was plentiful so there was no problem with their winter feed. The Oklee Community Story reprinted an article from a 1902 Gazette which reads that various farmers, among them "...Siméon Bernier and others have averaged about $35.00 a month from the sale of their milk during the factory season." The milk was used to make cheese.
+Besides farming the land, Siméon had several cows. Prairie grass grew well and hay was plentiful so there was no problem with their winter feed. *The Oklee Community Story* reprinted an article from a 1902 *Gazette* which reads that various farmers, among them "...Siméon Bernier and others have averaged about $35.00 a month from the sale of their milk during the factory season." The milk was used to make cheese.
 
 His daughter, Rachel, only months before her death in 1985, related the following about her father, Siméon: he was a farmer and a contractor. He raised cattle and grain which he took into northern Minnesota and traded for lumber which he then sold to others.
 
 Siméon had a sharp mind and an eye for business. Also, he was a hard worker and was not afraid to undertake new tasks.
-
-These are Siméon and Célinère's children:
-
-1. Clara married Tom Toulouse. She remained in the States. Her children are: Thomas, Frank, Albert (deceased), Rachel.
-
-2. Alvida married Antoinette Lefèvre. They came to St. Brieux, Saskatchewan.
-
-LAMBERT TOWNSHIP
-
-Lambert Township Map taken from The Oklee Community Story.
-
-Their children are: Délima married Albert Dupuis Noé married Cecile Dupuis Onézime married Alice Baribeau Isidore married Simone Dupuis Napoleon married Therese Baribeau Raymond married Yvonne Desjardin Emile married Jeanne Roy Marie Célinie Agna b. March 29, 1921, married James Davidson Antonia Marie Josephe (Antoinette) b. March 31, 1923, married Felix Baribeau * All of the boys and Delima are deceased.
-
-3. Lucias married Alfred Lessard September 1905 in Lambert County, Minnesota. Their children are: Eva b. August 24, 1906 in Minnesota m. Charles Prince in 1925; Lawrence b. July 7, 1915 in Minnesota m. Reine Lavoie in 1940 Lucille b. July 8, 1918 in Saskatchewan m. Rémi Arcand of Chilliwack, B.C. Emma b. May 17, 1920 in Saskatchewan m. Phillippe Gagné of Noranda, Quebec
-
-4. Délia married Napoléon Poulin. They went to Washington. They had twins. The girl survived and is living in North Yakima, Washington. Then they had twins a second time. They, along with their mother, Délia, died from the 'flu in 1918.
-
-5. Léah married Antoine Boucher. Their children are: Bert Eleanor m. a Czechoslovakian Raymond became a religious brother. He died the same year as his mother.

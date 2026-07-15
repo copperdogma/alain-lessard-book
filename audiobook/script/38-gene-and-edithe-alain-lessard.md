@@ -1,14 +1,4 @@
-# 06. Simon Allain – First Ancestor
-
-Source: Printed pages 95-103 | Source scans 102-110
-
-Narration note: This script is prepared for an Onward-style family audiobook. Dense genealogy tables, indexes, source lists, and personal-record forms are intentionally kept out of the audio lane and remain available in the website and PDFs.
-
----
-
-1970. Shortly after, Rachel took up residence in St. Joseph's Villa, Dundas, Ontario. Here she remained except for brief visits to various members of her family. In 1983 she suffered a stroke. She died in early 1985. Mae and Bernard share with us: “Grandma Strasser (Rachel) began her new life on January 16, as a quiet end came to about six weeks in a deep coma, the result of a second stroke soon after her 89th birthday. In accordance with local custom for the little rural cemetery at Kirkfield, Ontario, she was buried after the winter's frost had left the soil she loved, on a bright, breezy May afternoon, with children, grandchildren and great grandchildren present for the occasion.”
-
-GENE AND EDITHE (ALAIN) LESSARD
+# Gene and Edithe (Alain) Lessard
 
 Gene Alfred Lessard was born December 17, 1916 in Lambert, Minnesota, U.S.A. Gene tells us:
 
@@ -32,9 +22,7 @@ Gene Alfred Lessard was born December 17, 1916 in Lambert, Minnesota, U.S.A. Gen
 
 "In 1928 our family moved to Veillardville where we farmed the S.E. quarter of 4-45-4 W of the 2nd. When we came to this country, the road to school from our farm (which is the same farm we live on today) was just a foot wide -- only a walking trail. We often saw moose on our way to school, just off the trail. It was nothing to count ten, fifteen, sometimes even twenty moose in the morning in this half mile. There were deer, coyotes and timber wolves. You could hear the wolves at night, but we never saw them."
 
-"When we wanted to go to Veillardville, we'd cross the bridge up the hill, at Murdoch's, then cut across to Murdoch's corner. There would be a wagon or sleigh trail depending on the season. If you wanted to go to town, which was Hudson Bay, you'd go through Quinn's, through more bush and you'd end up where the T.V. tower is today. The highway, if you could call it that, was a corduroy road. In summer you travelled either
-
-on foot or you rode horseback. We walked to school and, often, we walked the six miles to town. In the spring you couldn't walk the high-way because there was water all over it so you'd take the railroad track and walk the rails. It was always dry and nice."
+"When we wanted to go to Veillardville, we'd cross the bridge up the hill, at Murdoch's, then cut across to Murdoch's corner. There would be a wagon or sleigh trail depending on the season. If you wanted to go to town, which was Hudson Bay, you'd go through Quinn's, through more bush and you'd end up where the T.V. tower is today. The highway, if you could call it that, was a corduroy road. In summer you travelled either on foot or you rode horseback. We walked to school and, often, we walked the six miles to town. In the spring you couldn't walk the highway because there was water all over it so you'd take the railroad track and walk the rails. It was always dry and nice."
 
 "Before we left Delmas, Ma had married Louis Strasser. He was more of a carpenter and he worked some on the White Poplar School after we moved to Veillardville. Later he went to Flin Flon."
 
@@ -48,9 +36,7 @@ on foot or you rode horseback. We walked to school and, often, we walked the six
 
 "On our way East, we went to Minnesota where I helped Uncle Charlie Lessard with the seeding -- three horses on a drill. Martin did other work. Then we were back on the road. We went by way of Chicago. At that time there was a square in the middle of the street for the pedestrians. When someone hollered, 'You're going the wrong way,' I made a U-turn right there in the middle of the square and I passed very close to a few Negro toes with the trailer behind. Several black fists were raised. Later, I took a driver's test in Tillsonburg, as you needed a license to drive in Ontario."
 
-"It was dark when we landed in Tillsonburg so we pitched our tent on an old farm. Martin and I got a job priming tobacco. The bottom leaves (the sand leaves) ripen first. They already had a crew of five other guys who had been picking for two or three days so they were limbered up. But Martin and I were really soft. After my first day's work, I woke up about three in the morning. I was so stiff from being bent over; I told Martin, 'You know, I'll never walk again.' However, each day after that the picking became easier. Ma, Therese and Joe got on tying tobacco. About four o'clock, when our crew finished in the tobacco fields, we had to hang the tobacco in kilns which were about twenty feet high. The tobacco leaves were tied onto four foot slats. These were then hung on 2 x 6 stringers set at various levels. A fellow was needed to straddle the 2 x 6 stringers while another worker on the ground handed the tobacco up which was then passed to the fellow above you and so on. The pay was good -- $2.50 a day -- if I remember
-
-right."
+"It was dark when we landed in Tillsonburg so we pitched our tent on an old farm. Martin and I got a job priming tobacco. The bottom leaves (the sand leaves) ripen first. They already had a crew of five other guys who had been picking for two or three days so they were limbered up. But Martin and I were really soft. After my first day's work, I woke up about three in the morning. I was so stiff from being bent over; I told Martin, 'You know, I'll never walk again.' However, each day after that the picking became easier. Ma, Therese and Joe got on tying tobacco. About four o'clock, when our crew finished in the tobacco fields, we had to hang the tobacco in kilns which were about twenty feet high. The tobacco leaves were tied onto four foot slats. These were then hung on 2 x 6 stringers set at various levels. A fellow was needed to straddle the 2 x 6 stringers while another worker on the ground handed the tobacco up which was then passed to the fellow above you and so on. The pay was good -- $2.50 a day -- if I remember right."
 
 "Martin and I built a little house in Tillsonburg; actually it was more like a garage. We didn't have to pay rent anymore. Martin and (I think) Joe got on at the tobacco factory. I also got on but I only worked a few days because I hated the factory and being inside. It was the beginning of March; so with five dollars in my pocket, I took off for Kirkland Lake in northern Ontario."
 
@@ -104,7 +90,7 @@ Edithe had come with her family from Delmas some years earlier. She was born in 
 
 "Gene and I were married October 25, 1945 in the Catholic Rectory at Hudson Bay, Saskatchewan. Gene wore a black pinstripe suit while I wore a pale blue suit with navy hat, gloves, shoes and purse to match. Father G. Van Vynckt officiated while Joe Lessard, Gene's brother, and Yvonne, my brother's wife, were our witnesses. Mrs. Veillard and others sang at our wedding. After a nice supper at my home, we had a dance at Veillardville Hall with Albert Bernier, Omer Cartier and Art Nice playing their fiddles."
 
-"In those days, if you had a dance, your friends didn't shivaree you. On our way home from the dance we stopped at my home to pick up a few of my things before going to our little house, and the entire group from the dance followed us ... Joe Lessard, the Davidson girls, Frank Quinns', Yvonne and Rolland, Louis and Clara, Albert Bernier, among others -- there were about forty people in Gene's little tworoom shack which measured 14 by 18 feet."
+"In those days, if you had a dance, your friends didn't shivaree you. On our way home from the dance we stopped at my home to pick up a few of my things before going to our little house, and the entire group from the dance followed us... Joe Lessard, the Davidson girls, Frank Quinns', Yvonne and Rolland, Louis and Clara, Albert Bernier, among others -- there were about forty people in Gene's little two-room shack which measured 14 by 18 feet."
 
 "This little house was our first home. It cost Gene ten dollars when he bought it from the Government some years earlier. It had once belonged to Chester Cockwill."
 
@@ -156,14 +142,14 @@ Like others, Gene has served on various boards both in Veillardville and Hudson 
 
 Today they take life a bit easier. Gene tells us they have spent the past four winters in Phaar, Texas, U.S.A.:
 
-"The first spring we went south to see the place and to visit Bertha and Paul. There was a place up for sale, which we put a bid on, then bought it. It was a fully furnished trailer -- even with dishes. We motor out, leaving home the beginning of January and usually return around the end of April. Phaar is wet and damp in January; it's their winter. There are only forty-five trailers in the entire court so we know everyone. There are a lot of activities ... shuffleboard, cards, dances, and coffee is served each morning at the Seniors' Hall which belongs to the trailer court. While we enjoy Phaar for three to four months of each year, we are happy to return to our farm in Saskatchewan. For us, this is home."
+"The first spring we went south to see the place and to visit Bertha and Paul. There was a place up for sale, which we put a bid on, then bought it. It was a fully furnished trailer -- even with dishes. We motor out, leaving home the beginning of January and usually return around the end of April. Phaar is wet and damp in January; it's their winter. There are only forty-five trailers in the entire court so we know everyone. There are a lot of activities... shuffleboard, cards, dances, and coffee is served each morning at the Seniors' Hall which belongs to the trailer court. While we enjoy Phaar for three to four months of each year, we are happy to return to our farm in Saskatchewan. For us, this is home."
 
 Gene and Edithe concluded with the following facts about their family:
 
-Wayne, born August 23, 1946, married Lynn LeBlue in December 1966. They have two girls: Shonna, born July 22, 1968, and Melanie (adopted) August 1, 1979. Wayne and Lynn live in Lloydminster where Wayne is employed.
+**Wayne**, born August 23, 1946, married Lynn LeBlue in December 1966. They have two girls: Shonna, born July 22, 1968, and Melanie (adopted) August 1, 1979. Wayne and Lynn live in Lloydminster where Wayne is employed.
 
-Carol, born May 25, 1951, married Mike Todor December 1978. They have a girl, Rebecca, born June 13, 1979. Carol runs a fitness centre while Mike manages a photo shop and is a photographer. They live in Drumheller, Alberta.
+**Carol**, born May 25, 1951, married Mike Todor December 1978. They have a girl, Rebecca, born June 13, 1979. Carol runs a fitness centre while Mike manages a photo shop and is a photographer. They live in Drumheller, Alberta.
 
-Lee, born November 5, 1955, married Pamella Herrod, September 20, 1986. Pam has a little girl, Renee, born March 31, 1983. Lee and Pam live in Hudson Bay where Pam works at Simpson Timber Co. while Lee farms the home place at Veillardville.
+**Lee**, born November 5, 1955, married Pamella Herrod, September 20, 1986. Pam has a little girl, Renee, born March 31, 1983. Lee and Pam live in Hudson Bay where Pam works at Simpson Timber Co. while Lee farms the home place at Veillardville.
 
-Blair was born March 2, 1958. He is presently working in Saskatoon as Production Manager of Dew-Little Industries Inc. which manufactures and sells a new type of siding. It has the insulation bonded to the siding. Blair resides in Saskatoon, Saskatchewan.
+**Blair** was born March 2, 1958. He is presently working in Saskatoon as Production Manager of Dew-Little Industries Inc. which manufactures and sells a new type of siding. It has the insulation bonded to the siding. Blair resides in Saskatoon, Saskatchewan.

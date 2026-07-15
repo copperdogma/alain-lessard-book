@@ -18,7 +18,7 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_BUILD_DIR = ROOT / "build" / "family-site"
-ASSET_VERSION = "20260703-companion-docweb-r1"
+ASSET_VERSION = "20260703-companion-toc-r2"
 EXPECTED_ENTRY_COUNT = 39
 EXPECTED_SEARCH_ROW_COUNT = 41
 EXPECTED_SUPPLEMENTAL_DOCUMENT_COUNT = 2
@@ -29,9 +29,21 @@ EXPECTED_FIGURES = 174
 EXPECTED_FIGCAPTIONS_MIN = 140
 EXPECTED_TABLES = 12
 EXPECTED_PERSONAL_RECORD_TABLES = 8
+EXPECTED_AUDIO_SCRIPT_COUNT = 52
+COMPANION_CONTEXT_NOTE = "This document was not part of the main book; it was found tucked inside it."
 EXPECTED_COMPANION_DOCUMENTS = (
     ("alains-song", "companion-alains-song.html", "Alain's Song", 6),
     ("growing-up-on-the-farm", "companion-growing-up-on-the-farm.html", "Growing Up on the Farm", 13),
+)
+EXPECTED_GROWING_UP_SECTION_HEADINGS = (
+    "Growing Up On The Farm A Tribute To Mom And Dad",
+    "GROWING UP",
+    "SUMMER DAYS",
+    "WINTER DAYS",
+    "SCHOOL AT WHITE POPLAR",
+    "DAD",
+    "MOM",
+    "FAMILY LIFE",
 )
 
 SITE_COPY_FILES = (
@@ -368,6 +380,77 @@ def check_tables_figures_and_copy(build_dir: Path, parsed: dict[Path, PageParser
     audiobook_text = parsed[build_dir / "audiobook.html"].visible_text.lower() if (build_dir / "audiobook.html") in parsed else ""
     validation.require("tables, indexes, and dense records stay" in audiobook_text, "Audiobook page should clearly explain why tables are not narrated")
     validation.require("page 1 page-level material" not in audiobook_text, "Audiobook page should not list raw page-level skip rows")
+    script_dir = build_dir / "script"
+    audio_scripts = sorted(script_dir.glob("*.md")) if script_dir.exists() else []
+    validation.require(len(audio_scripts) == EXPECTED_AUDIO_SCRIPT_COUNT, f"Audiobook should publish {EXPECTED_AUDIO_SCRIPT_COUNT} scripts, found {len(audio_scripts)}")
+    validation.require("preamble" in audiobook_text, "Audiobook page should link the opening preamble")
+    validation.require("growing up on the farm" in audiobook_text, "Audiobook page should link the companion farm script")
+    for script in audio_scripts:
+        text = script.read_text(encoding="utf-8")
+        validation.require(text.startswith("# "), f"{rel(script, build_dir)} should start with a Markdown H1")
+        validation.require("Narration note:" not in text, f"{rel(script, build_dir)} should not include generator narration notes")
+        validation.require("Source:" not in text, f"{rel(script, build_dir)} should not include source labels in the recording script")
+        for marker in ("<table", "<article", "<nav", "<figure", "<img"):
+            validation.require(marker not in text, f"{rel(script, build_dir)} should not expose raw HTML marker {marker}")
+
+    audio_by_name = {script.name: script.read_text(encoding="utf-8") for script in audio_scripts}
+    all_audio_text = "\n".join(audio_by_name.values())
+    all_audio_lower = all_audio_text.lower()
+    validation.require(
+        "46-therese-lessard-macfarlane.md" in audio_by_name,
+        "Audiobook should publish the restored Therese memoir as track 46",
+    )
+    validation.require(
+        "46-paulette-mary-lessard.md" not in audio_by_name,
+        "Audiobook should not publish Paulette's short reference profile as track 46",
+    )
+    for phrase in (
+        "coat of arms",
+        "riestap",
+        "salted lard cake",
+        "berthe and paul's family is as follows",
+        "we've raised six children",
+        "now here are all the children",
+        "these are siméon and célinère's children",
+        "information taken from *the oklee community story*",
+    ):
+        validation.require(phrase not in all_audio_lower, f"Audiobook should omit reference-first passage: {phrase}")
+    for fragment in (
+        "commu-nity",
+        "crib-bage",
+        "hav-ing",
+        "meet-ing",
+        "chil dren",
+        "fol lowing",
+        "jump ing",
+        "stook ing",
+        "throw ing",
+    ):
+        validation.require(fragment not in all_audio_text, f"Audiobook still contains split OCR word: {fragment}")
+    validation.require("- - " not in all_audio_text, "Audiobook should not contain doubled list markers")
+    validation.require(
+        not re.search(r"[A-Za-zÀ-ÖØ-öø-ÿ]-\n\n[a-zà-öø-ÿ]", all_audio_text),
+        "Audiobook should not break hyphenated words across Markdown paragraphs",
+    )
+    expected_restorations = {
+        "37-joseph-deride-lessard.md": "bright, breezy May afternoon",
+        "39-martin-alphonse-lessard.md": "home to family and friends on Prince Street",
+        "41-joseph-roland-donald-lessard.md": "both Helen and I retired in September 1981",
+        "46-therese-lessard-macfarlane.md": "My full name is Marie Jeanne Therese",
+    }
+    for filename, phrase in expected_restorations.items():
+        validation.require(
+            phrase in audio_by_name.get(filename, ""),
+            f"Audiobook should preserve restored page-boundary prose in {filename}: {phrase}",
+        )
+    validation.require(
+        "Recently, I purchased a van" in audio_by_name.get("46-therese-lessard-macfarlane.md", ""),
+        "Therese's restored memoir should include its closing paragraph",
+    )
+    for companion_script in ("script/51-alain-s-song.md", "script/52-growing-up-on-the-farm-a-tribute-to-mom-and-dad.md"):
+        script_path = build_dir / companion_script
+        if script_path.exists():
+            validation.require(COMPANION_CONTEXT_NOTE in script_path.read_text(encoding="utf-8"), f"{companion_script} should include the companion-document context note")
 
     home_html = (build_dir / "index.html").read_text(encoding="utf-8")
     home_text = parsed[build_dir / "index.html"].visible_text if (build_dir / "index.html") in parsed else ""
@@ -457,10 +540,15 @@ def check_companion_document_pages(build_dir: Path, parsed: dict[Path, PageParse
         html = page.read_text(encoding="utf-8")
         text = parser.visible_text
         validation.require(title in text, f"{filename} should expose the companion document title")
-        validation.require("Readable Text" in text, f"{filename} should expose a readable text section")
+        validation.require(COMPANION_CONTEXT_NOTE in text, f"{filename} should explain that the document was tucked into the main book")
+        validation.require("Readable Text" not in text, f"{filename} should not expose the old generic readable text label")
         validation.require("Source Pages" in text, f"{filename} should expose source page images")
         validation.require("Reader PDF" in text and "Archival PDF" in text, f"{filename} should keep PDF download links")
-        validation.require('class="doc-web-entry"' in html, f"{filename} should render accepted doc-web entry HTML")
+        if slug == "growing-up-on-the-farm":
+            validation.require('class="companion-story-section"' in html, f"{filename} should render story-heading sections from accepted doc-web HTML")
+        else:
+            validation.require('class="doc-web-entry"' in html, f"{filename} should render accepted doc-web entry HTML")
+            validation.require('class="companion-toc"' not in html, f"{filename} should not add a TOC to a short companion document")
         validation.require("<pre>" not in html, f"{filename} should not fall back to the old raw OCR transcript renderer")
         validation.require(
             f'href="downloads/{slug}-searchable.pdf?v={ASSET_VERSION}"' in html,
@@ -472,6 +560,37 @@ def check_companion_document_pages(build_dir: Path, parsed: dict[Path, PageParse
         )
         image_refs = re.findall(rf'src="images/companion/{re.escape(slug)}/page-\d{{3}}\.jpg"', html)
         validation.require(len(image_refs) == page_count, f"{filename} should include {page_count} companion page images, found {len(image_refs)}")
+        if slug == "alains-song":
+            refrain_blocks = []
+            unbold_refrains = []
+            for paragraph in re.findall(r"<p\b[^>]*>(.*?)</p>", html, flags=re.IGNORECASE | re.DOTALL):
+                plain = re.sub(r"<br\s*/?>", " ", paragraph, flags=re.IGNORECASE)
+                plain = re.sub(r"<[^>]+>", " ", plain)
+                if not re.match(r"^\s*REFRAIN:?\b", plain, flags=re.IGNORECASE):
+                    continue
+                refrain_blocks.append(paragraph)
+                stripped = paragraph.strip()
+                if not (re.match(r"^<strong\b[^>]*>", stripped, flags=re.IGNORECASE) and re.search(r"</strong>\s*$", stripped, flags=re.IGNORECASE)):
+                    unbold_refrains.append(stripped[:80])
+            validation.require(len(refrain_blocks) == 10, f"{filename} should include 10 refrain stanzas, found {len(refrain_blocks)}")
+            validation.require(not unbold_refrains, f"{filename} has unbolded refrain stanzas: {unbold_refrains[:3]}")
+        if slug == "growing-up-on-the-farm":
+            story_sections = re.findall(r'<section class="companion-story-section">(.*?)</section>', html, flags=re.IGNORECASE | re.DOTALL)
+            section_headings = []
+            for section in story_sections:
+                match = re.search(r"<h[12]\b[^>]*>(.*?)</h[12]>", section, flags=re.IGNORECASE | re.DOTALL)
+                if match:
+                    section_headings.append(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", match.group(1))).strip())
+            validation.require(len(story_sections) == len(EXPECTED_GROWING_UP_SECTION_HEADINGS), f"{filename} should render story-heading sections, found {len(story_sections)}")
+            validation.require(tuple(section_headings) == EXPECTED_GROWING_UP_SECTION_HEADINGS, f"{filename} has unexpected story section headings: {section_headings}")
+            validation.require('class="doc-web-entry"' not in html, f"{filename} should not expose page-break doc-web entry sections")
+            toc_match = re.search(r'<nav\b[^>]*class="companion-toc"[^>]*>(.*?)</nav>', html, flags=re.IGNORECASE | re.DOTALL)
+            validation.require(toc_match is not None, f"{filename} should expose a companion document TOC")
+            if toc_match:
+                toc_links = re.findall(r'<a href="#([^"]+)">(.*?)</a>', toc_match.group(1), flags=re.IGNORECASE | re.DOTALL)
+                toc_headings = tuple(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", text)).strip() for _, text in toc_links)
+                validation.require(toc_headings == EXPECTED_GROWING_UP_SECTION_HEADINGS, f"{filename} has unexpected TOC headings: {toc_headings}")
+                validation.require(all(anchor.startswith("blk-") for anchor, _ in toc_links), f"{filename} TOC should link to doc-web heading anchors")
 
 
 def public_url(base: str, ref: str) -> str:

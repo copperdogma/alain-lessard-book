@@ -1,5 +1,42 @@
 # Changelog
 
+## [2026-07-14-01] - Refine audiobook listening scripts
+
+### Changed
+- Removed source-verified heraldry, recipes, descendant registers, citations,
+  and other reference-first passages from track 04 onward while retaining the
+  surrounding family history and story prose.
+- Replaced the incomplete Paulette/Therese splice with Therese MacFarlane's
+  complete memoir, including its opening text verified against source scan 121.
+
+### Fixed
+- Restored three memoir endings that had been split across imported HTML entry
+  boundaries and joined source-verified print/OCR word breaks for narration.
+- Added family-site validation for the curated cuts, restored prose, track 46,
+  and common listening-script fragmentation regressions.
+
+## [2026-07-05-01] - Prepare final audiobook scripts
+
+### Changed
+- Reworked the audiobook generator to produce final Onward-style recording
+  Markdown: a preamble, clean story scripts, split family-story tracks,
+  companion-document scripts, and no in-script source/process notes.
+- Updated the audiobook manifest and site validation for the 52 script-ready
+  tracks while keeping tables, genealogy lists, recipes, bibliography, and
+  personal-record forms out of the audio lane.
+- Added a short context note to both companion documents explaining that they
+  were found tucked into the main book rather than printed as part of it.
+
+## [2026-07-03-01] - Normalize Alain's Song refrains
+
+### Fixed
+- Made every `Alain's Song` refrain stanza bold in the companion HTML page and
+  added validation to keep the refrain formatting consistent.
+- Grouped `Growing Up on the Farm` companion HTML into story-heading sections
+  instead of preserving arbitrary page-break sections.
+- Removed the generic companion-page `Readable Text` label and added a
+  story-section table of contents for `Growing Up on the Farm`.
+
 ## [2026-07-02-02] - Add supplemental documents to archive
 
 ### Added

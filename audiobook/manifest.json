@@ -1,317 +1,766 @@
 {
-  "schema_version": "alain_lessard_audiobook_manifest_v2",
+  "schema_version": "alain_lessard_audiobook_manifest_v3",
+  "title": "Alain Lessard Audio Companion",
   "mode": "onward-style-narrative-audio",
   "preferred_voice": {
     "provider": "ElevenLabs",
     "name": "Matilda",
     "voice_id": "XrExE9yKIg1WjnnlVkGX"
   },
-  "note": "Scripts are prepared for narrative entries only; genealogy tables, personal records, bibliography, and page-level reference material remain readable/searchable.",
-  "entries": [
+  "note": "Scripts are clean Markdown chapters prepared for recording; tables, genealogy lists, personal records, recipes, bibliography, and source lists remain in the readable archive.",
+  "tracks": [
     {
-      "index": 1,
-      "entry_id": "chapter-001",
-      "title": "LOUIS AND CLARA (LESSARD) ALAIN",
-      "script": "script/01-louis-and-clara-lessard-alain.md",
-      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "track_number": 1,
+      "title": "Preamble",
+      "script_path": "script/01-preamble.md",
+      "source_ids": [
+        "manual:preamble"
+      ],
+      "source_label": "Manual listening preamble",
+      "word_count": 123,
       "status": "script-ready",
-      "audio_file": null
+      "audio_path": null
     },
     {
-      "index": 2,
-      "entry_id": "chapter-002",
-      "title": "Introduction",
-      "script": "script/02-introduction.md",
-      "source_label": "Printed page 81 | Source scan 88",
+      "track_number": 2,
+      "title": "Dedication and Introduction",
+      "script_path": "script/02-dedication-and-introduction.md",
+      "source_ids": [
+        "page-007"
+      ],
+      "source_label": "Source scan 5",
+      "word_count": 241,
       "status": "script-ready",
-      "audio_file": null
+      "audio_path": null
     },
     {
-      "index": 3,
-      "entry_id": "chapter-003",
+      "track_number": 3,
       "title": "Preface",
-      "script": "script/03-preface.md",
-      "source_label": "Printed page 82 | Source scan 89",
+      "script_path": "script/03-preface.md",
+      "source_ids": [
+        "page-011"
+      ],
+      "source_label": "Source scan 7",
+      "word_count": 731,
       "status": "script-ready",
-      "audio_file": null
+      "audio_path": null
     },
     {
-      "index": 4,
-      "entry_id": "chapter-004",
-      "title": "Part I – Alain Family History",
-      "script": "script/04-part-i-alain-family-history.md",
+      "track_number": 4,
+      "title": "Part I - Alain Family History",
+      "script_path": "script/04-part-i-alain-family-history.md",
+      "source_ids": [
+        "page-002",
+        "page-004",
+        "page-006",
+        "page-008",
+        "page-010"
+      ],
+      "source_label": "Printed page 2 | Source scan 9; Printed page 3 | Source scan 10; Printed page 4 | Source scan 11; Printed page 5 | Source scan 12; Printed page 6 | Source scan 13",
+      "word_count": 3435,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 5,
+      "title": "Henri Delphice Alain",
+      "script_path": "script/05-henri-delphice-alain.md",
+      "source_ids": [
+        "page-012",
+        "page-013",
+        "page-014",
+        "page-015",
+        "page-016",
+        "page-017",
+        "page-018"
+      ],
+      "source_label": "Printed page 7 | Source scan 14; Printed page 8 | Source scan 15; Printed page 9 | Source scan 16; Printed page 10 | Source scan 17; Printed page 11 | Source scan 18; Printed page 12 | Source scan 19; Printed page 13 | Source scan 20",
+      "word_count": 4523,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 6,
+      "title": "Moise (Smokey) Alain",
+      "script_path": "script/06-moise-smokey-alain.md",
+      "source_ids": [
+        "page-019",
+        "page-020",
+        "page-021"
+      ],
+      "source_label": "Printed page 14 | Source scan 21; Printed page 15 | Source scan 22; Printed page 16 | Source scan 23",
+      "word_count": 1655,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 7,
+      "title": "Louis and Clara (Lessard) Alain",
+      "script_path": "script/07-louis-and-clara-lessard-alain.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 6323,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 8,
+      "title": "Marlyne (Alain) Reindl",
+      "script_path": "script/08-marlyne-alain-reindl.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 3245,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 9,
+      "title": "Robert Reindl",
+      "script_path": "script/09-robert-reindl.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 296,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 10,
+      "title": "Geraldine (Reindl) Law",
+      "script_path": "script/10-geraldine-reindl-law.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 813,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 11,
+      "title": "Louella Mae (Reindl) Sim",
+      "script_path": "script/11-louella-mae-reindl-sim.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 935,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 12,
+      "title": "Mark Reindl",
+      "script_path": "script/12-mark-reindl.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 1068,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 13,
+      "title": "Maxine Theresa (Alain) Prentice",
+      "script_path": "script/13-maxine-theresa-alain-prentice.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 2959,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 14,
+      "title": "Adelle Prentice",
+      "script_path": "script/14-adelle-prentice.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 1219,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 15,
+      "title": "Marcella (Alain) Sevigny",
+      "script_path": "script/15-marcella-alain-sevigny.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 3370,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 16,
+      "title": "Bruce Alain",
+      "script_path": "script/16-bruce-alain.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 1289,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 17,
+      "title": "Bernadette Michelle (Alain) Adrian",
+      "script_path": "script/17-bernadette-michelle-alain-adrian.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 2694,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 18,
+      "title": "Kendall Louise Adrian",
+      "script_path": "script/18-kendall-louise-adrian.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 344,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 19,
+      "title": "Shantell Monique Adrian",
+      "script_path": "script/19-shantell-monique-adrian.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 134,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 20,
+      "title": "Rachelle (Alain) Toews",
+      "script_path": "script/20-rachelle-alain-toews.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 2622,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 21,
+      "title": "Lana (Toews) Bury",
+      "script_path": "script/21-lana-toews-bury.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 821,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 22,
+      "title": "John Toews",
+      "script_path": "script/22-john-toews.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 257,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 23,
+      "title": "Todd Toews",
+      "script_path": "script/23-todd-toews.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 347,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 24,
+      "title": "Michelle (Alain) Pepper",
+      "script_path": "script/24-michelle-alain-pepper.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 1923,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 25,
+      "title": "Joseph Albert Alain",
+      "script_path": "script/25-joseph-albert-alain.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 791,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 26,
+      "title": "Yvonne (Alain) O'Brien",
+      "script_path": "script/26-yvonne-alain-o-brien.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 456,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 27,
+      "title": "What Is a Family?",
+      "script_path": "script/27-what-is-a-family.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 131,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 28,
+      "title": "Rolland Joseph Francois Alain",
+      "script_path": "script/28-rolland-joseph-francois-alain.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 1926,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 29,
+      "title": "A Farmer's Creed",
+      "script_path": "script/29-a-farmer-s-creed.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 294,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 30,
+      "title": "Marie Paule Menzies",
+      "script_path": "script/30-marie-paule-menzies.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 1113,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 31,
+      "title": "Berthe (Alain) Marsollier",
+      "script_path": "script/31-berthe-alain-marsollier.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 394,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 32,
+      "title": "Paul Emile Alain",
+      "script_path": "script/32-paul-emile-alain.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 2085,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 33,
+      "title": "Moise L'Heureux",
+      "script_path": "script/33-moise-l-heureux.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 855,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 34,
+      "title": "Bruno Gideon Alain",
+      "script_path": "script/34-bruno-gideon-alain.md",
+      "source_ids": [
+        "chapter-001"
+      ],
+      "source_label": "Printed pages 17-80 | Source scans 24-87",
+      "word_count": 1985,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 35,
+      "title": "Part III - Lessard Family History",
+      "script_path": "script/35-part-iii-lessard-family-history.md",
+      "source_ids": [
+        "chapter-004"
+      ],
       "source_label": "Printed pages 82-85 | Source scans 89-92",
+      "word_count": 2737,
       "status": "script-ready",
-      "audio_file": null
+      "audio_path": null
     },
     {
-      "index": 5,
-      "entry_id": "chapter-005",
-      "title": "EDOUARD LESSARD",
-      "script": "script/05-edouard-lessard.md",
+      "track_number": 36,
+      "title": "Edouard Lessard",
+      "script_path": "script/36-edouard-lessard.md",
+      "source_ids": [
+        "chapter-005"
+      ],
       "source_label": "Printed pages 86-94 | Source scans 93-101",
+      "word_count": 940,
       "status": "script-ready",
-      "audio_file": null
+      "audio_path": null
     },
     {
-      "index": 6,
-      "entry_id": "chapter-006",
-      "title": "Simon Allain – First Ancestor",
-      "script": "script/06-simon-allain-first-ancestor.md",
+      "track_number": 37,
+      "title": "Joseph Déridé Lessard",
+      "script_path": "script/37-joseph-deride-lessard.md",
+      "source_ids": [
+        "chapter-005",
+        "chapter-006"
+      ],
+      "source_label": "Printed pages 86-94 | Source scans 93-101; Printed pages 95-103 | Source scans 102-110",
+      "word_count": 4092,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 38,
+      "title": "Gene and Edithe (Alain) Lessard",
+      "script_path": "script/38-gene-and-edithe-alain-lessard.md",
+      "source_ids": [
+        "chapter-006"
+      ],
       "source_label": "Printed pages 95-103 | Source scans 102-110",
+      "word_count": 6909,
       "status": "script-ready",
-      "audio_file": null
+      "audio_path": null
     },
     {
-      "index": 7,
-      "entry_id": "chapter-007",
-      "title": "MARTIN ALPHONSE LESSARD",
-      "script": "script/07-martin-alphonse-lessard.md",
-      "source_label": "Printed pages 104-106 | Source scans 111-113",
+      "track_number": 39,
+      "title": "Martin Alphonse Lessard",
+      "script_path": "script/39-martin-alphonse-lessard.md",
+      "source_ids": [
+        "chapter-007",
+        "chapter-008"
+      ],
+      "source_label": "Printed pages 104-106 | Source scans 111-113; Printed pages 107-111 | Source scans 114-118",
+      "word_count": 2495,
       "status": "script-ready",
-      "audio_file": null
+      "audio_path": null
     },
     {
-      "index": 8,
-      "entry_id": "chapter-008",
-      "title": "Henri Alain",
-      "script": "script/08-henri-alain.md",
+      "track_number": 40,
+      "title": "Joe Lessard",
+      "script_path": "script/40-joe-lessard.md",
+      "source_ids": [
+        "chapter-008"
+      ],
       "source_label": "Printed pages 107-111 | Source scans 114-118",
+      "word_count": 286,
       "status": "script-ready",
-      "audio_file": null
+      "audio_path": null
     },
     {
-      "index": 9,
-      "entry_id": "chapter-009",
-      "title": "Moise Alain",
-      "script": "script/09-moise-alain.md",
+      "track_number": 41,
+      "title": "Joseph Roland Donald Lessard",
+      "script_path": "script/41-joseph-roland-donald-lessard.md",
+      "source_ids": [
+        "chapter-008",
+        "chapter-009"
+      ],
+      "source_label": "Printed pages 107-111 | Source scans 114-118; Printed pages 112-116 | Source scans 119-123",
+      "word_count": 3731,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 42,
+      "title": "Paul Lessard",
+      "script_path": "script/42-paul-lessard.md",
+      "source_ids": [
+        "chapter-009"
+      ],
       "source_label": "Printed pages 112-116 | Source scans 119-123",
+      "word_count": 59,
       "status": "script-ready",
-      "audio_file": null
+      "audio_path": null
     },
     {
-      "index": 10,
-      "entry_id": "chapter-010",
-      "title": "Louis Alain's Children's Stories",
-      "script": "script/10-louis-alain-s-children-s-stories.md",
+      "track_number": 43,
+      "title": "Darlene (Lessard) Kirwin",
+      "script_path": "script/43-darlene-lessard-kirwin.md",
+      "source_ids": [
+        "chapter-009"
+      ],
+      "source_label": "Printed pages 112-116 | Source scans 119-123",
+      "word_count": 279,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 44,
+      "title": "Susan (Lessard) Marks",
+      "script_path": "script/44-susan-lessard-marks.md",
+      "source_ids": [
+        "chapter-009"
+      ],
+      "source_label": "Printed pages 112-116 | Source scans 119-123",
+      "word_count": 228,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 45,
+      "title": "Carolanne (Lessard) White",
+      "script_path": "script/45-carolanne-lessard-white.md",
+      "source_ids": [
+        "chapter-009"
+      ],
+      "source_label": "Printed pages 112-116 | Source scans 119-123",
+      "word_count": 240,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 46,
+      "title": "Therese (Lessard) MacFarlane",
+      "script_path": "script/46-therese-lessard-macfarlane.md",
+      "source_ids": [
+        "chapter-009",
+        "chapter-010"
+      ],
+      "source_label": "Printed pages 112-116 | Source scans 119-123; Printed pages 117-123 | Source scans 124-130",
+      "word_count": 1533,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 47,
+      "title": "Mae (Strasser) Daly",
+      "script_path": "script/47-mae-strasser-daly.md",
+      "source_ids": [
+        "chapter-010"
+      ],
       "source_label": "Printed pages 117-123 | Source scans 124-130",
+      "word_count": 3971,
       "status": "script-ready",
-      "audio_file": null
+      "audio_path": null
     },
     {
-      "index": 11,
-      "entry_id": "chapter-011",
-      "title": "Additional",
-      "script": "script/11-additional.md",
+      "track_number": 48,
+      "title": "Simeon Bernier",
+      "script_path": "script/48-simeon-bernier.md",
+      "source_ids": [
+        "chapter-011"
+      ],
       "source_label": "Printed pages 124-126 | Source scans 131-133",
+      "word_count": 680,
       "status": "script-ready",
-      "audio_file": null
+      "audio_path": null
     },
     {
-      "index": 12,
-      "entry_id": "chapter-012",
-      "title": "Rolland Alain's Children's Stories",
-      "script": "script/12-rolland-alain-s-children-s-stories.md",
-      "source_label": "Printed page 127 | Source scan 134",
-      "status": "script-ready",
-      "audio_file": null
-    },
-    {
-      "index": 13,
-      "entry_id": "chapter-013",
-      "title": "Marie Paule (Alain) Menzies",
-      "script": "script/13-marie-paule-alain-menzies.md",
-      "source_label": "Printed page 128 | Source scan 135",
-      "status": "script-ready",
-      "audio_file": null
-    },
-    {
-      "index": 14,
-      "entry_id": "chapter-014",
+      "track_number": 49,
       "title": "Part V - Veillardville",
-      "script": "script/14-part-v-veillardville.md",
+      "script_path": "script/49-part-v-veillardville.md",
+      "source_ids": [
+        "chapter-014"
+      ],
       "source_label": "Printed pages 129-135 | Source scans 136-142",
+      "word_count": 3666,
       "status": "script-ready",
-      "audio_file": null
+      "audio_path": null
     },
     {
-      "index": 15,
-      "entry_id": "chapter-015",
-      "title": "Part VI – Memories",
-      "script": "script/15-part-vi-memories.md",
+      "track_number": 50,
+      "title": "Part VI - Memories",
+      "script_path": "script/50-part-vi-memories.md",
+      "source_ids": [
+        "chapter-015"
+      ],
       "source_label": "Printed pages 136-142 | Source scans 143-149",
+      "word_count": 2363,
       "status": "script-ready",
-      "audio_file": null
+      "audio_path": null
+    },
+    {
+      "track_number": 51,
+      "title": "Alain's Song",
+      "script_path": "script/51-alain-s-song.md",
+      "source_ids": [
+        "companion:alains-song"
+      ],
+      "source_label": "6 source pages",
+      "word_count": 1025,
+      "status": "script-ready",
+      "audio_path": null
+    },
+    {
+      "track_number": 52,
+      "title": "Growing Up on the Farm: A Tribute to Mom and Dad",
+      "script_path": "script/52-growing-up-on-the-farm-a-tribute-to-mom-and-dad.md",
+      "source_ids": [
+        "companion:growing-up-on-the-farm"
+      ],
+      "source_label": "13 source pages",
+      "word_count": 2912,
+      "status": "script-ready",
+      "audio_path": null
     }
   ],
   "skipped_entries": [
     {
-      "entry_id": "chapter-018",
-      "title": "Alain Lessard",
-      "reason": "cover and title pages",
-      "source_label": "Source scans 1-2",
-      "table_count": 0
+      "title": "Cover, title pages, copyright, and table of contents",
+      "reason": "opening reference material"
     },
     {
-      "entry_id": "page-003",
-      "title": "Image 3",
-      "reason": "page-level material",
-      "source_label": "Source scan 3",
-      "table_count": 0
+      "title": "Acknowledgements",
+      "reason": "source acknowledgements"
     },
     {
-      "entry_id": "page-005",
-      "title": "Page iii",
-      "reason": "page-level material",
-      "source_label": "Source scan 4",
-      "table_count": 1
+      "title": "Personal records",
+      "reason": "personal records tables"
     },
     {
-      "entry_id": "page-007",
-      "title": "Page iv",
-      "reason": "page-level material",
-      "source_label": "Source scan 5",
-      "table_count": 0
-    },
-    {
-      "entry_id": "page-009",
-      "title": "Page v",
-      "reason": "page-level material",
-      "source_label": "Source scan 6",
-      "table_count": 0
-    },
-    {
-      "entry_id": "page-011",
-      "title": "Page vi",
-      "reason": "page-level material",
-      "source_label": "Source scan 7",
-      "table_count": 0
-    },
-    {
-      "entry_id": "page-001",
-      "title": "Page 1",
-      "reason": "page-level material",
-      "source_label": "Printed page 1 | Source scan 8",
-      "table_count": 0
-    },
-    {
-      "entry_id": "page-002",
-      "title": "Page 2",
-      "reason": "page-level material",
-      "source_label": "Printed page 2 | Source scan 9",
-      "table_count": 0
-    },
-    {
-      "entry_id": "page-004",
-      "title": "Page 3",
-      "reason": "page-level material",
-      "source_label": "Printed page 3 | Source scan 10",
-      "table_count": 0
-    },
-    {
-      "entry_id": "page-006",
-      "title": "Page 4",
-      "reason": "page-level material",
-      "source_label": "Printed page 4 | Source scan 11",
-      "table_count": 0
-    },
-    {
-      "entry_id": "page-008",
-      "title": "Page 5",
-      "reason": "page-level material",
-      "source_label": "Printed page 5 | Source scan 12",
-      "table_count": 0
-    },
-    {
-      "entry_id": "page-010",
-      "title": "Page 6",
-      "reason": "page-level material",
-      "source_label": "Printed page 6 | Source scan 13",
-      "table_count": 0
-    },
-    {
-      "entry_id": "page-012",
-      "title": "Page 7",
-      "reason": "page-level material",
-      "source_label": "Printed page 7 | Source scan 14",
-      "table_count": 0
-    },
-    {
-      "entry_id": "page-013",
-      "title": "Page 8",
-      "reason": "page-level material",
-      "source_label": "Printed page 8 | Source scan 15",
-      "table_count": 0
-    },
-    {
-      "entry_id": "page-014",
-      "title": "Page 9",
-      "reason": "page-level material",
-      "source_label": "Printed page 9 | Source scan 16",
-      "table_count": 0
-    },
-    {
-      "entry_id": "page-015",
-      "title": "Page 10",
-      "reason": "page-level material",
-      "source_label": "Printed page 10 | Source scan 17",
-      "table_count": 0
-    },
-    {
-      "entry_id": "page-016",
-      "title": "Page 11",
-      "reason": "page-level material",
-      "source_label": "Printed page 11 | Source scan 18",
-      "table_count": 0
-    },
-    {
-      "entry_id": "page-017",
-      "title": "Page 12",
-      "reason": "page-level material",
-      "source_label": "Printed page 12 | Source scan 19",
-      "table_count": 0
-    },
-    {
-      "entry_id": "page-018",
-      "title": "Page 13",
-      "reason": "page-level material",
-      "source_label": "Printed page 13 | Source scan 20",
-      "table_count": 0
-    },
-    {
-      "entry_id": "page-019",
-      "title": "Page 14",
-      "reason": "page-level material",
-      "source_label": "Printed page 14 | Source scan 21",
-      "table_count": 0
-    },
-    {
-      "entry_id": "page-020",
-      "title": "Page 15",
-      "reason": "page-level material",
-      "source_label": "Printed page 15 | Source scan 22",
-      "table_count": 0
-    },
-    {
-      "entry_id": "page-021",
-      "title": "Page 16",
-      "reason": "page-level material",
-      "source_label": "Printed page 16 | Source scan 23",
-      "table_count": 0
-    },
-    {
-      "entry_id": "chapter-016",
-      "title": "Part VII – Personal Records",
-      "reason": "personal records tables",
-      "source_label": "Printed pages 143-144 | Source scans 150-151",
-      "table_count": 8
-    },
-    {
-      "entry_id": "chapter-017",
       "title": "Bibliography",
-      "reason": "bibliography",
-      "source_label": "Printed pages 145-146 | Source scans 152-153",
-      "table_count": 0
+      "reason": "bibliography"
+    },
+    {
+      "title": "Additional",
+      "reason": "genealogy/reference section",
+      "source_id": "chapter-001"
+    },
+    {
+      "title": "ALAIN GENEALOGY",
+      "reason": "genealogy/reference section",
+      "source_id": "chapter-001"
+    },
+    {
+      "title": "**FOLLEY GENEALOGY**",
+      "reason": "genealogy/reference section",
+      "source_id": "chapter-001"
+    },
+    {
+      "title": "Part IV - Lessard Family Stories",
+      "reason": "genealogy/reference section",
+      "source_id": "chapter-005"
+    },
+    {
+      "title": "Paulette Mary Lessard",
+      "reason": "short reference profile",
+      "source_id": "chapter-009"
+    },
+    {
+      "title": "RECIPES",
+      "reason": "genealogy/reference section",
+      "source_id": "chapter-010"
+    },
+    {
+      "title": "Additional",
+      "reason": "genealogy/reference section",
+      "source_id": "chapter-011"
+    },
+    {
+      "title": "LAMBERT TOWNSHIP",
+      "reason": "genealogy/reference section",
+      "source_id": "chapter-011"
+    },
+    {
+      "title": "The Alain name and coat of arms",
+      "reason": "heraldic/reference material",
+      "source_id": "page-001"
+    },
+    {
+      "title": "Salted Lard Cake",
+      "reason": "recipe material",
+      "source_id": "page-008"
+    },
+    {
+      "title": "The Lessard name and coat of arms",
+      "reason": "heraldic/reference material",
+      "source_id": "chapter-002"
+    },
+    {
+      "title": "Lessard source citation",
+      "reason": "bibliographic reference",
+      "source_id": "chapter-004"
+    },
+    {
+      "title": "Berthe and Paul Marsollier family register",
+      "reason": "genealogy/reference section",
+      "source_id": "chapter-001"
+    },
+    {
+      "title": "Paul Emile and Reine Alain family register",
+      "reason": "genealogy/reference section",
+      "source_id": "chapter-001"
+    },
+    {
+      "title": "Edouard Lessard descendant register",
+      "reason": "genealogy/reference section",
+      "source_id": "chapter-005"
+    },
+    {
+      "title": "Simeon Bernier descendant register",
+      "reason": "genealogy/reference section",
+      "source_id": "chapter-011"
+    },
+    {
+      "title": "Lessard Genealogy",
+      "reason": "genealogy/reference section",
+      "source_id": "chapter-012"
+    },
+    {
+      "title": "Strasser Family",
+      "reason": "genealogy/reference section",
+      "source_id": "chapter-013"
+    },
+    {
+      "title": "Recipes",
+      "reason": "recipe/table material",
+      "source_id": "chapter-010"
     }
   ]
 }

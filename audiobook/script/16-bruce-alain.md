@@ -1,0 +1,33 @@
+# Bruce Alain
+
+I was born in Hudson Bay, Saskatchewan, on November 12, 1946. Many things happened to me as a youngster – some events that I personally recall follow.
+
+When I was quite young I would follow my father behind the plough in the field directly in front of our place. The plough was a regular two-bottom plough that my dad pulled behind the old McCormick and it had a big throw which would turn the dirt over. Because he didn't have enough power or speed, the furrow would fall right over and flop back. I remember getting caught in the furrow and losing my rubber boot.
+
+Once, when I was between three and four years old, there was a huge snow storm when we were out in the cutter. The cutter was like a big motorhome except it was drawn by horses. It had a windshield and inside was a woodstove for heat, a vent, a table and a place to sit down. One Saturday, we were being pulled home from Veillardville which was about three-quarters of a mile away. To me it seemed like an eternity that we were in the cutter with the coal oil lantern swinging back and forth from the ceiling.
+
+At about age four an incident that I remember more clearly than any other was getting my first pair of hockey gloves for Christmas. In those days Grandpa Alain used to come by and tease me about "Rocket" Richard. That pair of hockey gloves was a gift I was proud of for a long time.
+
+An interesting experience happened to me in school, probably about Grade 5. I was able to take a joke as well as give one. One day my cousins and a few other school kids wrapped up a steel ball bearing, which was about three inches in diameter, with some white tape. I used to ride my bike to play scrub in the morning and, that morning, I hit the steel ball with the bat from a very close range – of course, it was their idea of a joke. Later in school, for about two hours after hitting this "ball", my hands were unable to hold a pen or pencil. My teacher wasn't too excited about that.
+
+We used to plug gopher holes at school with broken bats and then flush out the gophers with the slop water from the school. This was part of school in those days.
+
+In the winter time Rachelle, Bernie and I would hitch up my two dogs, Rusty and Pup, and they would pull us to school. I enjoyed those years. My dogs were great and I went everywhere with them. I probably shot as many as a hundred squirrels in winter. I never caught a mink though I always wanted to. I got quite a few weasels but squirrels were the big thing – you got about two bits a squirrel. There was never a moment when there was nothing to do. If you couldn't do something sensible, you could always do something irrational and I had a chance to do both at an early age.
+
+On the farm just about every Saturday in the spring, when it got dry enough to go on the land, my dad would get us kids together and hook a stone boat up and we would have to go out and pick all the rocks that had bared themselves after the winter snow. They were easy to see and pick. Marcella and I and sometimes the other kids would run from the wagon or from the stone boat, left and right. Marlyne's husband, Adolf, had his turn picking rocks with us, too. We had some pretty entertaining days out there with Dad in the captain's seat pointing out the rocks for us to leap out and pick.
+
+I was fairly mechanical and, with the help of my Uncle Rolland, I designed my first motorbike. It was an old Briggs & Stratton washing machine engine that was stuck on the side of the bike. I had it for two or three summers, that I can remember, and it was quite a sight to see.
+
+When I was in Grade 8 or 9, I started going to the town school. The school was more than one room and had lots of teachers. That was the first year my Uncle Rolland drove the bus, and marked the change for me, from farm life to city life. It was a major change in my life, I feel, because life on the farm wasn't the same anymore after experiencing town life.
+
+After a couple of years in town school, I didn't like school anymore and I struck off with a friend, a man we knew from Hudson Bay. His name was Leo Budnick, and he took me to Calgary. There I embarked on a career, that of a jockey. Half a year later I was fortunate enough to paddock a horse called Wood's Wish at the Queen's Play at Woodbine in Ontario. I rode many thoroughbreds and did come out of the starting gate. It was very eventful at the track. We had to go by train with the horses from Edmonton to Toronto. On one trip, on the second day, I was mucking the stables out and thought the only way to get rid of the stuff was to throw it out the train door - so I did! Well, what I didn't know was that the car right behind ours was the dining car. I guess it was a pretty shitty view!
+
+I looked after a horse farm in Toronto and that led me to my second job which was working at a funeral home in Toronto called Lyonnete Funeral Parlor. There I would deliver flowers and wash the new cars - I didn't have much to do with the actual embalming of bodies.
+
+I then came West. My parents had sold the farm and eventually moved to Golden, B.C. where Dad was working in a sawmill. I ran into my brother-in-law, Don Adrian, and some others who had already taken a welding course and they all suggested that I go to welding school in Kelowna and learn a trade. My cousin, Lloyd Alain, and I did go to welding school in Kelowna and took our welding papers and both joined the Iron Workers. Lloyd is currently working as an iron worker. I spent ten years in the field, putting up iron in Saskatchewan, Ontario, British Columbia, Alberta, Wyoming, California, Arizona, Colorado, and New Mexico.
+
+I then took up freestyle ski judging when the sport was very young. I took that sport from a very early age of freestyle skiing - in fact, I was involved in the third freestyle contest ever held. I started judging and worked my way up to be the general manager and chief organizer for Canada. This took about eight years of total dedication to the sport, seven months of each year. In the summer time I helped a couple of my buddies build homes. While I was doing the freestyle skiing, I was very fortunate to have had the opportunity to travel to many European countries - Yugoslavia, Austria, Germany, Italy, France, Liechtenstein, and Switzerland. I was even in Japan for ten days which was probably one of the highlights of my freestyle skiing career.
+
+I then took up contracting full time and, with a partner, have been quite busy in the Vernon area building custom homes.
+
+I married Gaila Kanester on November 8, 1986, in Vernon, B.C., having first met her and her two young daughters, Tiara and Hailey, back in 1983. We live in Vernon, B.C., and quite enjoy life here.

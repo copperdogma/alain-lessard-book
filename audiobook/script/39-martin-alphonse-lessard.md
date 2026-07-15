@@ -1,12 +1,4 @@
-# 07. MARTIN ALPHONSE LESSARD
-
-Source: Printed pages 104-106 | Source scans 111-113
-
-Narration note: This script is prepared for an Onward-style family audiobook. Dense genealogy tables, indexes, source lists, and personal-record forms are intentionally kept out of the audio lane and remain available in the website and PDFs.
-
----
-
-MARTIN ALPHONSE LESSARD
+# Martin Alphonse Lessard
 
 I was born on August 25, 1921. When we lived in Delmas, we went to a French school.
 
@@ -40,13 +32,11 @@ On July 17, 1942, I married Floris Tarvis in Hamilton, Ontario. Floris was born 
 
 The following February (1943) I joined up and served in the Navy till the fall of '45. I took my basic training at HMC Star in Hamilton and further training in the Annapolis Valley in Nova Scotia. I chose the Navy for, by now, I had a couple of years experience in machine shops and I could continue to use my machinist trade in the Navy. For the most part I was stationed in Newfoundland for when we were on patrol from Halifax to Newfoundland, we were often dropped off at the latter.
 
-In 1945 I got my discharge from the Navy in Hamilton. The job opportunities were scarce what with thousands of service men returning to the labour market. Also, communications between the governments were poor at that time. Brantford was only twenty miles away from Hamilton where I was. Each morning when I went to look for work in Hamilton, I was told the same thing: there is no work. But the first time I went to Brantford, I was hired and went to work the same day. At the end of my eight hours I was asked, "How many more men can you bring with you tomorrow morning?" Brantford needed men for its large industrial plants, Massey Harris and
-
-Cockshutt, and by this time, farm machinery supplies needed to be built up. But the unemployment offices in Hamilton, where large numbers of unemployed gathered, knew nothing of the job opportunities only twenty miles away. I remained in Brantford, working as a machinist at Massey Harris for the next five years.
+In 1945 I got my discharge from the Navy in Hamilton. The job opportunities were scarce what with thousands of service men returning to the labour market. Also, communications between the governments were poor at that time. Brantford was only twenty miles away from Hamilton where I was. Each morning when I went to look for work in Hamilton, I was told the same thing: there is no work. But the first time I went to Brantford, I was hired and went to work the same day. At the end of my eight hours I was asked, "How many more men can you bring with you tomorrow morning?" Brantford needed men for its large industrial plants, Massey Harris and Cockshutt, and by this time, farm machinery supplies needed to be built up. But the unemployment offices in Hamilton, where large numbers of unemployed gathered, knew nothing of the job opportunities only twenty miles away. I remained in Brantford, working as a machinist at Massey Harris for the next five years.
 
 In 1950 we moved to Saskatchewan. By this time I felt that I had had enough of machine work and that kind of life. Floris and I thought that a change in lifestyle would be good. We had been out West in 1944; we'd looked the place over and talked about it. Finally, I decided to quit my job with Massey Harris which was quite a decision for, by now, I had five years seniority with the company.
 
-I left my work as a machinist for a homestead S.E.¼ Section 15-45-4 W2 in northern Saskatchewan. We found it a great change. Floris and our two young girls had known only city life. Luanne was born March 13, 1943 in Hamilton, Ontario and Susan was born October 8, 1944 in Owen Sound, Ontario. Together, as a family, we weathered the changes as we began farming in the early Fifties. At first it was more like homesteading - breaking the land and so on. Then I had to work at building up the farm.
+I left my work as a machinist for a homestead S.E.¼ Section 15-45-4 W2 in northern Saskatchewan. We found it a great change. Floris and our two young girls had known only city life. **Luanne** was born March 13, 1943 in Hamilton, Ontario and **Susan** was born October 8, 1944 in Owen Sound, Ontario. Together, as a family, we weathered the changes as we began farming in the early Fifties. At first it was more like homesteading - breaking the land and so on. Then I had to work at building up the farm.
 
 I continued to farm until 1973 but three or four years prior, I had started to work at the MacMillan Bloedel plant as a machinist - something I had never intended to do but got talked into it. It did have some benefits, one of which was that of building up my Canada Pension Plan.
 
@@ -61,3 +51,11 @@ My wife, Floris, was born with a defective heart. Then in 1945-1946, she became 
 This year of hospitalization had been a most critical time in Floris' life. After her discharge from the hospital, she was never sick again but, as long as she lived, Floris was aware of the condition of her heart and knew that she needed to look after herself. Floris died on March 28, 1973.
 
 I left the farm in 1974 and moved to Hudson Bay when I remarried. Alice Michie became my wife in 1973. In 1975 I sold the farm to Peter Borowetz. Today we are taking life easier in our retirement years. I enjoy dropping in on the elderly for a visit. Many are neighbours or friends from Veillardville.
+
+Recently I helped with the building of our new church, St. Dominic, in Hudson Bay. I served on the finance committee. The old building was too small and no longer met the needs of the people. The church contracted the services of Leson Construction. Still, much remained to be done so Smokey Alain and I contributed what we could to assist with the finishing. Lee Lessard also offered his help on occasion. Ray Leyshen was hired to do the painting. The church was blessed on June 8, 1984.
+
+Alice is busy in her retirement years. She enjoys oil painting - especially landscapes - and handwork. She is often crocheting or knitting baby clothes either for my grandchildren or for hers. Alice had four children from her previous marriage to Wilbert C. Michie. "Wib", as he was known, died in 1970.
+
+Alice is a charter member of the O.O.R.P. and was active in the Anglican Church as well as in other community organizations.
+
+Together, Alice and I enjoy travelling to visit family and friends or simply to see the many parts of our country. We both enjoy fishing. We purchased a motorhome in 1979 and use it a good deal. When we are not travelling, we are home to family and friends on Prince Street in Hudson Bay.
