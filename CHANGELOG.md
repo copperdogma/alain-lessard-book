@@ -1,5 +1,13 @@
 # Changelog
 
+## [2026-07-15-01] - Refine the audiobook preamble
+
+### Changed
+- Rephrased the listening-edition explanation in track 01 so it sounds natural
+  when narrated and avoids production-oriented terminology.
+- Rechecked tracks 02 and 03 against their original scans and retained their
+  dedication, contributor credits, research context, and preface prose intact.
+
 ## [2026-07-14-01] - Refine audiobook listening scripts
 
 ### Changed
