@@ -63,8 +63,8 @@
     },
     {
       "track_number": 5,
-      "title": "Henri Delphice Alain",
-      "script_path": "script/05-henri-delphice-alain.md",
+      "title": "Part II - Alain Family Stories: Henri Delphice Alain",
+      "script_path": "script/05-part-ii-alain-family-stories-henri-delphice-alain.md",
       "source_ids": [
         "page-012",
         "page-013",
@@ -75,7 +75,7 @@
         "page-018"
       ],
       "source_label": "Printed page 7 | Source scan 14; Printed page 8 | Source scan 15; Printed page 9 | Source scan 16; Printed page 10 | Source scan 17; Printed page 11 | Source scan 18; Printed page 12 | Source scan 19; Printed page 13 | Source scan 20",
-      "word_count": 4523,
+      "word_count": 4528,
       "status": "script-ready",
       "audio_path": null
     },

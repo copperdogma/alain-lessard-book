@@ -1,4 +1,6 @@
-# Henri Delphice Alain
+# Part II - Alain Family Stories
+
+## Henri Delphice Alain
 
 *Henri and Alma's story has been compiled with assistance from the Saskatchewan Archives; Alma's sister, Marie-Louise LaClare; Louis, Clara, Smokey and Rolland Alain; Yvonne O'Brien; Omer and Ida Cartier; and the Hudson Bay History Book, Valley Echoes.*
 

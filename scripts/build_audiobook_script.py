@@ -383,9 +383,20 @@ def merge_fragmented_markdown_blocks(blocks: list[str]) -> list[str]:
 
 
 def word_count(markdown: str) -> int:
+    markdown = re.sub(r'<break\s+time="[0-9.]+s"\s*/>', " ", markdown, flags=re.IGNORECASE)
     text = re.sub(r"^#+\s+", "", markdown, flags=re.MULTILINE)
     text = re.sub(r"[*_>`#-]", " ", text)
     return len(re.findall(r"\b[\w']+\b", text))
+
+
+def format_multilingual_v2_verse(markdown: str, pause_seconds: float = 0.4) -> str:
+    """Keep each verse stanza in one Studio block while preserving line pauses."""
+    break_tag = f'<break time="{pause_seconds:.1f}s" />'
+    paragraphs = []
+    for block in markdown.rstrip().split("\n\n"):
+        lines = [line.strip() for line in block.splitlines() if line.strip()]
+        paragraphs.append(f" {break_tag} ".join(lines))
+    return "\n\n".join(paragraphs) + "\n"
 
 
 def render_markdown(title: str, html: str) -> str:
@@ -583,7 +594,7 @@ def build_html_tracks() -> tuple[list[HtmlTrack], list[dict[str, object]]]:
         entry_track("Preface", bundle, entries_by_id, ["page-011"]),
         part_i,
         entry_track(
-            "Henri Delphice Alain",
+            "Part II - Alain Family Stories: Henri Delphice Alain",
             bundle,
             entries_by_id,
             ["page-012", "page-013", "page-014", "page-015", "page-016", "page-017", "page-018"],
@@ -754,6 +765,14 @@ def build(output_dir: Path) -> None:
     html_tracks, skipped_entries = build_html_tracks()
     for index, html_track in enumerate(html_tracks, start=2):
         markdown = render_markdown(html_track.title, html_track.html)
+        if html_track.title == "Part II - Alain Family Stories: Henri Delphice Alain":
+            markdown = markdown.replace(
+                f"# {html_track.title}\n",
+                "# Part II - Alain Family Stories\n\n## Henri Delphice Alain\n",
+                1,
+            )
+        if html_track.title == "Growing Up on the Farm: A Tribute to Mom and Dad":
+            markdown = format_multilingual_v2_verse(markdown)
         manifest_tracks.append(write_track(output_dir, index, html_track.title, markdown, html_track))
 
     MANIFEST_PATH.parent.mkdir(parents=True, exist_ok=True)

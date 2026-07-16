@@ -1,5 +1,14 @@
 # Changelog
 
+## [2026-07-16-01] - Prepare final audiobook recordings
+
+### Changed
+- Added the missing Part II heading to the Henri Delphice Alain track and
+  aligned its generated filename and manifest entry.
+- Grouped the *Growing Up on the Farm* verse into stanza-level ElevenLabs
+  blocks with Multilingual v2 pause tags so the complete poem can be generated
+  without exceeding Studio's paragraph limit.
+
 ## [2026-07-15-01] - Refine the audiobook preamble
 
 ### Changed
