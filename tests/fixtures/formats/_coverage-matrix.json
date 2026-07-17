@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_reviewed": "2026-07-02",
+  "last_reviewed": "2026-07-16",
   "sources": [
     {
       "id": "main-book-raw-scans",
@@ -71,10 +71,42 @@
       "status": "generated"
     },
     {
+      "id": "family-site-reading-sections",
+      "path": "build/family-site/_internal/reading-sections.json",
+      "format": "semantic-reading-section-manifest",
+      "status": "generated",
+      "observed_count": 57,
+      "notes": "49 track-aligned narrative sections plus 8 named reference sections derived from all 39 canonical doc-web entries; all 1,737 source block ids are retained exactly once."
+    },
+    {
       "id": "audiobook-scripts",
       "path": "audiobook/script",
       "format": "markdown-narration-scripts",
       "status": "generated"
+    },
+    {
+      "id": "reviewed-audiobook-tracks",
+      "path": "audiobook/script/*.mp3",
+      "format": "reviewed-mp3-track-set",
+      "status": "reviewed-local",
+      "observed_count": 52,
+      "notes": "Ignored local ElevenLabs Multilingual v2 narration assets paired one-to-one with the 52 tracked Markdown scripts."
+    },
+    {
+      "id": "complete-audiobook",
+      "path": "audiobook/generated/alain-lessard-complete-audiobook.mp3",
+      "format": "manifest-ordered-mono-mp3",
+      "status": "generated-local",
+      "observed_count": 1,
+      "notes": "9:00:14 complete audiobook generated from the 52 reviewed tracks with 51 two-second pauses."
+    },
+    {
+      "id": "family-site-audiobook-assets",
+      "path": "build/family-site/audiobook",
+      "format": "static-site-mp3-assets",
+      "status": "deployed",
+      "observed_count": 53,
+      "notes": "Strict release bundle containing 52 individual tracks plus the complete audiobook, deployed to alain-lessard.copper-dog.com on 2026-07-16; all 53 public paths passed audio/mpeg, positive-length, and 206 byte-range checks."
     }
   ]
 }

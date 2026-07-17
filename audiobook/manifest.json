@@ -1,55 +1,94 @@
 {
-  "schema_version": "alain_lessard_audiobook_manifest_v3",
+  "schema_version": "alain_lessard_audiobook_manifest_v4",
   "title": "Alain Lessard Audio Companion",
   "mode": "onward-style-narrative-audio",
+  "expected_track_count": 52,
+  "audio_profile": {
+    "codec": "mp3",
+    "sample_rate_hz": 44100,
+    "channels": 1
+  },
   "preferred_voice": {
     "provider": "ElevenLabs",
     "name": "Matilda",
-    "voice_id": "XrExE9yKIg1WjnnlVkGX"
+    "voice_id": "XrExE9yKIg1WjnnlVkGX",
+    "model": "Eleven Multilingual v2"
   },
-  "note": "Scripts are clean Markdown chapters prepared for recording; tables, genealogy lists, personal records, recipes, bibliography, and source lists remain in the readable archive.",
+  "note": "The reviewed listening edition includes narrative family history, stories, poems, memories, obituaries, and the two companion documents. Tables, genealogy lists, personal records, recipes, bibliography, and source lists remain in the readable archive.",
+  "full_audiobook": {
+    "title": "Alain Lessard: Complete Audiobook",
+    "audio_path": "generated/alain-lessard-complete-audiobook.mp3",
+    "public_audio_path": "audiobook/alain-lessard-complete-audiobook.mp3",
+    "silence_between_tracks_seconds": 2.0,
+    "album": "Alain Lessard",
+    "artist": "The Alain and Lessard Families",
+    "narrator": "Matilda (ElevenLabs Multilingual v2)",
+    "duration_seconds": 32414.352
+  },
   "tracks": [
     {
       "track_number": 1,
       "title": "Preamble",
       "script_path": "script/01-preamble.md",
+      "audio_path": "script/01-preamble.mp3",
+      "public_audio_path": "audiobook/tracks/01-preamble.mp3",
       "source_ids": [
         "manual:preamble"
       ],
+      "target_entry_ids": [],
       "source_label": "Manual listening preamble",
       "word_count": 120,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 58.021
     },
     {
       "track_number": 2,
       "title": "Dedication and Introduction",
       "script_path": "script/02-dedication-and-introduction.md",
+      "audio_path": "script/02-dedication-and-introduction.mp3",
+      "public_audio_path": "audiobook/tracks/02-dedication-and-introduction.mp3",
       "source_ids": [
+        "page-007"
+      ],
+      "target_entry_ids": [
         "page-007"
       ],
       "source_label": "Source scan 5",
       "word_count": 241,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 98.676
     },
     {
       "track_number": 3,
       "title": "Preface",
       "script_path": "script/03-preface.md",
+      "audio_path": "script/03-preface.mp3",
+      "public_audio_path": "audiobook/tracks/03-preface.mp3",
       "source_ids": [
+        "page-011"
+      ],
+      "target_entry_ids": [
         "page-011"
       ],
       "source_label": "Source scan 7",
       "word_count": 731,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 285.927
     },
     {
       "track_number": 4,
       "title": "Part I - Alain Family History",
       "script_path": "script/04-part-i-alain-family-history.md",
+      "audio_path": "script/04-part-i-alain-family-history.mp3",
+      "public_audio_path": "audiobook/tracks/04-part-i-alain-family-history.mp3",
       "source_ids": [
+        "page-002",
+        "page-004",
+        "page-006",
+        "page-008",
+        "page-010"
+      ],
+      "target_entry_ids": [
         "page-002",
         "page-004",
         "page-006",
@@ -58,14 +97,25 @@
       ],
       "source_label": "Printed page 2 | Source scan 9; Printed page 3 | Source scan 10; Printed page 4 | Source scan 11; Printed page 5 | Source scan 12; Printed page 6 | Source scan 13",
       "word_count": 3435,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 1393.845
     },
     {
       "track_number": 5,
       "title": "Part II - Alain Family Stories: Henri Delphice Alain",
       "script_path": "script/05-part-ii-alain-family-stories-henri-delphice-alain.md",
+      "audio_path": "script/05-part-ii-alain-family-stories-henri-delphice-alain.mp3",
+      "public_audio_path": "audiobook/tracks/05-part-ii-alain-family-stories-henri-delphice-alain.mp3",
       "source_ids": [
+        "page-012",
+        "page-013",
+        "page-014",
+        "page-015",
+        "page-016",
+        "page-017",
+        "page-018"
+      ],
+      "target_entry_ids": [
         "page-012",
         "page-013",
         "page-014",
@@ -76,578 +126,819 @@
       ],
       "source_label": "Printed page 7 | Source scan 14; Printed page 8 | Source scan 15; Printed page 9 | Source scan 16; Printed page 10 | Source scan 17; Printed page 11 | Source scan 18; Printed page 12 | Source scan 19; Printed page 13 | Source scan 20",
       "word_count": 4528,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 1693.323
     },
     {
       "track_number": 6,
       "title": "Moise (Smokey) Alain",
       "script_path": "script/06-moise-smokey-alain.md",
+      "audio_path": "script/06-moise-smokey-alain.mp3",
+      "public_audio_path": "audiobook/tracks/06-moise-smokey-alain.mp3",
       "source_ids": [
+        "page-019",
+        "page-020",
+        "page-021"
+      ],
+      "target_entry_ids": [
         "page-019",
         "page-020",
         "page-021"
       ],
       "source_label": "Printed page 14 | Source scan 21; Printed page 15 | Source scan 22; Printed page 16 | Source scan 23",
       "word_count": 1655,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 577.566
     },
     {
       "track_number": 7,
       "title": "Louis and Clara (Lessard) Alain",
       "script_path": "script/07-louis-and-clara-lessard-alain.md",
+      "audio_path": "script/07-louis-and-clara-lessard-alain.mp3",
+      "public_audio_path": "audiobook/tracks/07-louis-and-clara-lessard-alain.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 6323,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 2223.267
     },
     {
       "track_number": 8,
       "title": "Marlyne (Alain) Reindl",
       "script_path": "script/08-marlyne-alain-reindl.md",
+      "audio_path": "script/08-marlyne-alain-reindl.mp3",
+      "public_audio_path": "audiobook/tracks/08-marlyne-alain-reindl.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 3245,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 1120.429
     },
     {
       "track_number": 9,
       "title": "Robert Reindl",
       "script_path": "script/09-robert-reindl.md",
+      "audio_path": "script/09-robert-reindl.mp3",
+      "public_audio_path": "audiobook/tracks/09-robert-reindl.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 296,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 125.48
     },
     {
       "track_number": 10,
       "title": "Geraldine (Reindl) Law",
       "script_path": "script/10-geraldine-reindl-law.md",
+      "audio_path": "script/10-geraldine-reindl-law.mp3",
+      "public_audio_path": "audiobook/tracks/10-geraldine-reindl-law.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 813,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 300.247
     },
     {
       "track_number": 11,
       "title": "Louella Mae (Reindl) Sim",
       "script_path": "script/11-louella-mae-reindl-sim.md",
+      "audio_path": "script/11-louella-mae-reindl-sim.mp3",
+      "public_audio_path": "audiobook/tracks/11-louella-mae-reindl-sim.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 935,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 335.274
     },
     {
       "track_number": 12,
       "title": "Mark Reindl",
       "script_path": "script/12-mark-reindl.md",
+      "audio_path": "script/12-mark-reindl.mp3",
+      "public_audio_path": "audiobook/tracks/12-mark-reindl.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 1068,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 347.661
     },
     {
       "track_number": 13,
       "title": "Maxine Theresa (Alain) Prentice",
       "script_path": "script/13-maxine-theresa-alain-prentice.md",
+      "audio_path": "script/13-maxine-theresa-alain-prentice.mp3",
+      "public_audio_path": "audiobook/tracks/13-maxine-theresa-alain-prentice.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 2959,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 1090.541
     },
     {
       "track_number": 14,
       "title": "Adelle Prentice",
       "script_path": "script/14-adelle-prentice.md",
+      "audio_path": "script/14-adelle-prentice.mp3",
+      "public_audio_path": "audiobook/tracks/14-adelle-prentice.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 1219,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 470.44
     },
     {
       "track_number": 15,
       "title": "Marcella (Alain) Sevigny",
       "script_path": "script/15-marcella-alain-sevigny.md",
+      "audio_path": "script/15-marcella-alain-sevigny.mp3",
+      "public_audio_path": "audiobook/tracks/15-marcella-alain-sevigny.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 3370,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 1161.789
     },
     {
       "track_number": 16,
       "title": "Bruce Alain",
       "script_path": "script/16-bruce-alain.md",
+      "audio_path": "script/16-bruce-alain.mp3",
+      "public_audio_path": "audiobook/tracks/16-bruce-alain.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 1289,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 424.93
     },
     {
       "track_number": 17,
       "title": "Bernadette Michelle (Alain) Adrian",
       "script_path": "script/17-bernadette-michelle-alain-adrian.md",
+      "audio_path": "script/17-bernadette-michelle-alain-adrian.mp3",
+      "public_audio_path": "audiobook/tracks/17-bernadette-michelle-alain-adrian.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 2694,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 884.795
     },
     {
       "track_number": 18,
       "title": "Kendall Louise Adrian",
       "script_path": "script/18-kendall-louise-adrian.md",
+      "audio_path": "script/18-kendall-louise-adrian.mp3",
+      "public_audio_path": "audiobook/tracks/18-kendall-louise-adrian.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 344,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 121.525
     },
     {
       "track_number": 19,
       "title": "Shantell Monique Adrian",
       "script_path": "script/19-shantell-monique-adrian.md",
+      "audio_path": "script/19-shantell-monique-adrian.mp3",
+      "public_audio_path": "audiobook/tracks/19-shantell-monique-adrian.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 134,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 45.931
     },
     {
       "track_number": 20,
       "title": "Rachelle (Alain) Toews",
       "script_path": "script/20-rachelle-alain-toews.md",
+      "audio_path": "script/20-rachelle-alain-toews.mp3",
+      "public_audio_path": "audiobook/tracks/20-rachelle-alain-toews.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 2622,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 878.186
     },
     {
       "track_number": 21,
       "title": "Lana (Toews) Bury",
       "script_path": "script/21-lana-toews-bury.md",
+      "audio_path": "script/21-lana-toews-bury.mp3",
+      "public_audio_path": "audiobook/tracks/21-lana-toews-bury.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 821,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 279.584
     },
     {
       "track_number": 22,
       "title": "John Toews",
       "script_path": "script/22-john-toews.md",
+      "audio_path": "script/22-john-toews.mp3",
+      "public_audio_path": "audiobook/tracks/22-john-toews.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 257,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 84.723
     },
     {
       "track_number": 23,
       "title": "Todd Toews",
       "script_path": "script/23-todd-toews.md",
+      "audio_path": "script/23-todd-toews.mp3",
+      "public_audio_path": "audiobook/tracks/23-todd-toews.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 347,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 115.599
     },
     {
       "track_number": 24,
       "title": "Michelle (Alain) Pepper",
       "script_path": "script/24-michelle-alain-pepper.md",
+      "audio_path": "script/24-michelle-alain-pepper.mp3",
+      "public_audio_path": "audiobook/tracks/24-michelle-alain-pepper.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 1923,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 682.353
     },
     {
       "track_number": 25,
       "title": "Joseph Albert Alain",
       "script_path": "script/25-joseph-albert-alain.md",
+      "audio_path": "script/25-joseph-albert-alain.mp3",
+      "public_audio_path": "audiobook/tracks/25-joseph-albert-alain.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 791,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 281.588
     },
     {
       "track_number": 26,
       "title": "Yvonne (Alain) O'Brien",
       "script_path": "script/26-yvonne-alain-o-brien.md",
+      "audio_path": "script/26-yvonne-alain-o-brien.mp3",
+      "public_audio_path": "audiobook/tracks/26-yvonne-alain-o-brien.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 456,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 186.429
     },
     {
       "track_number": 27,
       "title": "What Is a Family?",
       "script_path": "script/27-what-is-a-family.md",
+      "audio_path": "script/27-what-is-a-family.mp3",
+      "public_audio_path": "audiobook/tracks/27-what-is-a-family.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 131,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 52.751
     },
     {
       "track_number": 28,
       "title": "Rolland Joseph Francois Alain",
       "script_path": "script/28-rolland-joseph-francois-alain.md",
+      "audio_path": "script/28-rolland-joseph-francois-alain.mp3",
+      "public_audio_path": "audiobook/tracks/28-rolland-joseph-francois-alain.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 1926,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 769.309
     },
     {
       "track_number": 29,
       "title": "A Farmer's Creed",
       "script_path": "script/29-a-farmer-s-creed.md",
+      "audio_path": "script/29-a-farmer-s-creed.mp3",
+      "public_audio_path": "audiobook/tracks/29-a-farmer-s-creed.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 294,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 111.875
     },
     {
       "track_number": 30,
       "title": "Marie Paule Menzies",
       "script_path": "script/30-marie-paule-menzies.md",
+      "audio_path": "script/30-marie-paule-menzies.mp3",
+      "public_audio_path": "audiobook/tracks/30-marie-paule-menzies.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 1113,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 399.852
     },
     {
       "track_number": 31,
       "title": "Berthe (Alain) Marsollier",
       "script_path": "script/31-berthe-alain-marsollier.md",
+      "audio_path": "script/31-berthe-alain-marsollier.mp3",
+      "public_audio_path": "audiobook/tracks/31-berthe-alain-marsollier.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 394,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 143.658
     },
     {
       "track_number": 32,
       "title": "Paul Emile Alain",
       "script_path": "script/32-paul-emile-alain.md",
+      "audio_path": "script/32-paul-emile-alain.mp3",
+      "public_audio_path": "audiobook/tracks/32-paul-emile-alain.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 2085,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 660.36
     },
     {
       "track_number": 33,
       "title": "Moise L'Heureux",
       "script_path": "script/33-moise-l-heureux.md",
+      "audio_path": "script/33-moise-l-heureux.mp3",
+      "public_audio_path": "audiobook/tracks/33-moise-l-heureux.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 855,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 305.279
     },
     {
       "track_number": 34,
       "title": "Bruno Gideon Alain",
       "script_path": "script/34-bruno-gideon-alain.md",
+      "audio_path": "script/34-bruno-gideon-alain.mp3",
+      "public_audio_path": "audiobook/tracks/34-bruno-gideon-alain.mp3",
       "source_ids": [
+        "chapter-001"
+      ],
+      "target_entry_ids": [
         "chapter-001"
       ],
       "source_label": "Printed pages 17-80 | Source scans 24-87",
       "word_count": 1985,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 671.057
     },
     {
       "track_number": 35,
       "title": "Part III - Lessard Family History",
       "script_path": "script/35-part-iii-lessard-family-history.md",
+      "audio_path": "script/35-part-iii-lessard-family-history.mp3",
+      "public_audio_path": "audiobook/tracks/35-part-iii-lessard-family-history.mp3",
       "source_ids": [
+        "chapter-004"
+      ],
+      "target_entry_ids": [
         "chapter-004"
       ],
       "source_label": "Printed pages 82-85 | Source scans 89-92",
       "word_count": 2737,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 1069.903
     },
     {
       "track_number": 36,
       "title": "Edouard Lessard",
       "script_path": "script/36-edouard-lessard.md",
+      "audio_path": "script/36-edouard-lessard.mp3",
+      "public_audio_path": "audiobook/tracks/36-edouard-lessard.mp3",
       "source_ids": [
+        "chapter-005"
+      ],
+      "target_entry_ids": [
         "chapter-005"
       ],
       "source_label": "Printed pages 86-94 | Source scans 93-101",
       "word_count": 940,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 340.295
     },
     {
       "track_number": 37,
       "title": "Joseph Déridé Lessard",
       "script_path": "script/37-joseph-deride-lessard.md",
+      "audio_path": "script/37-joseph-deride-lessard.mp3",
+      "public_audio_path": "audiobook/tracks/37-joseph-deride-lessard.mp3",
       "source_ids": [
+        "chapter-005",
+        "chapter-006"
+      ],
+      "target_entry_ids": [
         "chapter-005",
         "chapter-006"
       ],
       "source_label": "Printed pages 86-94 | Source scans 93-101; Printed pages 95-103 | Source scans 102-110",
       "word_count": 4092,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 1460.507
     },
     {
       "track_number": 38,
       "title": "Gene and Edithe (Alain) Lessard",
       "script_path": "script/38-gene-and-edithe-alain-lessard.md",
+      "audio_path": "script/38-gene-and-edithe-alain-lessard.mp3",
+      "public_audio_path": "audiobook/tracks/38-gene-and-edithe-alain-lessard.mp3",
       "source_ids": [
+        "chapter-006"
+      ],
+      "target_entry_ids": [
         "chapter-006"
       ],
       "source_label": "Printed pages 95-103 | Source scans 102-110",
       "word_count": 6909,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 2280.155
     },
     {
       "track_number": 39,
       "title": "Martin Alphonse Lessard",
       "script_path": "script/39-martin-alphonse-lessard.md",
+      "audio_path": "script/39-martin-alphonse-lessard.mp3",
+      "public_audio_path": "audiobook/tracks/39-martin-alphonse-lessard.mp3",
       "source_ids": [
+        "chapter-007",
+        "chapter-008"
+      ],
+      "target_entry_ids": [
         "chapter-007",
         "chapter-008"
       ],
       "source_label": "Printed pages 104-106 | Source scans 111-113; Printed pages 107-111 | Source scans 114-118",
       "word_count": 2495,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 885.96
     },
     {
       "track_number": 40,
       "title": "Joe Lessard",
       "script_path": "script/40-joe-lessard.md",
+      "audio_path": "script/40-joe-lessard.mp3",
+      "public_audio_path": "audiobook/tracks/40-joe-lessard.mp3",
       "source_ids": [
+        "chapter-008"
+      ],
+      "target_entry_ids": [
         "chapter-008"
       ],
       "source_label": "Printed pages 107-111 | Source scans 114-118",
       "word_count": 286,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 133.387
     },
     {
       "track_number": 41,
       "title": "Joseph Roland Donald Lessard",
       "script_path": "script/41-joseph-roland-donald-lessard.md",
+      "audio_path": "script/41-joseph-roland-donald-lessard.mp3",
+      "public_audio_path": "audiobook/tracks/41-joseph-roland-donald-lessard.mp3",
       "source_ids": [
+        "chapter-008",
+        "chapter-009"
+      ],
+      "target_entry_ids": [
         "chapter-008",
         "chapter-009"
       ],
       "source_label": "Printed pages 107-111 | Source scans 114-118; Printed pages 112-116 | Source scans 119-123",
       "word_count": 3731,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 1318.946
     },
     {
       "track_number": 42,
       "title": "Paul Lessard",
       "script_path": "script/42-paul-lessard.md",
+      "audio_path": "script/42-paul-lessard.mp3",
+      "public_audio_path": "audiobook/tracks/42-paul-lessard.mp3",
       "source_ids": [
+        "chapter-009"
+      ],
+      "target_entry_ids": [
         "chapter-009"
       ],
       "source_label": "Printed pages 112-116 | Source scans 119-123",
       "word_count": 59,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 29.757
     },
     {
       "track_number": 43,
       "title": "Darlene (Lessard) Kirwin",
       "script_path": "script/43-darlene-lessard-kirwin.md",
+      "audio_path": "script/43-darlene-lessard-kirwin.mp3",
+      "public_audio_path": "audiobook/tracks/43-darlene-lessard-kirwin.mp3",
       "source_ids": [
+        "chapter-009"
+      ],
+      "target_entry_ids": [
         "chapter-009"
       ],
       "source_label": "Printed pages 112-116 | Source scans 119-123",
       "word_count": 279,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 109.253
     },
     {
       "track_number": 44,
       "title": "Susan (Lessard) Marks",
       "script_path": "script/44-susan-lessard-marks.md",
+      "audio_path": "script/44-susan-lessard-marks.mp3",
+      "public_audio_path": "audiobook/tracks/44-susan-lessard-marks.mp3",
       "source_ids": [
+        "chapter-009"
+      ],
+      "target_entry_ids": [
         "chapter-009"
       ],
       "source_label": "Printed pages 112-116 | Source scans 119-123",
       "word_count": 228,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 90.472
     },
     {
       "track_number": 45,
       "title": "Carolanne (Lessard) White",
       "script_path": "script/45-carolanne-lessard-white.md",
+      "audio_path": "script/45-carolanne-lessard-white.mp3",
+      "public_audio_path": "audiobook/tracks/45-carolanne-lessard-white.mp3",
       "source_ids": [
+        "chapter-009"
+      ],
+      "target_entry_ids": [
         "chapter-009"
       ],
       "source_label": "Printed pages 112-116 | Source scans 119-123",
       "word_count": 240,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 91.307
     },
     {
       "track_number": 46,
       "title": "Therese (Lessard) MacFarlane",
       "script_path": "script/46-therese-lessard-macfarlane.md",
+      "audio_path": "script/46-therese-lessard-macfarlane.mp3",
+      "public_audio_path": "audiobook/tracks/46-therese-lessard-macfarlane.mp3",
       "source_ids": [
+        "chapter-009",
+        "chapter-010"
+      ],
+      "target_entry_ids": [
         "chapter-009",
         "chapter-010"
       ],
       "source_label": "Printed pages 112-116 | Source scans 119-123; Printed pages 117-123 | Source scans 124-130",
       "word_count": 1533,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 542.861
     },
     {
       "track_number": 47,
       "title": "Mae (Strasser) Daly",
       "script_path": "script/47-mae-strasser-daly.md",
+      "audio_path": "script/47-mae-strasser-daly.mp3",
+      "public_audio_path": "audiobook/tracks/47-mae-strasser-daly.mp3",
       "source_ids": [
+        "chapter-010"
+      ],
+      "target_entry_ids": [
         "chapter-010"
       ],
       "source_label": "Printed pages 117-123 | Source scans 124-130",
       "word_count": 3971,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 1409.951
     },
     {
       "track_number": 48,
       "title": "Simeon Bernier",
       "script_path": "script/48-simeon-bernier.md",
+      "audio_path": "script/48-simeon-bernier.mp3",
+      "public_audio_path": "audiobook/tracks/48-simeon-bernier.mp3",
       "source_ids": [
+        "chapter-011"
+      ],
+      "target_entry_ids": [
         "chapter-011"
       ],
       "source_label": "Printed pages 124-126 | Source scans 131-133",
       "word_count": 680,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 265.573
     },
     {
       "track_number": 49,
       "title": "Part V - Veillardville",
       "script_path": "script/49-part-v-veillardville.md",
+      "audio_path": "script/49-part-v-veillardville.mp3",
+      "public_audio_path": "audiobook/tracks/49-part-v-veillardville.mp3",
       "source_ids": [
+        "chapter-014"
+      ],
+      "target_entry_ids": [
         "chapter-014"
       ],
       "source_label": "Printed pages 129-135 | Source scans 136-142",
       "word_count": 3666,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 1352.144
     },
     {
       "track_number": 50,
       "title": "Part VI - Memories",
       "script_path": "script/50-part-vi-memories.md",
+      "audio_path": "script/50-part-vi-memories.mp3",
+      "public_audio_path": "audiobook/tracks/50-part-vi-memories.mp3",
       "source_ids": [
+        "chapter-015"
+      ],
+      "target_entry_ids": [
         "chapter-015"
       ],
       "source_label": "Printed pages 136-142 | Source scans 143-149",
       "word_count": 2363,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 1078.993
     },
     {
       "track_number": 51,
       "title": "Alain's Song",
       "script_path": "script/51-alain-s-song.md",
+      "audio_path": "script/51-alain-s-song.mp3",
+      "public_audio_path": "audiobook/tracks/51-alain-s-song.mp3",
       "source_ids": [
+        "companion:alains-song"
+      ],
+      "target_entry_ids": [
         "companion:alains-song"
       ],
       "source_label": "6 source pages",
       "word_count": 1025,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 391.76
     },
     {
       "track_number": 52,
       "title": "Growing Up on the Farm: A Tribute to Mom and Dad",
       "script_path": "script/52-growing-up-on-the-farm-a-tribute-to-mom-and-dad.md",
+      "audio_path": "script/52-growing-up-on-the-farm-a-tribute-to-mom-and-dad.mp3",
+      "public_audio_path": "audiobook/tracks/52-growing-up-on-the-farm-a-tribute-to-mom-and-dad.mp3",
       "source_ids": [
+        "companion:growing-up-on-the-farm"
+      ],
+      "target_entry_ids": [
         "companion:growing-up-on-the-farm"
       ],
       "source_label": "13 source pages",
       "word_count": 2912,
-      "status": "script-ready",
-      "audio_path": null
+      "status": "audio-reviewed",
+      "duration_seconds": 1078.858
     }
   ],
   "skipped_entries": [

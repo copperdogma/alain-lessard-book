@@ -5,6 +5,8 @@ import argparse
 import json
 import re
 import shutil
+import sys
+from collections import Counter
 from dataclasses import dataclass
 from html import escape
 from html.parser import HTMLParser
@@ -15,6 +17,26 @@ from PIL import Image
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.audiobook import (  # noqa: E402
+    AudiobookCatalog,
+    AudiobookManifestError,
+    AudiobookTrack,
+    format_audio_duration,
+    format_file_size,
+    load_audiobook_catalog,
+    tracks_by_target_entry_id,
+    validate_audiobook_catalog,
+)
+from scripts.reading_sections import (  # noqa: E402
+    ReadingCatalog,
+    ReadingSection,
+    ReadingSource,
+    build_reading_catalog,
+)
+
 ACTIVE_BUNDLE_PATH = ROOT / "input" / "doc-web-html" / "active-bundle.json"
 PROCESSED_DIR = ROOT / "output" / "processed-pages"
 PDF_DIR = ROOT / "output" / "pdf"
@@ -29,8 +51,14 @@ SITE_TITLE = "Alain Lessard"
 SITE_SUBTITLE = "Our First Ancestors and A Compilation of Stories of Their Descendants"
 PUBLIC_HOST = "https://alain-lessard.copper-dog.com"
 BOOK_YEAR = "1987"
-SITE_ASSET_VERSION = "20260703-companion-toc-r2"
+SITE_ASSET_VERSION = "20260716-semantic-reader-r2"
 COMPANION_CONTEXT_NOTE = "This document was not part of the main book; it was found tucked inside it."
+AUDIOBOOK_ICON_SVG = (
+    '<svg class="listen-icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">'
+    '<path d="M12 4.5a6.75 6.75 0 0 0-6.75 6.75v4.5A2.25 2.25 0 0 0 7.5 18h.75a.75.75 0 0 0 .75-.75v-4.5a.75.75 0 0 0-.75-.75H6.75v-.75a5.25 5.25 0 1 1 10.5 0V12h-1.5a.75.75 0 0 0-.75.75v4.5a.75.75 0 0 0 .75.75h.75a2.25 2.25 0 0 0 2.25-2.25v-4.5A6.75 6.75 0 0 0 12 4.5Z" fill="currentColor"/>'
+    '<path d="M9.75 18.75a.75.75 0 0 0 0 1.5h4.5a.75.75 0 0 0 0-1.5h-4.5Z" fill="currentColor"/>'
+    "</svg>"
+)
 
 ARTICLE_RE = re.compile(r"<article\b[^>]*>(.*?)</article>", re.IGNORECASE | re.DOTALL)
 IMAGE_SRC_RE = re.compile(r'(<img\b[^>]*\bsrc=")images/', re.IGNORECASE)
@@ -529,8 +557,8 @@ def scan_url(page_number: int) -> str:
     return f"images/scans/page-{page_number:03d}.jpg"
 
 
-def source_scan_links(entry: Entry) -> str:
-    pages = list(entry.source_pages)
+def source_scan_links_for_pages(source_pages: Iterable[int]) -> str:
+    pages = sorted({int(page) for page in source_pages})
     if not pages:
         return "<p>No source scans are attached to this entry.</p>"
     if len(pages) <= 10:
@@ -545,6 +573,10 @@ def source_scan_links(entry: Entry) -> str:
             seen_gap = True
         rendered.append(f'<a href="{scan_url(page)}">Scan {page:03d}</a>')
     return f'<div class="scan-links">{"".join(rendered)}</div>'
+
+
+def source_scan_links(entry: Entry) -> str:
+    return source_scan_links_for_pages(entry.source_pages)
 
 
 def html_page(title: str, body: str, current: str = "") -> str:
@@ -582,6 +614,7 @@ def html_page(title: str, body: str, current: str = "") -> str:
   <footer class="site-footer">
     <p>Digitized from the {BOOK_YEAR} family history book for reading, searching, listening, and family reference.</p>
   </footer>
+  <script defer src="assets/audio.js?v={SITE_ASSET_VERSION}"></script>
 </body>
 </html>
 """
@@ -593,6 +626,13 @@ def render_chapter_card(bundle: Bundle, entry: Entry) -> str:
     return f"""<article class="entry-card">
   <h3><a href="{escape(entry.path)}">{escape(title)}</a></h3>
   <p>{escape(excerpt_from_html(article))}</p>
+</article>"""
+
+
+def render_reading_card(section: ReadingSection) -> str:
+    return f"""<article class="entry-card">
+  <h3><a href="{escape(section.path)}">{escape(section.title)}</a></h3>
+  <p>{escape(excerpt_from_html(section.article_html))}</p>
 </article>"""
 
 
@@ -646,13 +686,18 @@ def render_supplemental_cards(supplemental_documents: list[SupplementalSiteDocum
     return "".join(cards)
 
 
-def home_feature_entries(entries: list[Entry]) -> list[Entry]:
-    skip_ids = {"chapter-018", "page-003", "page-005"}
-    return [entry for entry in entries if entry.entry_id not in skip_ids][:6]
+def home_feature_sections(reading_catalog: ReadingCatalog) -> list[ReadingSection]:
+    return [section for section in reading_catalog.sections if section.kind == "narrative"][:6]
 
 
-def render_home(bundle: Bundle, entries: list[Entry], supplemental_documents: list[SupplementalSiteDocument]) -> str:
-    feature_cards = "\n".join(render_chapter_card(bundle, entry) for entry in home_feature_entries(entries))
+def render_home(
+    bundle: Bundle,
+    entries: list[Entry],
+    reading_catalog: ReadingCatalog,
+    supplemental_documents: list[SupplementalSiteDocument],
+    audiobook_catalog: AudiobookCatalog,
+) -> str:
+    feature_cards = "\n".join(render_reading_card(section) for section in home_feature_sections(reading_catalog))
     supplemental_cards = render_supplemental_cards(supplemental_documents)
     table_count = sum(read_article_html(bundle, entry).lower().count("<table") for entry in entries)
     figure_count = sum(read_article_html(bundle, entry).lower().count("<figure") for entry in entries)
@@ -691,26 +736,27 @@ def render_home(bundle: Bundle, entries: list[Entry], supplemental_documents: li
       </article>
       <article>
         <h2>Audio companion</h2>
-        <p>Narrative chapters can be prepared for listening, while tables, indexes, and records stay easy to read on the site.</p>
+        <p>Listen to {len(audiobook_catalog.tracks)} family-history recordings in your browser or download the complete audiobook. No app or account is needed.</p>
+        <div class="card-actions"><a class="button primary" href="audiobook.html">Listen to the audiobook</a></div>
       </article>
     </section>
 
     <section class="stat-band" aria-label="Edition summary">
-      <div><strong>{len(entries)}</strong><span>reading entries</span></div>
+      <div><strong>{len(reading_catalog.sections)}</strong><span>reading sections</span></div>
       <div><strong>{figure_count}</strong><span>figures and captions</span></div>
       <div><strong>{table_count}</strong><span>structured tables</span></div>
       <div><strong>{len(supplemental_documents)}</strong><span>companion documents</span></div>
     </section>
 
-    {supplemental_section}
-
     <section class="section-list">
       <div class="section-heading">
         <h2>Start Reading</h2>
-        <p>Begin with the front matter and early family-history sections, or use the complete contents on the reading page.</p>
+        <p>Begin with the introductory and early family-history sections, or use the complete contents on the reading page.</p>
       </div>
       <div class="cards">{feature_cards}</div>
     </section>
+
+    {supplemental_section}
 """
     return html_page("Home", body, "Home")
 
@@ -719,7 +765,7 @@ def render_toc(parts: list[BookPart]) -> str:
     lines = []
     for part in parts:
         count = len(part.links)
-        label = "1 heading" if count == 1 else f"{count} headings"
+        label = "1 section" if count == 1 else f"{count} sections"
         lines.append(f'<li><a href="#{escape(part.part_id)}">{escape(part.title)}</a><span>{label}</span></li>')
     return "\n".join(lines)
 
@@ -767,7 +813,7 @@ def render_part_sections(parts: list[BookPart]) -> str:
     rendered = []
     for part in parts:
         count = len(part.links)
-        label = "1 heading" if count == 1 else f"{count} headings"
+        label = "1 section" if count == 1 else f"{count} sections"
         rendered.append(
             f"""<section class="part-section" id="{escape(part.part_id)}">
   <div class="part-heading">
@@ -780,12 +826,29 @@ def render_part_sections(parts: list[BookPart]) -> str:
     return "\n".join(rendered)
 
 
-def render_book(bundle: Bundle, entries: list[Entry]) -> str:
-    parts = build_book_parts(bundle, entries)
+def build_semantic_book_parts(reading_catalog: ReadingCatalog) -> list[BookPart]:
+    sections_by_part: dict[str, list[ReadingSection]] = {part_id: [] for part_id, _title in PART_ORDER}
+    for section in reading_catalog.sections:
+        sections_by_part.setdefault(section.part_id, []).append(section)
+    parts: list[BookPart] = []
+    for part_id, title in PART_ORDER:
+        sections = sections_by_part.get(part_id, [])
+        if not sections:
+            continue
+        links = tuple(
+            f'<li class="heading-level-1 semantic-section-link"><a href="{escape(section.path)}">{escape(section.title)}</a></li>'
+            for section in sections
+        )
+        parts.append(BookPart(part_id, title, links))
+    return parts
+
+
+def render_book(reading_catalog: ReadingCatalog) -> str:
+    parts = build_semantic_book_parts(reading_catalog)
     body = f"""
     <section class="page-title">
       <h1>Read the Book</h1>
-      <p>Search the text, browse the book parts, and jump directly to family entries, photographs, captions, and tables.</p>
+      <p>Search the text or browse the book by family-history section. Photographs, captions, tables, and reference material remain with the stories they belong to.</p>
     </section>
     <section class="book-tools">
       <label class="search-label" for="site-search">Search the book</label>
@@ -820,7 +883,12 @@ def entry_nav(entries: list[Entry], index: int) -> str:
 </nav>"""
 
 
-def render_entry_page(bundle: Bundle, entries: list[Entry], index: int) -> str:
+def render_entry_page(
+    bundle: Bundle,
+    entries: list[Entry],
+    index: int,
+    audio_tracks: Iterable[AudiobookTrack] = (),
+) -> str:
     entry = entries[index]
     article = read_article_html(bundle, entry)
     label = entry_meta_label(entry)
@@ -831,6 +899,7 @@ def render_entry_page(bundle: Bundle, entries: list[Entry], index: int) -> str:
       <h1>{escape(title)}</h1>
     </section>
     {entry_nav(entries, index)}
+    {render_entry_audio_section(audio_tracks)}
     <section class="reader-shell">
       <aside class="source-panel">
         <h2>Source Pages</h2>
@@ -844,6 +913,37 @@ def render_entry_page(bundle: Bundle, entries: list[Entry], index: int) -> str:
     {entry_nav(entries, index)}
 """
     return html_page(title, body, "Read")
+
+
+def render_reading_section_page(
+    reading_catalog: ReadingCatalog,
+    index: int,
+    audio_tracks: Iterable[AudiobookTrack] = (),
+) -> str:
+    section = reading_catalog.sections[index]
+    scan_count = len(section.source_pages)
+    scan_label = "1 source scan" if scan_count == 1 else f"{scan_count} source scans"
+    kind_label = "Story section" if section.kind == "narrative" else "Reference section"
+    body = f"""
+    <section class="entry-header">
+      <p class="eyebrow">{escape(kind_label)}</p>
+      <h1>{escape(section.title)}</h1>
+    </section>
+    {entry_nav(list(reading_catalog.sections), index)}
+    {render_entry_audio_section(audio_tracks)}
+    <section class="reader-shell">
+      <aside class="source-panel">
+        <h2>Source Material</h2>
+        <p>{escape(scan_label)} preserve this section in the scanned edition.</p>
+        {source_scan_links_for_pages(section.source_pages)}
+      </aside>
+      <article class="book-article">
+        {section.article_html}
+      </article>
+    </section>
+    {entry_nav(list(reading_catalog.sections), index)}
+"""
+    return html_page(section.title, body, "Read")
 
 
 def render_companion_source_figures(document: SupplementalSiteDocument) -> str:
@@ -913,7 +1013,10 @@ def companion_document_toc_html(document: SupplementalSiteDocument, article: str
         </nav>"""
 
 
-def render_companion_document(document: SupplementalSiteDocument) -> str:
+def render_companion_document(
+    document: SupplementalSiteDocument,
+    audio_tracks: Iterable[AudiobookTrack] = (),
+) -> str:
     page_label = "1 source page" if document.page_count == 1 else f"{document.page_count} source pages"
     article = companion_doc_web_article_html(document)
     companion_toc = companion_document_toc_html(document, article)
@@ -930,6 +1033,7 @@ def render_companion_document(document: SupplementalSiteDocument) -> str:
         <a class="button" href="{archival_href}">Archival PDF</a>
       </div>
     </section>
+    {render_entry_audio_section(audio_tracks)}
     <section class="reader-shell companion-shell">
       <aside class="source-panel">
         <h2>Document Files</h2>
@@ -1022,24 +1126,157 @@ def friendly_skip_group(reason: str, count: int) -> str:
     return f"{labels.get(reason, fallback)} <span>{count} {noun}</span>"
 
 
-def render_audiobook() -> str:
-    if AUDIOBOOK_MANIFEST_PATH.exists():
-        manifest = json.loads(AUDIOBOOK_MANIFEST_PATH.read_text(encoding="utf-8"))
-        entries = manifest.get("tracks") or manifest.get("entries", [])
-        skipped = manifest.get("skipped_entries", [])
-    else:
-        entries = []
-        skipped = []
-    script_rows = "\n".join(
-        f"""<article class="entry-card">
-  <p class="eyebrow">Script {int(entry.get("track_number") or entry.get("index")):02d}</p>
-  <h3><a href="{escape(str(entry.get("script_path") or entry.get("script")))}">{escape(str(entry["title"]))}</a></h3>
-  <p>{escape(str(entry.get("source_label") or ""))}</p>
-</article>"""
-        for entry in entries
+def audio_player(audio_path: str, title: str) -> str:
+    return f"""<audio class="audio-player" controls preload="none" data-audio-key="{escape(audio_path)}" aria-label="{escape(title)}">
+  <source src="{escape(audio_path)}" type="audio/mpeg">
+  <a href="{escape(audio_path)}" download>Download MP3</a>
+</audio>"""
+
+
+def audio_runtime(duration_seconds: float | None) -> str:
+    if duration_seconds is None:
+        return ""
+    return f'<p class="audio-runtime">Run time {escape(format_audio_duration(duration_seconds))}</p>'
+
+
+def audio_reading_links(
+    reading_catalog: ReadingCatalog,
+    supplemental_documents: list[SupplementalSiteDocument],
+    audiobook_catalog: AudiobookCatalog,
+) -> dict[int, tuple[str, str]]:
+    links: dict[int, tuple[str, str]] = {
+        track_number: (section.path, section.title)
+        for section in reading_catalog.sections
+        for track_number in section.track_numbers
+    }
+    documents_by_target = {
+        f"companion:{document.slug}": document
+        for document in supplemental_documents
+    }
+    for track in audiobook_catalog.tracks:
+        companion_target = next(
+            (target for target in track.target_entry_ids if target.startswith("companion:")),
+            None,
+        )
+        document = documents_by_target.get(companion_target or "")
+        if document:
+            links[track.track_number] = (supplemental_html_href(document), document.title)
+    return links
+
+
+def track_read_actions(
+    track: AudiobookTrack,
+    reading_links: dict[int, tuple[str, str]],
+) -> str:
+    target = reading_links.get(track.track_number)
+    if not target:
+        return ""
+    href, _title = target
+    return f'<a class="button" href="{escape(href)}">Read</a>'
+
+
+def render_listen_bar(track: AudiobookTrack) -> str:
+    duration = format_audio_duration(track.duration_seconds) if track.duration_seconds is not None else ""
+    player = audio_player(track.public_audio_path, track.title) if track.is_available else ""
+    download = (
+        f'<a class="listen-download" href="{escape(track.public_audio_path)}" download>Download</a>'
+        if track.is_available
+        else '<span class="audio-unavailable">Audio unavailable</span>'
     )
+    return f"""<section class="listen-bar" aria-label="Listen to {escape(track.title)}">
+  <div class="listen-bar-copy">
+    <span class="listen-icon" aria-hidden="true">{AUDIOBOOK_ICON_SVG}</span>
+    <span class="listen-bar-title"><small>Track {track.track_number:02d}</small><strong>{escape(track.title)}</strong></span>
+    {f'<span class="listen-bar-time">{escape(duration)}</span>' if duration else ''}
+  </div>
+  {player}
+  {download}
+</section>"""
+
+
+def render_track_player(track: AudiobookTrack, *, compact: bool = False) -> str:
+    player = audio_player(track.public_audio_path, track.title) if track.is_available else ""
+    unavailable = (
+        "" if track.is_available else '<p class="audio-unavailable">Audio is unavailable in this local preview.</p>'
+    )
+    download = (
+        f'<a class="button" href="{escape(track.public_audio_path)}" download>Download MP3</a>'
+        if track.is_available
+        else ""
+    )
+    runtime = audio_runtime(track.duration_seconds)
+    if compact:
+        return render_listen_bar(track)
+    return f"""<article class="audio-track-card" id="track-{track.track_number:02d}">
+  <div class="audio-track-copy">
+    <p class="eyebrow">Track {track.track_number:02d}</p>
+    <h2>{escape(track.title)}</h2>
+    {runtime}
+  </div>
+  {player}
+  <div class="card-actions">{download}</div>
+  {unavailable}
+</article>"""
+
+
+def render_entry_audio_section(tracks: Iterable[AudiobookTrack]) -> str:
+    ordered = tuple(tracks)
+    if not ordered:
+        return ""
+    bars = "\n".join(render_track_player(track, compact=True) for track in ordered)
+    return f"""<section class="entry-audio-section compact-listening" aria-label="Listen to this section">
+  {bars}
+</section>"""
+
+
+def render_audiobook(
+    catalog: AudiobookCatalog,
+    reading_links: dict[int, tuple[str, str]],
+) -> str:
+    track_rows = []
+    for track in catalog.tracks:
+        row = render_track_player(track)
+        read_actions = track_read_actions(track, reading_links)
+        if read_actions:
+            row = row.replace(
+                '<div class="card-actions">',
+                f'<div class="card-actions">{read_actions}',
+                1,
+            )
+        track_rows.append(row)
+    full = catalog.full_audiobook
+    full_player = audio_player(full.public_audio_path, full.title) if full.is_available else ""
+    full_download = (
+        f'<a class="button primary" href="{escape(full.public_audio_path)}" download>Download complete audiobook</a>'
+        if full.is_available
+        else ""
+    )
+    full_size = format_file_size(full.probe.size_bytes) if full.probe else ""
+    full_meta = " · ".join(
+        value
+        for value in (
+            format_audio_duration(full.duration_seconds) if full.duration_seconds is not None else "",
+            full_size,
+            "MP3" if full.is_available else "",
+        )
+        if value
+    )
+    full_unavailable = (
+        ""
+        if full.is_available
+        else '<p class="audio-unavailable">The complete audiobook has not been assembled for this local preview.</p>'
+    )
+    full_section = f"""<section class="audio-feature-card" id="full-audiobook">
+  <p class="eyebrow">Complete audiobook</p>
+  <h2>{escape(full.title)}</h2>
+  <p>Listen from beginning to end in one file, or download it for later.</p>
+  {f'<p class="audio-runtime">{escape(full_meta)}</p>' if full_meta else ''}
+  {full_player}
+  <div class="card-actions">{full_download}</div>
+  {full_unavailable}
+</section>"""
     skipped_counts: dict[str, int] = {}
-    for item in skipped:
+    for item in catalog.skipped_entries:
         reason = str(item.get("reason") or "reference material")
         skipped_counts[reason] = skipped_counts.get(reason, 0) + 1
     skipped_rows = "\n".join(
@@ -1048,9 +1285,17 @@ def render_audiobook() -> str:
     body = f"""
     <section class="page-title">
       <h1>Audiobook</h1>
-      <p>Onward-style narration scripts are prepared for story chapters. Tables, indexes, and dense records stay in the readable archive.</p>
+      <p>Listen to the complete family audiobook or choose any individual story below. No app or account is needed.</p>
+      <p class="audio-attribution">Narrated with the Matilda AI voice using ElevenLabs Multilingual v2. Tables, indexes, and dense records stay in the readable archive.</p>
     </section>
-    <section class="cards archive-downloads">{script_rows or '<p>No narration scripts have been generated yet.</p>'}</section>
+    {full_section}
+    <section class="section-list audio-track-list">
+      <div class="section-heading">
+        <h2>Individual recordings</h2>
+        <p>{len(catalog.tracks)} tracks in listening order.</p>
+      </div>
+      <div class="audio-track-grid">{''.join(track_rows)}</div>
+    </section>
     <section class="archive-grid">
       <article>
         <h2>Reference Material</h2>
@@ -1066,6 +1311,7 @@ def write_site_assets(output_dir: Path) -> None:
     assets_dir.mkdir(parents=True, exist_ok=True)
     (assets_dir / "site.css").write_text(SITE_CSS, encoding="utf-8")
     (assets_dir / "search.js").write_text(SEARCH_JS, encoding="utf-8")
+    (assets_dir / "audio.js").write_text(AUDIO_JS, encoding="utf-8")
 
 
 def write_scan_images(output_dir: Path) -> None:
@@ -1140,22 +1386,147 @@ def write_audio_scripts(output_dir: Path) -> None:
     if not source.exists():
         return
     destination = output_dir / "script"
-    shutil.copytree(source, destination, dirs_exist_ok=True)
+    destination.mkdir(parents=True, exist_ok=True)
+    for script in sorted(source.glob("*.md")):
+        shutil.copy2(script, destination / script.name)
 
 
-def write_search_index(output_dir: Path, bundle: Bundle, entries: list[Entry], supplemental_documents: list[SupplementalSiteDocument]) -> None:
+def derive_site_reading_catalog(
+    bundle: Bundle,
+    entries: list[Entry],
+    audiobook_catalog: AudiobookCatalog,
+) -> ReadingCatalog:
+    sources = [
+        ReadingSource(
+            entry_id=entry.entry_id,
+            title=display_title(bundle, entry),
+            kind=entry.kind,
+            order=index,
+            source_pages=entry.source_pages,
+            printed_pages=printable_page_values(entry),
+            article_html=read_article_html(bundle, entry),
+        )
+        for index, entry in enumerate(entries)
+    ]
+    reading_catalog = build_reading_catalog(sources, audiobook_catalog.tracks)
+    if reading_catalog.unassigned_source_entry_ids:
+        raise SystemExit(
+            "Semantic reading sections left source entries unassigned: "
+            + ", ".join(reading_catalog.unassigned_source_entry_ids)
+        )
+    if reading_catalog.unassigned_track_numbers:
+        raise SystemExit(
+            "Semantic reading sections left narrative tracks without a Read target: "
+            + ", ".join(f"{number:02d}" for number in reading_catalog.unassigned_track_numbers)
+        )
+    block_ids = lambda html: re.findall(r'\bid="([^"]+)"', html)  # noqa: E731 - compact invariant helper.
+    source_blocks = Counter(
+        block_id
+        for source in sources
+        for block_id in block_ids(source.article_html)
+    )
+    section_blocks = Counter(
+        block_id
+        for section in reading_catalog.sections
+        for block_id in block_ids(section.article_html)
+    )
+    if source_blocks != section_blocks:
+        missing = sorted((source_blocks - section_blocks).elements())[:10]
+        duplicated = sorted((section_blocks - source_blocks).elements())[:10]
+        raise SystemExit(
+            "Semantic reading sections changed canonical doc-web block coverage; "
+            f"missing={missing}, duplicated={duplicated}"
+        )
+    return reading_catalog
+
+
+def render_legacy_reading_redirect(target_path: str) -> str:
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="refresh" content="0; url={escape(target_path)}">
+  <link rel="canonical" href="{escape(target_path)}">
+  <title>Reading section moved | {escape(SITE_TITLE)}</title>
+</head>
+<body>
+  <p>This material is now part of a complete reading section. <a href="{escape(target_path)}">Continue reading</a>.</p>
+</body>
+</html>
+"""
+
+
+def write_reading_catalog(
+    output_dir: Path,
+    reading_catalog: ReadingCatalog,
+) -> None:
+    payload = {
+        "schema_version": "alain_semantic_reading_sections_v1",
+        "section_count": len(reading_catalog.sections),
+        "sections": [
+            {
+                "section_id": section.section_id,
+                "title": section.title,
+                "path": section.path,
+                "kind": section.kind,
+                "part_id": section.part_id,
+                "source_entry_ids": list(section.source_entry_ids),
+                "source_pages": list(section.source_pages),
+                "track_numbers": list(section.track_numbers),
+            }
+            for section in reading_catalog.sections
+        ],
+        "redirects": reading_catalog.redirects,
+    }
+    internal = output_dir / "_internal"
+    internal.mkdir(parents=True, exist_ok=True)
+    (internal / "reading-sections.json").write_text(
+        json.dumps(payload, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+
+
+def copy_audiobook_assets(catalog: AudiobookCatalog, output_dir: Path) -> tuple[int, int]:
+    copied_count = 0
+    copied_bytes = 0
+    for track in catalog.tracks:
+        if not track.is_available:
+            continue
+        destination = output_dir / track.public_audio_path
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(track.audio_source_path, destination)
+        copied_count += 1
+        copied_bytes += track.audio_source_path.stat().st_size
+    full = catalog.full_audiobook
+    if full.is_available:
+        destination = output_dir / full.public_audio_path
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(full.audio_source_path, destination)
+        copied_count += 1
+        copied_bytes += full.audio_source_path.stat().st_size
+    internal = output_dir / "_internal" / "audiobook"
+    internal.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(catalog.manifest_path, internal / "manifest.json")
+    return copied_count, copied_bytes
+
+
+def write_search_index(
+    output_dir: Path,
+    reading_catalog: ReadingCatalog,
+    supplemental_documents: list[SupplementalSiteDocument],
+) -> None:
     rows = []
-    for entry in entries:
-        article = read_article_html(bundle, entry)
-        title = display_title(bundle, entry)
+    for section in reading_catalog.sections:
+        scan_count = len(section.source_pages)
         rows.append(
             {
-                "entry_id": entry.entry_id,
-                "kind": entry.kind,
-                "title": title,
-                "url": entry.path,
-                "source_label": entry_meta_label(entry),
-                "text": re.sub(r"\s+", " ", html_to_text(article)).strip(),
+                "entry_id": section.section_id,
+                "kind": section.kind,
+                "title": section.title,
+                "url": section.path,
+                "source_label": "1 source scan" if scan_count == 1 else f"{scan_count} source scans",
+                "text": re.sub(r"\s+", " ", html_to_text(section.article_html)).strip(),
             }
         )
     for document in supplemental_documents:
@@ -1173,12 +1544,22 @@ def write_search_index(output_dir: Path, bundle: Bundle, entries: list[Entry], s
     (output_dir / "search-index.json").write_text(json.dumps(rows, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def write_build_summary(output_dir: Path, bundle: Bundle, entries: list[Entry], supplemental_documents: list[SupplementalSiteDocument]) -> None:
+def write_build_summary(
+    output_dir: Path,
+    bundle: Bundle,
+    entries: list[Entry],
+    reading_catalog: ReadingCatalog,
+    supplemental_documents: list[SupplementalSiteDocument],
+    audiobook_catalog: AudiobookCatalog,
+    published_audio_count: int,
+    published_audio_bytes: int,
+) -> None:
     summary = {
         "schema_version": "alain_family_site_build_summary_v1",
         "bundle_snapshot_id": bundle.active.get("snapshotId"),
         "bundle_root": bundle.active.get("bundleRoot"),
         "entry_count": len(entries),
+        "reading_section_count": len(reading_catalog.sections),
         "chapter_count": sum(1 for entry in entries if entry.kind == "chapter"),
         "page_entry_count": sum(1 for entry in entries if entry.kind == "page"),
         "supplemental_document_count": len(supplemental_documents),
@@ -1190,6 +1571,10 @@ def write_build_summary(output_dir: Path, bundle: Bundle, entries: list[Entry], 
         "supplemental_doc_web_image_count": sum(document.doc_web_image_count for document in supplemental_documents),
         "figure_count": sum(read_article_html(bundle, entry).lower().count("<figure") for entry in entries),
         "table_count": sum(read_article_html(bundle, entry).lower().count("<table") for entry in entries),
+        "audiobook_track_count": len(audiobook_catalog.tracks),
+        "published_audio_file_count": published_audio_count,
+        "published_audio_bytes": published_audio_bytes,
+        "complete_audiobook_published": audiobook_catalog.full_audiobook.is_available,
         "public_host": PUBLIC_HOST,
     }
     internal_dir = output_dir / "_internal"
@@ -1197,10 +1582,35 @@ def write_build_summary(output_dir: Path, bundle: Bundle, entries: list[Entry], 
     (internal_dir / "build-summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def build(output_dir: Path) -> None:
+def build(output_dir: Path, *, require_complete_audio: bool = False) -> None:
     bundle = load_bundle()
     entries = ordered_entries(bundle)
     supplemental_documents = load_supplemental_documents()
+    try:
+        audiobook_catalog = load_audiobook_catalog(AUDIOBOOK_MANIFEST_PATH)
+    except AudiobookManifestError as exc:
+        raise SystemExit(f"Invalid audiobook manifest: {exc}") from exc
+    if require_complete_audio:
+        validation = validate_audiobook_catalog(audiobook_catalog, release=True, decode=False)
+        if validation.errors:
+            raise SystemExit(
+                "Release-ready family-site build requires complete audiobook media:\n"
+                + "\n".join(f"- {error}" for error in validation.errors)
+            )
+    reading_catalog = derive_site_reading_catalog(bundle, entries, audiobook_catalog)
+    reading_links = audio_reading_links(reading_catalog, supplemental_documents, audiobook_catalog)
+    audio_by_entry_id = tracks_by_target_entry_id(audiobook_catalog)
+    expected_read_tracks = {
+        track.track_number
+        for track in audiobook_catalog.tracks
+        if track.target_entry_ids
+    }
+    missing_read_tracks = sorted(expected_read_tracks - set(reading_links))
+    if missing_read_tracks:
+        raise SystemExit(
+            "Audiobook tracks do not match rendered semantic reading sections: "
+            + ", ".join(f"{number:02d}" for number in missing_read_tracks)
+        )
     clean_dir(output_dir)
     write_site_assets(output_dir)
     write_scan_images(output_dir)
@@ -1210,27 +1620,70 @@ def build(output_dir: Path) -> None:
     copy_downloads(output_dir, supplemental_documents)
     copy_structured_data(bundle, output_dir)
     write_audio_scripts(output_dir)
+    published_audio_count, published_audio_bytes = copy_audiobook_assets(audiobook_catalog, output_dir)
+    write_reading_catalog(output_dir, reading_catalog)
 
-    (output_dir / "index.html").write_text(render_home(bundle, entries, supplemental_documents), encoding="utf-8")
-    (output_dir / "book.html").write_text(render_book(bundle, entries), encoding="utf-8")
+    (output_dir / "index.html").write_text(
+        render_home(bundle, entries, reading_catalog, supplemental_documents, audiobook_catalog),
+        encoding="utf-8",
+    )
+    (output_dir / "book.html").write_text(render_book(reading_catalog), encoding="utf-8")
     (output_dir / "archive.html").write_text(render_archive(bundle, entries, supplemental_documents), encoding="utf-8")
-    (output_dir / "audiobook.html").write_text(render_audiobook(), encoding="utf-8")
+    (output_dir / "audiobook.html").write_text(
+        render_audiobook(audiobook_catalog, reading_links),
+        encoding="utf-8",
+    )
     for document in supplemental_documents:
-        (output_dir / supplemental_html_filename(document)).write_text(render_companion_document(document), encoding="utf-8")
-    for index, entry in enumerate(entries):
-        (output_dir / entry.path).write_text(render_entry_page(bundle, entries, index), encoding="utf-8")
-    write_search_index(output_dir, bundle, entries, supplemental_documents)
-    write_build_summary(output_dir, bundle, entries, supplemental_documents)
+        target_id = f"companion:{document.slug}"
+        (output_dir / supplemental_html_filename(document)).write_text(
+            render_companion_document(document, audio_by_entry_id.get(target_id, ())),
+            encoding="utf-8",
+        )
+    tracks_by_number = {track.track_number: track for track in audiobook_catalog.tracks}
+    for index, section in enumerate(reading_catalog.sections):
+        section_tracks = tuple(
+            tracks_by_number[number]
+            for number in section.track_numbers
+            if number in tracks_by_number
+        )
+        (output_dir / section.path).write_text(
+            render_reading_section_page(reading_catalog, index, section_tracks),
+            encoding="utf-8",
+        )
+    for entry in entries:
+        target_path = reading_catalog.redirects.get(entry.entry_id, "book.html")
+        (output_dir / entry.path).write_text(
+            render_legacy_reading_redirect(target_path),
+            encoding="utf-8",
+        )
+    write_search_index(output_dir, reading_catalog, supplemental_documents)
+    write_build_summary(
+        output_dir,
+        bundle,
+        entries,
+        reading_catalog,
+        supplemental_documents,
+        audiobook_catalog,
+        published_audio_count,
+        published_audio_bytes,
+    )
     print(f"built family site: {output_dir}")
-    print(f"entries: {len(entries)}")
+    print(f"source entries: {len(entries)}")
+    print(f"reading sections: {len(reading_catalog.sections)}")
     print(f"supplemental documents: {len(supplemental_documents)}")
+    print(f"published audio files: {published_audio_count}")
 
 
 def cli_main() -> int:
     parser = argparse.ArgumentParser(description="Build the Alain Lessard family archive website from the active doc-web bundle.")
     parser.add_argument("--output", default=str(DEFAULT_OUTPUT_DIR))
+    parser.add_argument(
+        "--require-complete-audio",
+        action="store_true",
+        help="Fail unless all 52 tracks and the complete audiobook are present and valid.",
+    )
     args = parser.parse_args()
-    build(Path(args.output).resolve())
+    build(Path(args.output).resolve(), require_complete_audio=args.require_complete_audio)
     return 0
 
 
@@ -1956,6 +2409,124 @@ img {
   text-align: center;
 }
 
+.audio-feature-card,
+.audio-track-card,
+.listen-bar {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.audio-feature-card {
+  margin: 0 auto 2rem;
+  padding: 1.5rem;
+  max-width: 72rem;
+}
+
+.audio-feature-card h2,
+.audio-track-card h2 {
+  margin-top: 0;
+}
+
+.audio-track-list,
+.entry-audio-section {
+  margin: 0 auto 2rem;
+  max-width: 72rem;
+}
+
+.audio-track-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.audio-track-card {
+  padding: 1.2rem;
+  min-width: 0;
+}
+
+.audio-track-copy {
+  min-width: 0;
+}
+
+.audio-player {
+  display: block;
+  width: 100%;
+  margin: 0.85rem 0;
+}
+
+.audio-runtime,
+.audio-attribution,
+.audio-unavailable {
+  color: var(--muted);
+}
+
+.compact-listening {
+  margin-bottom: 1rem;
+}
+
+.listen-bar {
+  display: grid;
+  grid-template-columns: minmax(15rem, 1fr) minmax(18rem, 1.4fr) auto;
+  gap: 0.85rem;
+  align-items: center;
+  padding: 0.65rem 0.8rem;
+  min-width: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.listen-bar-copy {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.7rem;
+  align-items: center;
+  min-width: 0;
+}
+
+.listen-icon {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  color: var(--accent);
+  background: rgba(141, 47, 35, 0.1);
+  border: 1px solid rgba(141, 47, 35, 0.14);
+  border-radius: 0.55rem;
+}
+
+.listen-icon-mark {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.listen-bar-title {
+  display: grid;
+  gap: 0.08rem;
+  min-width: 0;
+}
+
+.listen-bar-title small,
+.listen-bar-time {
+  color: var(--muted);
+}
+
+.listen-bar-title strong {
+  overflow-wrap: anywhere;
+}
+
+.listen-bar .audio-player {
+  margin: 0;
+  min-width: 0;
+}
+
+.listen-download {
+  color: var(--accent-strong);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 .site-footer {
   padding: 2rem 1.4rem;
   color: var(--muted);
@@ -1987,8 +2558,18 @@ img {
     .compact-grid,
     .part-links,
     .reader-shell,
-    .companion-source-grid {
+    .companion-source-grid,
+    .audio-track-grid {
     grid-template-columns: 1fr;
+  }
+
+  .listen-bar {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+
+  .listen-download {
+    justify-self: start;
   }
 
   .toc-panel,
@@ -2055,6 +2636,65 @@ SEARCH_JS = """
   input.addEventListener("input", (event) => render(event.target.value));
 })();
 """.replace("__SITE_ASSET_VERSION__", SITE_ASSET_VERSION)
+
+
+AUDIO_JS = """
+(() => {
+  const storageKey = "alain-audiobook-progress-v1";
+  const players = Array.from(document.querySelectorAll("audio[data-audio-key]"));
+  if (!players.length) return;
+
+  let progress = {};
+  try {
+    progress = JSON.parse(localStorage.getItem(storageKey) || "{}") || {};
+  } catch (_error) {
+    progress = {};
+  }
+
+  function writeProgress() {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(progress));
+    } catch (_error) {
+      // Playback remains fully native when storage is unavailable.
+    }
+  }
+
+  players.forEach((player) => {
+    const key = player.dataset.audioKey;
+    let lastSavedSecond = -1;
+
+    player.addEventListener("loadedmetadata", () => {
+      const saved = Number(progress[key]);
+      if (Number.isFinite(saved) && saved >= 5 && saved < player.duration - 30) {
+        player.currentTime = saved;
+      }
+    });
+
+    player.addEventListener("play", () => {
+      players.forEach((other) => {
+        if (other !== player && !other.paused) other.pause();
+      });
+    });
+
+    player.addEventListener("timeupdate", () => {
+      const second = Math.floor(player.currentTime);
+      if (second < 5 || second - lastSavedSecond < 5) return;
+      lastSavedSecond = second;
+      if (Number.isFinite(player.duration) && second >= player.duration - 30) {
+        delete progress[key];
+      } else {
+        progress[key] = second;
+      }
+      writeProgress();
+    });
+
+    player.addEventListener("ended", () => {
+      delete progress[key];
+      writeProgress();
+    });
+  });
+})();
+""".strip() + "\n"
 
 
 if __name__ == "__main__":

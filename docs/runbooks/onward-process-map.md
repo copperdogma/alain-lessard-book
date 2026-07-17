@@ -46,7 +46,11 @@ are downstream of the scan-to-PDF phase.
 5. `doc-web` website/audio input:
    `input/doc-web-html/alain-lessard-book-r1/`
 6. Public static site: `build/family-site/`
-7. Audio-script handoff: `audiobook/script/` and `audiobook/manifest.json`
+7. Reviewed audio contract: 52 paired Markdown/MP3 tracks under
+   `audiobook/script/`, described by `audiobook/manifest.json`
+8. Complete local audiobook:
+   `audiobook/generated/alain-lessard-complete-audiobook.mp3`
+9. Published media paths: `build/family-site/audiobook/`
 
 ## Current `doc-web` Treatment
 
@@ -56,7 +60,31 @@ The Alain site now follows the Onward-style `doc-web` treatment more closely:
 - `doc-web` cuts out 155 figure crops and places them in the chapter HTML;
 - tables remain as `<table>` elements rather than flattened OCR paragraphs;
 - captions remain attached to their figures;
-- the static site wraps the accepted bundle with source scan links, a working
-  TOC, search, archive downloads, and audio-script links;
+- the static site derives 57 meaningful reading/reference sections from the 39
+  accepted entries, preserving all 1,737 source blocks while redirecting legacy
+  printed-page URLs into their containing section;
+- the site wraps those sections with source scan links, a working TOC, search,
+  archive downloads, one Read target per applicable track, compact always-visible
+  audiobook bars, and direct MP3 downloads;
 - audio scripts are generated only for narrative entries, not personal records,
   bibliography, page-level material, or table-heavy reference sections.
+
+## Audiobook Assembly And Publication
+
+Alain follows Onward's manifest-ordered `ffmpeg` concatenation pattern but
+keeps the source narration's 44.1 kHz mono profile instead of forcing stereo.
+`make build-full-audiobook` inserts the manifest-configured two-second pause
+between tracks and writes complete-book ID3 metadata. The generated full MP3
+and reviewed source MP3s remain ignored local artifacts.
+
+`make build-family-site RELEASE=1` copies each chapter once to
+`audiobook/tracks/`, copies the complete MP3 to its stable public path, and
+fails if any of the 53 files is missing or invalid. `make deploy-static` is
+guarded by strict bundle validation. After upload, run:
+
+```bash
+make validate-family-site RELEASE=1 PUBLIC_BASE=https://alain-lessard.copper-dog.com
+```
+
+That public check verifies page/link coverage plus MP3 MIME types, content
+lengths, and representative `206` byte-range responses.

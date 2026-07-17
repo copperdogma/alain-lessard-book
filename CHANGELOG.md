@@ -1,5 +1,38 @@
 # Changelog
 
+## [2026-07-16-02] - Build and publish the complete on-site audiobook (Story 004)
+
+### Added
+- Added a strict v4 audiobook manifest contract, focused catalog/validator,
+  fixture tests, and deterministic mono `ffmpeg` complete-book builder.
+- Generated the 9:00:14 complete audiobook from all 52 reviewed tracks with a
+  two-second pause between recordings and embedded audiobook metadata.
+- Added native complete-book and individual-track players/downloads, matching
+  listening panels on main and companion reading pages, a homepage entry point,
+  single-player behavior, and guarded local playback resume.
+
+### Changed
+- Replaced print-page reader navigation with 57 meaningful sections: 49
+  track-aligned narratives and 8 named reference sections. Legacy page URLs now
+  redirect to the containing section, and all 1,737 source blocks remain
+  represented exactly once.
+- Simplified each applicable audiobook card to one `Read` link and replaced
+  nested listening disclosures with compact, always-visible native audio bars
+  on reading and companion pages.
+- Replaced the listening bar's decorative play-button lookalike with a quiet
+  headphones badge so the native player is the only playback affordance.
+- Moved the homepage companion documents below `Start Reading` so the main book
+  remains the clearest next step.
+- Published MP3s once under stable `audiobook/` paths instead of accidentally
+  copying them beneath the Markdown `script/` directory.
+- Added strict release/build/deploy gates for 53 local media assets and public
+  MIME, length, and byte-range verification.
+- Added `make deploy-deps` so the pinned SFTP dependency is installed into the
+  same Python interpreter used by the deployment target.
+- Deployed the 52 individual tracks and 9:00:14 complete audiobook to DreamHost;
+  all 53 public MP3 paths passed HTTPS MIME, positive-length, and `206` range
+  checks through Cloudflare.
+
 ## [2026-07-16-01] - Prepare final audiobook recordings
 
 ### Changed

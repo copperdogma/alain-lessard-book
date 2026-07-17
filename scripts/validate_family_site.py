@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from html.parser import HTMLParser
@@ -17,13 +18,24 @@ from PIL import Image
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.audiobook import (  # noqa: E402
+    AudiobookManifestError,
+    load_audiobook_catalog,
+    validate_audiobook_catalog,
+)
+
 DEFAULT_BUILD_DIR = ROOT / "build" / "family-site"
-ASSET_VERSION = "20260703-companion-toc-r2"
+ASSET_VERSION = "20260716-semantic-reader-r2"
 EXPECTED_ENTRY_COUNT = 39
-EXPECTED_SEARCH_ROW_COUNT = 41
+EXPECTED_READING_SECTION_COUNT = 57
+EXPECTED_SEARCH_ROW_COUNT = 59
 EXPECTED_SUPPLEMENTAL_DOCUMENT_COUNT = 2
-EXPECTED_HTML_PAGE_COUNT = 45
+EXPECTED_HTML_PAGE_COUNT = 102
 EXPECTED_DOC_WEB_IMAGES = 155
+EXPECTED_DOC_WEB_BLOCK_IDS = 1737
 EXPECTED_SCAN_IMAGES = 153
 EXPECTED_FIGURES = 174
 EXPECTED_FIGCAPTIONS_MIN = 140
@@ -125,6 +137,7 @@ class PageParser(HTMLParser):
         self.ids: set[str] = set()
         self.links: list[LinkRef] = []
         self.images: list[ImageRef] = []
+        self.audio_count = 0
         self.text_parts: list[str] = []
         self.skip_stack: list[str] = []
 
@@ -138,6 +151,8 @@ class PageParser(HTMLParser):
                 self.links.append(LinkRef(self.source, tag, attr, attr_map[attr]))
         if tag == "img":
             self.images.append(ImageRef(self.source, attr_map))
+        if tag == "audio":
+            self.audio_count += 1
         if self.skip_stack or tag in {"script", "style", "noscript"}:
             self.skip_stack.append(tag)
             return
@@ -211,7 +226,13 @@ def parse_html_pages(build_dir: Path, validation: Validation) -> dict[Path, Page
         parser = PageParser(page)
         parser.feed(text)
         parsed[page] = parser
-        validation.require("<main>" in text, f"{rel(page, build_dir)} is missing the main content wrapper")
+        if page.name.startswith(("chapter-", "page-")):
+            validation.require(
+                'http-equiv="refresh"' in text and 'rel="canonical"' in text,
+                f"{rel(page, build_dir)} should redirect to its semantic reading section",
+            )
+        else:
+            validation.require("<main>" in text, f"{rel(page, build_dir)} is missing the main content wrapper")
         validation.require("</html>" in text.lower(), f"{rel(page, build_dir)} does not appear to be a complete HTML document")
     return parsed
 
@@ -271,8 +292,72 @@ def check_required_pages(build_dir: Path, validation: Validation) -> None:
     reading_order = manifest.get("reading_order", [])
     validation.require(len(entries) == EXPECTED_ENTRY_COUNT, f"Expected {EXPECTED_ENTRY_COUNT} manifest entries, found {len(entries)}")
     validation.require(len(reading_order) == EXPECTED_ENTRY_COUNT, f"Expected {EXPECTED_ENTRY_COUNT} reading-order entries, found {len(reading_order)}")
+    semantic = read_json(build_dir / "_internal" / "reading-sections.json", validation, "semantic reading manifest")
+    semantic_sections = semantic.get("sections", []) if isinstance(semantic, dict) else []
+    redirects = semantic.get("redirects", {}) if isinstance(semantic, dict) else {}
+    validation.require(
+        isinstance(semantic, dict) and semantic.get("schema_version") == "alain_semantic_reading_sections_v1",
+        "Semantic reading manifest has the wrong schema version",
+    )
+    validation.require(
+        len(semantic_sections) == EXPECTED_READING_SECTION_COUNT,
+        f"Expected {EXPECTED_READING_SECTION_COUNT} semantic reading sections, found {len(semantic_sections)}",
+    )
+    source_entry_ids = {
+        str(entry.get("entry_id"))
+        for entry in entries
+        if isinstance(entry, dict) and entry.get("entry_id")
+    }
+    covered_source_ids = {
+        str(entry_id)
+        for section in semantic_sections
+        if isinstance(section, dict)
+        for entry_id in section.get("source_entry_ids", [])
+    }
+    validation.require(
+        covered_source_ids == source_entry_ids,
+        "Semantic reading sections must cover every canonical doc-web source entry",
+    )
+    semantic_track_numbers = [
+        int(number)
+        for section in semantic_sections
+        if isinstance(section, dict)
+        for number in section.get("track_numbers", [])
+    ]
+    validation.require(
+        semantic_track_numbers == list(range(2, 51)),
+        f"Semantic reading sections should map tracks 02-50 exactly once, found {semantic_track_numbers}",
+    )
+    for section in semantic_sections:
+        if not isinstance(section, dict):
+            validation.error("Semantic reading manifest contains a non-object section")
+            continue
+        title = str(section.get("title") or "")
+        path = str(section.get("path") or "")
+        validation.require(not re.fullmatch(r"(?:Page|Image)\s+\w+", title, re.IGNORECASE), f"Semantic reading section has a print-artifact title: {title}")
+        validation.require(path.startswith("read-") and path.endswith(".html"), f"Semantic reading section has an unstable path: {path}")
+    built_block_ids = [
+        block_id
+        for section in semantic_sections
+        if isinstance(section, dict) and section.get("path")
+        for block_id in re.findall(
+            r'\bid="(blk-[^"]+)"',
+            (build_dir / str(section["path"])).read_text(encoding="utf-8")
+            if (build_dir / str(section["path"])).is_file()
+            else "",
+        )
+    ]
+    validation.require(
+        len(built_block_ids) == EXPECTED_DOC_WEB_BLOCK_IDS and len(set(built_block_ids)) == EXPECTED_DOC_WEB_BLOCK_IDS,
+        f"Semantic reading sections should preserve {EXPECTED_DOC_WEB_BLOCK_IDS} unique doc-web block ids exactly once",
+    )
+    validation.require(
+        isinstance(redirects, dict) and set(redirects) == source_entry_ids,
+        "Every canonical doc-web entry should have a legacy-route redirect",
+    )
     required = {"index.html", "book.html", "archive.html", "audiobook.html"}
     required.update(str(entry.get("path")) for entry in entries if isinstance(entry, dict) and entry.get("path"))
+    required.update(str(section.get("path")) for section in semantic_sections if isinstance(section, dict) and section.get("path"))
     required.update(filename for _, filename, _, _ in EXPECTED_COMPANION_DOCUMENTS)
     for page in sorted(required):
         validation.require((build_dir / page).exists(), f"Required page is missing: {page}")
@@ -300,6 +385,12 @@ def check_search_index(build_dir: Path, validation: Validation) -> None:
         validation.require(bool(title), f"Search row {row_number} has no title")
         validation.require(bool(url), f"Search row {row_number} has no URL")
         validation.require("pages/" not in url, f"Search row {row_number} uses stale pages/ URL: {url}")
+        if not str(row.get("entry_id") or "").startswith("supplemental-"):
+            validation.require(url.startswith("read-"), f"Search row {row_number} should use a semantic reading route: {url}")
+            validation.require(
+                not re.fullmatch(r"(?:Page|Image)\s+\w+", title, re.IGNORECASE),
+                f"Search row {row_number} exposes a print-artifact title: {title}",
+            )
         parsed_url = urlparse(url)
         validation.require((build_dir / unquote(parsed_url.path)).exists(), f"Search row {row_number} points at missing page: {url}")
         validation.require(bool(text.strip()), f"Search row {row_number} has empty searchable text: {title or url}")
@@ -344,13 +435,13 @@ def check_tables_figures_and_copy(build_dir: Path, parsed: dict[Path, PageParser
     validation.require(figure_count == EXPECTED_FIGURES, f"Expected {EXPECTED_FIGURES} figures, found {figure_count}")
     validation.require(figcaption_count >= EXPECTED_FIGCAPTIONS_MIN, f"Expected at least {EXPECTED_FIGCAPTIONS_MIN} figcaptions, found {figcaption_count}")
 
-    personal_records = build_dir / "chapter-016.html"
+    personal_records = build_dir / "read-reference-personal-records.html"
     if personal_records.exists():
         personal_text = personal_records.read_text(encoding="utf-8")
         personal_tables = personal_text.lower().count("<table")
         validation.require(
             personal_tables == EXPECTED_PERSONAL_RECORD_TABLES,
-            f"Expected {EXPECTED_PERSONAL_RECORD_TABLES} personal-record tables in chapter-016.html, found {personal_tables}",
+            f"Expected {EXPECTED_PERSONAL_RECORD_TABLES} personal-record tables in the Personal Records section, found {personal_tables}",
         )
 
     stale_patterns = ('href="pages/', 'src="pages/', '"url": "pages/')
@@ -370,12 +461,13 @@ def check_tables_figures_and_copy(build_dir: Path, parsed: dict[Path, PageParser
             validation.require(phrase not in lower_text, f"{filename} exposes process wording to readers: {phrase}")
 
     for page in sorted(parsed):
-        if page.name.startswith(("chapter-", "page-")):
+        if page.name.startswith("read-"):
             text = page.read_text(encoding="utf-8")
             validation.require(
                 bool(re.search(r'<section class="entry-header">.*?<h1>.*?</h1>', text, re.IGNORECASE | re.DOTALL)),
-                f"{rel(page, build_dir)} is missing a page-level reader heading",
+                f"{rel(page, build_dir)} is missing a semantic reader heading",
             )
+    validation.require("<details" not in html, "Listening controls should not be hidden in disclosure panels")
 
     audiobook_text = parsed[build_dir / "audiobook.html"].visible_text.lower() if (build_dir / "audiobook.html") in parsed else ""
     validation.require("tables, indexes, and dense records stay" in audiobook_text, "Audiobook page should clearly explain why tables are not narrated")
@@ -467,6 +559,12 @@ def check_tables_figures_and_copy(build_dir: Path, parsed: dict[Path, PageParser
     )
     validation.require('href="companion-alains-song.html"' in home_html, "index.html should link the Alain's Song HTML page")
     validation.require('href="companion-growing-up-on-the-farm.html"' in home_html, "index.html should link the Growing Up on the Farm HTML page")
+    start_reading_position = home_html.find("<h2>Start Reading</h2>")
+    companion_position = home_html.find("<h2>Companion Documents</h2>")
+    validation.require(
+        start_reading_position >= 0 and companion_position >= 0 and start_reading_position < companion_position,
+        "Home page should present Start Reading before the less-prominent companion documents",
+    )
     start_reading_match = re.search(r"<h2>Start Reading</h2>.*?</section>", home_html, flags=re.IGNORECASE | re.DOTALL)
     if start_reading_match:
         start_reading_html = start_reading_match.group(0)
@@ -482,8 +580,8 @@ def check_tables_figures_and_copy(build_dir: Path, parsed: dict[Path, PageParser
     validation.require("Preface" in book_text, "book.html should expose Preface in the contents")
     validation.require("Part I - Alain Family History" in book_text, "book.html should expose Part I in the contents")
     validation.require("Part II - Alain Family Stories" in book_text, "book.html should expose Part II in the contents")
-    validation.require("HENRI DELPHICE ALAIN" in book_text, "book.html should expose Part II family-entry headings")
-    validation.require("MOISE (SMOKEY) ALAIN" in book_text, "book.html should expose Moise Alain as a jump target")
+    validation.require("Henri Delphice Alain" in book_text, "book.html should expose the Henri Delphice Alain section")
+    validation.require("Moise (Smokey) Alain" in book_text, "book.html should expose Moise Alain as a section")
     validation.require("Page Entries" not in book_text, "book.html should not split the contents into generic Page Entries")
     archive_text = parsed[build_dir / "archive.html"].visible_text if (build_dir / "archive.html") in parsed else ""
     archive_html = (build_dir / "archive.html").read_text(encoding="utf-8") if (build_dir / "archive.html").exists() else ""
@@ -498,12 +596,17 @@ def check_tables_figures_and_copy(build_dir: Path, parsed: dict[Path, PageParser
     part_link_blocks = re.findall(r'<ol class="part-links">(.*?)</ol>', book_html, flags=re.IGNORECASE | re.DOTALL)
     validation.require(all("<span" not in block.lower() for block in part_link_blocks), "book.html TOC heading links should not include per-entry page labels")
     validation.require("scroll-padding-top: 6.5rem" in (build_dir / "assets" / "site.css").read_text(encoding="utf-8"), "site CSS should offset hash navigation for the sticky header")
-    expanded_markers = [match.start() for match in re.finditer(r"\nFront Matter\n\d+ headings", book_text)]
-    expanded_contents_start = expanded_markers[-1] if expanded_markers else -1
-    expanded_contents = book_text[expanded_contents_start:] if expanded_contents_start >= 0 else book_text
-    if all(term in expanded_contents for term in ("Preface", "Part I - Alain Family History", "Part II - Alain Family Stories", "LOUIS AND CLARA")):
+    ordered_terms = (
+        "Preface",
+        "Part I - Alain Family History",
+        "Part II - Alain Family Stories",
+        "Louis and Clara (Lessard) Alain",
+    )
+    expanded_contents = book_text[book_text.rfind("Front Matter") :]
+    if all(term in expanded_contents for term in ordered_terms):
         validation.require(
-            expanded_contents.index("Preface") < expanded_contents.index("Part I - Alain Family History") < expanded_contents.index("Part II - Alain Family Stories") < expanded_contents.index("LOUIS AND CLARA"),
+            [expanded_contents.index(term) for term in ordered_terms]
+            == sorted(expanded_contents.index(term) for term in ordered_terms),
             "book.html contents order should follow front matter, Part I, Part II, then Louis and Clara",
         )
 
@@ -593,6 +696,197 @@ def check_companion_document_pages(build_dir: Path, parsed: dict[Path, PageParse
                 validation.require(all(anchor.startswith("blk-") for anchor, _ in toc_links), f"{filename} TOC should link to doc-web heading anchors")
 
 
+def check_audiobook_surface(
+    build_dir: Path,
+    parsed: dict[Path, PageParser],
+    validation: Validation,
+    *,
+    require_complete_audio: bool,
+) -> list[str]:
+    try:
+        catalog = load_audiobook_catalog(ROOT / "audiobook" / "manifest.json")
+    except AudiobookManifestError as exc:
+        validation.error(f"Could not load canonical audiobook manifest: {exc}")
+        return []
+
+    if require_complete_audio:
+        audio_validation = validate_audiobook_catalog(catalog, release=True, decode=False)
+        for error in audio_validation.errors:
+            validation.error(f"Release audiobook validation failed: {error}")
+
+    script_mp3s = sorted((build_dir / "script").glob("*.mp3"))
+    validation.require(not script_mp3s, f"MP3 files must not be published under script/: {[path.name for path in script_mp3s[:5]]}")
+    internal_manifest = build_dir / "_internal" / "audiobook" / "manifest.json"
+    validation.require(internal_manifest.is_file(), "Built site is missing its internal audiobook manifest snapshot")
+
+    audiobook_page = build_dir / "audiobook.html"
+    audiobook_html = audiobook_page.read_text(encoding="utf-8") if audiobook_page.is_file() else ""
+    audiobook_parser = parsed.get(audiobook_page)
+    available_tracks = [track for track in catalog.tracks if track.is_available]
+    expected_player_count = len(available_tracks) + (1 if catalog.full_audiobook.is_available else 0)
+    if audiobook_parser:
+        validation.require(
+            audiobook_parser.audio_count == expected_player_count,
+            f"Audiobook page has {audiobook_parser.audio_count} players, expected {expected_player_count}",
+        )
+    validation.require(
+        audiobook_html.count('class="audio-track-card"') == len(catalog.tracks),
+        f"Audiobook page should render {len(catalog.tracks)} track cards",
+    )
+    validation.require("No app or account is needed" in audiobook_html, "Audiobook page should explain that no app or account is needed")
+    validation.require("ElevenLabs Multilingual v2" in audiobook_html, "Audiobook page should identify the narration model")
+    home_html = (build_dir / "index.html").read_text(encoding="utf-8") if (build_dir / "index.html").is_file() else ""
+    validation.require('href="audiobook.html">Listen to the audiobook</a>' in home_html, "Homepage should provide a clear audiobook entry point")
+
+    public_paths: list[str] = []
+    for track in catalog.tracks:
+        built_audio = build_dir / track.public_audio_path
+        if track.is_available:
+            validation.require(built_audio.is_file(), f"Built site is missing track {track.track_number:02d}: {track.public_audio_path}")
+            if built_audio.is_file():
+                validation.require(
+                    built_audio.stat().st_size == track.audio_source_path.stat().st_size,
+                    f"Built track {track.track_number:02d} size differs from its reviewed source",
+                )
+                public_paths.append(track.public_audio_path)
+        if require_complete_audio:
+            validation.require(built_audio.is_file(), f"Release build requires track {track.track_number:02d}: {track.public_audio_path}")
+
+    full = catalog.full_audiobook
+    built_full = build_dir / full.public_audio_path
+    if full.is_available:
+        validation.require(built_full.is_file(), f"Built site is missing the complete audiobook: {full.public_audio_path}")
+        if built_full.is_file():
+            validation.require(
+                built_full.stat().st_size == full.audio_source_path.stat().st_size,
+                "Built complete audiobook size differs from its generated source",
+            )
+            public_paths.append(full.public_audio_path)
+    if require_complete_audio:
+        validation.require(full.is_available, "Release build requires the generated complete audiobook source")
+        validation.require(built_full.is_file(), "Release build requires the published complete audiobook")
+        validation.require("Download complete audiobook" in audiobook_html, "Release audiobook page is missing its complete-book download")
+        validation.require('id="full-audiobook"' in audiobook_html, "Release audiobook page is missing its complete-book section")
+
+    semantic = read_json(build_dir / "_internal" / "reading-sections.json", validation, "semantic reading manifest")
+    reading_paths_by_track: dict[int, str] = {}
+    for section in semantic.get("sections", []) if isinstance(semantic, dict) else []:
+        if not isinstance(section, dict):
+            continue
+        path = str(section.get("path") or "")
+        for number in section.get("track_numbers", []):
+            track_number = int(number)
+            validation.require(track_number not in reading_paths_by_track, f"Track {track_number:02d} has multiple semantic reading targets")
+            reading_paths_by_track[track_number] = path
+    companion_paths = {
+        f"companion:{slug}": filename
+        for slug, filename, _title, _page_count in EXPECTED_COMPANION_DOCUMENTS
+    }
+    for track in catalog.tracks:
+        companion_target = next((target for target in track.target_entry_ids if target.startswith("companion:")), None)
+        target_path = reading_paths_by_track.get(track.track_number) or companion_paths.get(companion_target or "")
+        card_match = re.search(
+            rf'<article class="audio-track-card" id="track-{track.track_number:02d}">(.*?)</article>',
+            audiobook_html,
+            flags=re.IGNORECASE | re.DOTALL,
+        )
+        validation.require(card_match is not None, f"Audiobook page is missing track card {track.track_number:02d}")
+        card_html = card_match.group(1) if card_match else ""
+        read_links = re.findall(r'<a class="button" href="([^"]+)">Read</a>', card_html)
+        if target_path:
+            validation.require(read_links == [target_path], f"Track {track.track_number:02d} should expose exactly one Read link to {target_path}, found {read_links}")
+            page_path = build_dir / target_path
+            page_html = page_path.read_text(encoding="utf-8") if page_path.is_file() else ""
+            validation.require(
+                f'data-audio-key="{track.public_audio_path}"' in page_html,
+                f"{target_path} is missing track {track.track_number:02d}",
+            )
+            validation.require(
+                page_html.count('class="listen-bar"') == 1,
+                f"{target_path} should expose one compact listening bar",
+            )
+            validation.require("<details" not in page_html, f"{target_path} should not hide audio in a disclosure")
+            validation.require('class="listen-icon-mark"' in page_html, f"{target_path} should identify audio with the headphones icon")
+            validation.require("&#9654;" not in page_html, f"{target_path} should not render a decorative play-button lookalike")
+        else:
+            validation.require(not read_links, f"Track {track.track_number:02d} should not expose a Read link")
+
+    total_listen_bars = sum(
+        path.read_text(encoding="utf-8").count('class="listen-bar"')
+        for path in parsed
+    )
+    validation.require(total_listen_bars == 51, f"Expected 51 compact section listening bars, found {total_listen_bars}")
+
+    audio_js = (build_dir / "assets" / "audio.js").read_text(encoding="utf-8") if (build_dir / "assets" / "audio.js").is_file() else ""
+    for marker in ("localStorage", 'addEventListener("play"', "other.pause()", 'addEventListener("ended"'):
+        validation.require(marker in audio_js, f"Audio playback enhancement is missing marker: {marker}")
+
+    summary = read_json(build_dir / "_internal" / "build-summary.json", validation, "build summary")
+    if isinstance(summary, dict):
+        expected_published = len(available_tracks) + (1 if full.is_available else 0)
+        validation.require(summary.get("audiobook_track_count") == len(catalog.tracks), "Build summary has the wrong audiobook track count")
+        validation.require(summary.get("reading_section_count") == EXPECTED_READING_SECTION_COUNT, "Build summary has the wrong semantic reading-section count")
+        validation.require(summary.get("published_audio_file_count") == expected_published, "Build summary has the wrong published audio count")
+        validation.require(summary.get("complete_audiobook_published") is full.is_available, "Build summary has the wrong complete-audiobook state")
+
+    if require_complete_audio:
+        built_mp3s = sorted((build_dir / "audiobook").rglob("*.mp3"))
+        validation.require(
+            len(built_mp3s) == len(catalog.tracks) + 1,
+            f"Release bundle should contain {len(catalog.tracks) + 1} audiobook MP3s, found {len(built_mp3s)}",
+        )
+    return public_paths
+
+
+def fetch_public_audio(url: str, timeout: float) -> tuple[str, list[str]]:
+    errors: list[str] = []
+    headers = {"User-Agent": "alain-family-site-validator/1.0"}
+    try:
+        with urlopen(Request(url, headers=headers, method="HEAD"), timeout=timeout) as response:
+            if response.getcode() != 200:
+                errors.append(f"HEAD returned HTTP {response.getcode()}")
+            content_type = response.headers.get_content_type()
+            if content_type != "audio/mpeg":
+                errors.append(f"Content-Type is {content_type!r}, expected 'audio/mpeg'")
+            try:
+                content_length = int(response.headers.get("Content-Length") or 0)
+            except ValueError:
+                content_length = 0
+            if content_length <= 0:
+                errors.append("Content-Length is missing or zero")
+    except Exception as exc:  # noqa: BLE001 - public verification should retain exact network evidence.
+        errors.append(f"HEAD failed: {exc}")
+        return url, errors
+    range_headers = dict(headers)
+    range_headers["Range"] = "bytes=0-1023"
+    try:
+        with urlopen(Request(url, headers=range_headers, method="GET"), timeout=timeout) as response:
+            if response.getcode() != 206:
+                errors.append(f"Range request returned HTTP {response.getcode()}, expected 206")
+            if not str(response.headers.get("Content-Range") or "").startswith("bytes 0-"):
+                errors.append("Range response is missing a valid Content-Range header")
+            response.read(1024)
+    except Exception as exc:  # noqa: BLE001 - public verification should retain exact network evidence.
+        errors.append(f"Range request failed: {exc}")
+    return url, errors
+
+
+def check_public_audio_assets(
+    public_base: str,
+    public_paths: Iterable[str],
+    validation: Validation,
+    timeout: float,
+) -> None:
+    urls = [public_url(public_base, path) for path in public_paths]
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        futures = [executor.submit(fetch_public_audio, url, timeout) for url in urls]
+        for future in as_completed(futures):
+            url, errors = future.result()
+            for error in errors:
+                validation.error(f"Public audiobook check failed for {url}: {error}")
+    validation.note(f"Checked {len(urls)} public audiobook assets for MIME, length, and byte-range support.")
+
+
 def public_url(base: str, ref: str) -> str:
     parsed = urlparse(ref)
     quoted_path = quote(parsed.path, safe="/._-~")
@@ -658,7 +952,13 @@ def check_public_site(build_dir: Path, public_base: str, refs: Iterable[str], va
         validation.error(f"Could not verify public search index: {exc}")
 
 
-def run_validation(build_dir: Path, public_base: str | None, timeout: float) -> Validation:
+def run_validation(
+    build_dir: Path,
+    public_base: str | None,
+    timeout: float,
+    *,
+    require_complete_audio: bool = False,
+) -> Validation:
     validation = Validation()
     validation.require(build_dir.exists(), f"Build directory does not exist: {build_dir}")
     if not build_dir.exists():
@@ -672,11 +972,19 @@ def run_validation(build_dir: Path, public_base: str | None, timeout: float) -> 
     check_tables_figures_and_copy(build_dir, parsed, validation)
     check_supplemental_downloads(build_dir, validation)
     check_companion_document_pages(build_dir, parsed, validation)
+    public_audio_paths = check_audiobook_surface(
+        build_dir,
+        parsed,
+        validation,
+        require_complete_audio=require_complete_audio,
+    )
     check_asset_version(build_dir, validation)
     validation.note(f"Checked {len(parsed)} HTML pages, {len(public_refs)} local references, and {EXPECTED_SEARCH_ROW_COUNT} search rows.")
 
     if public_base:
         check_public_site(build_dir, public_base, public_refs, validation, timeout)
+        if require_complete_audio:
+            check_public_audio_assets(public_base, public_audio_paths, validation, timeout)
         validation.note(f"Checked public host: {public_base.rstrip('/')}")
     return validation
 
@@ -686,10 +994,20 @@ def cli_main() -> int:
     parser.add_argument("--build-dir", default=str(DEFAULT_BUILD_DIR), help="Built site directory to validate.")
     parser.add_argument("--public-base", default="", help="Optional public base URL to verify with HTTP requests.")
     parser.add_argument("--timeout", type=float, default=15.0, help="Per-request timeout for public HTTP checks.")
+    parser.add_argument(
+        "--require-complete-audio",
+        action="store_true",
+        help="Require all 52 track MP3s plus the generated complete audiobook and release UI.",
+    )
     args = parser.parse_args()
 
     build_dir = Path(args.build_dir).resolve()
-    validation = run_validation(build_dir, args.public_base.strip() or None, args.timeout)
+    validation = run_validation(
+        build_dir,
+        args.public_base.strip() or None,
+        args.timeout,
+        require_complete_audio=args.require_complete_audio,
+    )
 
     for note in validation.notes:
         print(f"NOTE: {note}")

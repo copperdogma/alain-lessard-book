@@ -82,7 +82,7 @@ searchable, and navigable outside the PDF.
 The chosen site stack should support chapter reading, indexes, source downloads,
 and companion archive materials.
 
-### C4 Website is live; reviewed audio is still pending
+### C4 Website and audiobook are live and verified
 
 - Ideal: cleaned scans and OCR feed a structured, public, Onward-style book site
 - Constraint: the static site is generated from the accepted `doc-web`
@@ -91,13 +91,29 @@ and companion archive materials.
   uploaded over the Onward DreamHost SFTP path
 - Constraint: DreamHost assigned this hosted subdomain to origin
   `173.236.136.184`, not the older Onward origin IP
-- Limitation: the public site currently contains generated audio scripts but no
-  reviewed narrated MP3 files
-- Limitation type: production readiness
-- Evolution signal: reviewed audio files are generated and published where
-  narration is useful
+- Constraint: all 52 reviewed chapter MP3s and the generated 9:00:14 complete
+  audiobook exist locally; the strict static bundle now exposes native players,
+  direct downloads, semantic reading-section mappings, and local resume
+  behavior
+- Constraint: the main-book reader derives 57 meaningful sections from the 39
+  canonical `doc-web` entries: 49 narrative sections aligned one-to-one with
+  tracks 02–50 plus 8 named reference sections. All 1,737 source block ids are
+  retained exactly once, while legacy printed-page URLs redirect into the new
+  section routes
+- Constraint: the audio-enabled bundle was deployed to DreamHost on 2026-07-16;
+  all 53 MP3 paths passed public HTTPS, `audio/mpeg`, positive-length, and `206`
+  byte-range verification through Cloudflare
+- Constraint: production closeout verified native playback, saved-position
+  resume, single-player behavior, MP3 download, and the native player/source/
+  download fallback with JavaScript disabled
+- Limitation: future hosting, CDN, or browser changes could regress byte-range
+  delivery or native media behavior after this verified release
+- Limitation type: operational durability
+- Evolution signal: rerun strict public validation and the focused browser smoke
+  after future audiobook or hosting changes
 - Residual form: keep the static generator, deploy helper, and infrastructure
-  note; delete only temporary DNS workaround notes
+  note plus the canonical audio manifest/full-book builder; delete only
+  temporary DNS workaround notes
 
 ## spec:5 Planning Infrastructure
 

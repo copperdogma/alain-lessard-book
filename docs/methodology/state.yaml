@@ -11,29 +11,24 @@
     "spec:1": { "substrate": "exists", "last_reviewed": "2026-07-02" },
     "spec:2": { "substrate": "exists", "last_reviewed": "2026-07-02" },
     "spec:3": { "substrate": "exists", "last_reviewed": "2026-07-02" },
-    "spec:4": { "substrate": "exists", "last_reviewed": "2026-07-02" },
+    "spec:4": { "substrate": "exists", "last_reviewed": "2026-07-16" },
     "spec:5": { "substrate": "exists", "last_reviewed": "2026-07-02" }
   },
   "compromises": {
     "C1": { "phase": "hold", "last_reviewed": "2026-07-02" },
     "C2": { "phase": "hold", "last_reviewed": "2026-07-01" },
     "C3": { "phase": "hold", "last_reviewed": "2026-07-01" },
-    "C4": { "phase": "hold", "last_reviewed": "2026-07-02" },
+    "C4": { "phase": "hold", "last_reviewed": "2026-07-16" },
     "B1": { "phase": "hold", "last_reviewed": "2026-07-01" }
   },
   "coverage_matrix": {
     "path": "tests/fixtures/formats/_coverage-matrix.json",
-    "last_reviewed": "2026-07-02",
-    "notes": "Canonical machine-readable inventory of source scans, doc-web bundle, generated site, audio-script, and PDF artifact surfaces."
+    "last_reviewed": "2026-07-16",
+    "notes": "Canonical machine-readable inventory of source scans, doc-web bundle, 57 semantic reading sections, generated site, audio scripts, reviewed chapter MP3s, complete audiobook, and PDF artifact surfaces."
   },
   "roadmap": {
     "active_focus": [],
-    "sequencing_bias": [
-      {
-        "target": "campaign:reviewed-audio-files",
-          "reason": "The main-book PDF, doc-web website path, public deployment, and complete supplemental source set are established; reviewed audio MP3 files are not yet present."
-      }
-    ],
+    "sequencing_bias": [],
     "campaigns": [
       {
         "id": "main-book-pdf",
@@ -64,6 +59,14 @@
         "status": "done",
         "story_refs": [],
         "notes": "The complete known companion set is present under `input/raw scans/Alain's Song/` and `input/raw scans/Growing Up on the Farm/`; generated searchable PDFs and archive/search entries are now part of the normal build surface."
+      },
+      {
+        "id": "reviewed-audio-files",
+        "status": "done",
+        "story_refs": [
+          "story-004-publish-complete-on-site-audiobook"
+        ],
+        "notes": "The 52 reviewed MP3s, canonical v4 manifest, generated 9:00:14 complete audiobook, 57-section semantic reader, one Read target per applicable track, and compact listening bars are deployed. All 53 public audio paths passed HTTPS MIME, positive-length, and byte-range verification on 2026-07-16; production playback, resume, single-player, download, and no-JavaScript behavior also passed closeout validation."
       }
     ]
   },
@@ -72,7 +75,7 @@
       {
         "id": "recommended-order",
         "title": "Recommended Order",
-        "markdown": "Current priority: generate reviewed audio files when ready. The complete known supplemental scan set is inventoried and included in the archive surface."
+        "markdown": "Story 004 is complete; no active story is currently selected."
       }
     ],
     "uncategorized_label": "Legacy / Uncategorized Stories"

@@ -23,6 +23,7 @@ from scripts.build_family_site import (  # noqa: E402
     ordered_entries,
     read_article_html,
 )
+from scripts.audiobook import AudiobookManifestError, SCHEMA_VERSION, probe_audio_file  # noqa: E402
 
 
 DEFAULT_OUTPUT_DIR = ROOT / "audiobook" / "script"
@@ -32,7 +33,11 @@ VOICE = {
     "provider": "ElevenLabs",
     "name": "Matilda",
     "voice_id": "XrExE9yKIg1WjnnlVkGX",
+    "model": "Eleven Multilingual v2",
 }
+FULL_AUDIOBOOK_PATH = "generated/alain-lessard-complete-audiobook.mp3"
+FULL_AUDIOBOOK_PUBLIC_PATH = "audiobook/alain-lessard-complete-audiobook.mp3"
+FULL_AUDIOBOOK_PAUSE_SECONDS = 2.0
 
 BLOCK_TAG_PATTERN = re.compile(r"^<([a-z0-9]+)\b", re.IGNORECASE)
 BLOCK_PATTERN = re.compile(r"<(?P<tag>h[1-6]|p|li)\b[^>]*>.*?</(?P=tag)>", re.IGNORECASE | re.DOTALL)
@@ -754,7 +759,41 @@ def write_track(output_dir: Path, index: int, title: str, markdown: str, html_tr
     )
 
 
+def read_existing_manifest() -> dict[str, object]:
+    if not MANIFEST_PATH.is_file():
+        return {}
+    try:
+        payload = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def configured_duration(path: Path, previous_value: object = None) -> float | None:
+    if path.is_file():
+        try:
+            return round(probe_audio_file(path).duration_seconds, 3)
+        except AudiobookManifestError as exc:
+            raise SystemExit(f"Could not probe reviewed audiobook file {path}: {exc}") from exc
+    if isinstance(previous_value, (int, float)) and float(previous_value) >= 0:
+        return float(previous_value)
+    return None
+
+
+def target_entry_ids(source_ids: tuple[str, ...]) -> list[str]:
+    return [source_id for source_id in source_ids if not source_id.startswith("manual:")]
+
+
 def build(output_dir: Path) -> None:
+    existing_manifest = read_existing_manifest()
+    existing_tracks = {
+        (row.get("track_number"), row.get("script_path")): row
+        for row in existing_manifest.get("tracks", [])
+        if isinstance(row, dict)
+    }
+    existing_full = existing_manifest.get("full_audiobook")
+    if not isinstance(existing_full, dict):
+        existing_full = {}
     output_dir.mkdir(parents=True, exist_ok=True)
     for old in output_dir.glob("*.md"):
         old.unlink()
@@ -776,27 +815,58 @@ def build(output_dir: Path) -> None:
         manifest_tracks.append(write_track(output_dir, index, html_track.title, markdown, html_track))
 
     MANIFEST_PATH.parent.mkdir(parents=True, exist_ok=True)
+    manifest_track_rows = []
+    for index, track in enumerate(manifest_tracks, start=1):
+        script_path = f"script/{track.filename}"
+        audio_path = f"script/{Path(track.filename).stem}.mp3"
+        previous = existing_tracks.get((index, script_path), {})
+        manifest_track_rows.append(
+            {
+                "track_number": index,
+                "title": track.title,
+                "script_path": script_path,
+                "audio_path": audio_path,
+                "public_audio_path": f"audiobook/tracks/{Path(track.filename).stem}.mp3",
+                "source_ids": list(track.source_ids),
+                "target_entry_ids": target_entry_ids(track.source_ids),
+                "source_label": track.source_label,
+                "word_count": track.word_count,
+                "status": "audio-reviewed",
+                "duration_seconds": configured_duration(
+                    MANIFEST_PATH.parent / audio_path,
+                    previous.get("duration_seconds") if isinstance(previous, dict) else None,
+                ),
+            }
+        )
+    full_audio_source = MANIFEST_PATH.parent / FULL_AUDIOBOOK_PATH
     MANIFEST_PATH.write_text(
         json.dumps(
             {
-                "schema_version": "alain_lessard_audiobook_manifest_v3",
+                "schema_version": SCHEMA_VERSION,
                 "title": "Alain Lessard Audio Companion",
                 "mode": "onward-style-narrative-audio",
+                "expected_track_count": len(manifest_track_rows),
+                "audio_profile": {
+                    "codec": "mp3",
+                    "sample_rate_hz": 44100,
+                    "channels": 1,
+                },
                 "preferred_voice": VOICE,
-                "note": "Scripts are clean Markdown chapters prepared for recording; tables, genealogy lists, personal records, recipes, bibliography, and source lists remain in the readable archive.",
-                "tracks": [
-                    {
-                        "track_number": index,
-                        "title": track.title,
-                        "script_path": f"script/{track.filename}",
-                        "source_ids": list(track.source_ids),
-                        "source_label": track.source_label,
-                        "word_count": track.word_count,
-                        "status": "script-ready",
-                        "audio_path": None,
-                    }
-                    for index, track in enumerate(manifest_tracks, start=1)
-                ],
+                "note": "The reviewed listening edition includes narrative family history, stories, poems, memories, obituaries, and the two companion documents. Tables, genealogy lists, personal records, recipes, bibliography, and source lists remain in the readable archive.",
+                "full_audiobook": {
+                    "title": "Alain Lessard: Complete Audiobook",
+                    "audio_path": FULL_AUDIOBOOK_PATH,
+                    "public_audio_path": FULL_AUDIOBOOK_PUBLIC_PATH,
+                    "silence_between_tracks_seconds": FULL_AUDIOBOOK_PAUSE_SECONDS,
+                    "album": "Alain Lessard",
+                    "artist": "The Alain and Lessard Families",
+                    "narrator": "Matilda (ElevenLabs Multilingual v2)",
+                    "duration_seconds": configured_duration(
+                        full_audio_source,
+                        existing_full.get("duration_seconds"),
+                    ),
+                },
+                "tracks": manifest_track_rows,
                 "skipped_entries": skipped_entries,
             },
             indent=2,
@@ -807,12 +877,15 @@ def build(output_dir: Path) -> None:
     )
     README_PATH.write_text(
         "# Alain Lessard Audio Companion\n\n"
-        "This folder contains final Onward-style Markdown scripts prepared for recording in ElevenLabs using the voice "
-        "\"Matilda\" (voiceId: XrExE9yKIg1WjnnlVkGX).\n\n"
+        "This folder contains final Onward-style Markdown scripts and reviewed MP3 tracks generated with ElevenLabs "
+        "Multilingual v2 using the voice \"Matilda\" (voiceId: XrExE9yKIg1WjnnlVkGX).\n\n"
         "Each script is a clean recording chapter. The scripts include narrative family history, stories, poems, memories, "
         "obituaries, and the two companion documents found with the book. Genealogy tables, personal-record forms, recipes, "
         "bibliography, and source lists remain in the readable website and PDFs instead of being narrated.\n\n"
-        "When reviewed MP3 files are ready, add their public paths to `manifest.json` and rebuild the site.\n",
+        "The reviewed chapter MP3s stay beside these scripts as ignored local media. `manifest.json` records their source and "
+        "public paths, durations, reading-page mappings, and complete-audiobook settings.\n\n"
+        "Run `make build-full-audiobook` to create the complete listening file, `make validate-audiobook` to probe/hash/decode "
+        "the whole set, and `make build-family-site RELEASE=1` plus `make validate-family-site RELEASE=1` before deployment.\n",
         encoding="utf-8",
     )
     print(f"built audiobook scripts: {output_dir}")

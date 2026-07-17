@@ -4,11 +4,12 @@ SCAN_INPUT ?= input/raw scans/main book
 SCAN_INTAKE_OUTPUT ?= output/intake
 FAMILY_SITE_OUTPUT ?= build/family-site
 AUDIOBOOK_SCRIPT_OUTPUT ?= audiobook/script
+AUDIOBOOK_MANIFEST ?= audiobook/manifest.json
 DOC_WEB_RUN_ID ?= alain-lessard-book-r1
 DOC_WEB_SNAPSHOT_ID ?= $(DOC_WEB_RUN_ID)
 PUBLIC_BASE ?=
 
-.PHONY: skills-sync skills-check methodology-compile methodology-check scan-intake-report process-scans build-image-pdf ocr-pdf archival-image-pdf archival-pdf scan-pdf-all supplemental-docs validate-supplemental-docs render-supplemental-pdf-checks doc-web-contract doc-web-run doc-web-import-run doc-web-validate-active companion-doc-web validate-companion-doc-web build-audiobook-script build-family-site validate-family-site deploy-static render-pdf-checks validate-pdf
+.PHONY: skills-sync skills-check methodology-compile methodology-check scan-intake-report process-scans build-image-pdf ocr-pdf archival-image-pdf archival-pdf scan-pdf-all supplemental-docs validate-supplemental-docs render-supplemental-pdf-checks doc-web-contract doc-web-run doc-web-import-run doc-web-validate-active companion-doc-web validate-companion-doc-web test-audiobook build-audiobook-script inspect-audiobook validate-audiobook build-full-audiobook build-family-site validate-family-site validate-family-site-release deploy-deps deploy-static render-pdf-checks validate-pdf
 
 skills-sync:
 	./scripts/sync-agent-skills.sh
@@ -69,16 +70,38 @@ companion-doc-web: supplemental-docs
 validate-companion-doc-web:
 	$(PYTHON) scripts/build_supplemental_doc_web.py validate
 
+test-audiobook:
+	$(PYTHON) -m unittest discover -s tests -p 'test_audiobook*.py'
+	$(PYTHON) -m unittest discover -s tests -p 'test_build_full_audiobook.py'
+
 build-audiobook-script:
 	$(PYTHON) scripts/build_audiobook_script.py --output "$(AUDIOBOOK_SCRIPT_OUTPUT)"
 
+inspect-audiobook:
+	$(PYTHON) scripts/audiobook.py inspect --manifest "$(AUDIOBOOK_MANIFEST)"
+
+validate-audiobook:
+	$(PYTHON) scripts/audiobook.py validate --manifest "$(AUDIOBOOK_MANIFEST)" --release --decode
+
+build-full-audiobook: build-audiobook-script
+	$(PYTHON) scripts/build_full_audiobook.py \
+		--manifest "$(AUDIOBOOK_MANIFEST)" \
+		$(if $(OUTPUT),--output "$(OUTPUT)",) \
+		$(if $(FORCE),--force,)
+
 build-family-site: build-audiobook-script supplemental-docs
-	$(PYTHON) scripts/build_family_site.py --output "$(FAMILY_SITE_OUTPUT)"
+	$(PYTHON) scripts/build_family_site.py --output "$(FAMILY_SITE_OUTPUT)" $(if $(RELEASE),--require-complete-audio,)
 
 validate-family-site:
-	$(PYTHON) scripts/validate_family_site.py --build-dir "$(FAMILY_SITE_OUTPUT)" $(if $(PUBLIC_BASE),--public-base "$(PUBLIC_BASE)",)
+	$(PYTHON) scripts/validate_family_site.py --build-dir "$(FAMILY_SITE_OUTPUT)" $(if $(PUBLIC_BASE),--public-base "$(PUBLIC_BASE)",) $(if $(RELEASE),--require-complete-audio,)
 
-deploy-static:
+validate-family-site-release:
+	$(PYTHON) scripts/validate_family_site.py --build-dir "$(FAMILY_SITE_OUTPUT)" --require-complete-audio $(if $(PUBLIC_BASE),--public-base "$(PUBLIC_BASE)",)
+
+deploy-deps:
+	$(PYTHON) -m pip install -r requirements-deploy.txt
+
+deploy-static: validate-family-site-release
 	$(PYTHON) scripts/deploy_static_site.py --source "$(FAMILY_SITE_OUTPUT)"
 
 render-pdf-checks:
