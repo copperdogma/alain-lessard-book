@@ -13,6 +13,8 @@ tmp/
 output/processed-pages/
 output/supplemental-documents/
 output/pdf/
+output/portable/
 audiobook/**/*.mp3
+audiobook/**/*.m4b
 audiobook/ElevenLabs_*/
 .env

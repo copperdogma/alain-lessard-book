@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_reviewed": "2026-07-16",
+  "last_reviewed": "2026-07-17",
   "sources": [
     {
       "id": "main-book-raw-scans",
@@ -96,9 +96,25 @@
       "id": "complete-audiobook",
       "path": "audiobook/generated/alain-lessard-complete-audiobook.mp3",
       "format": "manifest-ordered-mono-mp3",
-      "status": "generated-local",
+      "status": "deployed",
       "observed_count": 1,
       "notes": "9:00:14 complete audiobook generated from the 52 reviewed tracks with 51 two-second pauses."
+    },
+    {
+      "id": "portable-epub-edition",
+      "path": "output/portable/alain-lessard-family-history.epub",
+      "format": "epub-3.3-reflowable",
+      "status": "generated-local",
+      "observed_count": 1,
+      "notes": "90.0 MiB DRM-free EPUB built from 57 semantic main-book sections plus 2 companion documents, preserving all 1,737 main-book source block ids and 156 local image references. Repo validation and EPUBCheck 5.3.0 pass with zero messages; Apple Books and epub.js rendering passed on 2026-07-17."
+    },
+    {
+      "id": "chaptered-audiobook",
+      "path": "audiobook/generated/alain-lessard-complete-audiobook.m4b",
+      "format": "m4b-aac-lc-mono-with-cover-and-chapters",
+      "status": "generated-local",
+      "observed_count": 1,
+      "notes": "9:00:14, 257.5 MiB M4B generated in one AAC-LC pass from the 52 reviewed tracks with 51 two-second pauses, embedded cover/metadata, and exactly 52 named chapters. Probe, boundary, representative decode/comparison, Apple Books import, chapter navigation, and playback checks pass."
     },
     {
       "id": "family-site-audiobook-assets",
@@ -107,6 +123,14 @@
       "status": "deployed",
       "observed_count": 53,
       "notes": "Strict release bundle containing 52 individual tracks plus the complete audiobook, deployed to alain-lessard.copper-dog.com on 2026-07-16; all 53 public paths passed audio/mpeg, positive-length, and 206 byte-range checks."
+    },
+    {
+      "id": "family-site-portable-assets",
+      "path": "build/family-site/{downloads/alain-lessard-family-history.epub,audiobook/alain-lessard-complete-audiobook.m4b}",
+      "format": "static-site-epub-and-m4b-assets",
+      "status": "deployed",
+      "observed_count": 2,
+      "notes": "Deployed to alain-lessard.copper-dog.com on 2026-07-17 with direct no-JavaScript downloads, reading-apps.html guidance, and explicit EPUB/M4B MIME mappings. Strict public validation passed the declared MIME types, exact local lengths, and 206 byte ranges for both files."
     }
   ]
 }

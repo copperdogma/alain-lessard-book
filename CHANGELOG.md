@@ -1,5 +1,35 @@
 # Changelog
 
+## [2026-07-17-01] - Add portable reader and chaptered audiobook editions (Story 005)
+
+### Added
+- Added a deterministic EPUB 3 builder/validator that reuses the 57-section
+  semantic reader, includes both companion documents and all referenced images,
+  preserves all 1,737 main-book source block ids, and passes EPUBCheck 5.3.0
+  with zero messages.
+- Added a manifest-driven M4B builder/validator that encodes the 52 reviewed
+  recordings once as mono AAC-LC, inserts the configured pauses, embeds a cover
+  and publication metadata, and exposes exactly 52 named chapters.
+- Added direct EPUB/M4B downloads, a plain-language Apple/Kindle/Kobo/Google/
+  audiobook-app help page, strict release gates, MIME mappings, focused tests,
+  and public binary verification.
+
+### Changed
+- Extended the static release bundle beyond PDF/MP3 delivery while keeping the
+  website reader, searchable PDFs, complete MP3, and individual MP3s as
+  fallbacks.
+- Centralized portable publication metadata, filenames, format settings, size
+  limits, and public paths in `portable/manifest.json`.
+- Deployed the EPUB/M4B/device-help release to DreamHost; strict production
+  validation passed all pages/references, all 53 MP3s, and both portable files
+  with correct MIME, exact lengths, and `206` ranges, followed by clean
+  desktop/mobile browser smoke tests.
+
+### Fixed
+- Made the SFTP deploy helper require a real zero child exit so DNS,
+  connection, nonzero, or unknown-exit failures cannot be reported as a
+  successful publish; added focused regression tests.
+
 ## [2026-07-16-02] - Build and publish the complete on-site audiobook (Story 004)
 
 ### Added

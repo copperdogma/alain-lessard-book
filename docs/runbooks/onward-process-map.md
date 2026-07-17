@@ -51,6 +51,11 @@ are downstream of the scan-to-PDF phase.
 8. Complete local audiobook:
    `audiobook/generated/alain-lessard-complete-audiobook.mp3`
 9. Published media paths: `build/family-site/audiobook/`
+10. Portable reading edition:
+    `output/portable/alain-lessard-family-history.epub`
+11. Chaptered audiobook:
+    `audiobook/generated/alain-lessard-complete-audiobook.m4b`
+12. Portable format contract: `portable/manifest.json`
 
 ## Current `doc-web` Treatment
 
@@ -88,3 +93,33 @@ make validate-family-site RELEASE=1 PUBLIC_BASE=https://alain-lessard.copper-dog
 
 That public check verifies page/link coverage plus MP3 MIME types, content
 lengths, and representative `206` byte-range responses.
+
+## Portable Reader And Listener Editions
+
+The Alain project extends the Onward website/MP3 pattern with two deterministic
+derivatives rather than a storefront or podcast feed:
+
+- `scripts/portable_editions.py` consumes the same 57-section reading catalog,
+  accepted companion HTML, and referenced images as the site to build EPUB 3;
+- `scripts/build_m4b.py` consumes the same 52-track audio manifest as the
+  complete MP3 builder to produce an AAC-LC M4B with named chapters;
+- `portable/manifest.json` is the only hand-maintained filename, metadata,
+  format, and public-path contract for both artifacts;
+- `make build-portable-editions RELEASE=1` builds the EPUB/M4B and strict site
+  bundle, while `make validate-portable-editions` checks both formats;
+- the site publishes literal downloads and short Apple Books, Kindle, Kobo,
+  Google Play Books, and audiobook-app instructions without claiming a
+  universal one-click install.
+
+Both generated binaries are ignored local artifacts. Deployment still uses
+the normal `build/family-site/` boundary. The 2026-07-17 release proved the
+EPUB/M4B MIME types, exact lengths, and byte-range behavior publicly. The
+deploy helper now requires an actual zero SFTP child exit after a sandboxed DNS
+failure exposed the danger of accepting EOF/unknown status as success; the
+strict public validator remains the authoritative release proof.
+
+For the complete Onward adaptation sequence—including canonical inventory,
+contracts, fixture gates, real reader/app checks, deployment preflight, public
+HTTP proof, mobile/desktop smoke, and closeout truth—reuse the numbered
+`Reusable Onward Handoff Checklist` in Story 005 and substitute Onward's own
+counts, manifests, bundle path, and public host.

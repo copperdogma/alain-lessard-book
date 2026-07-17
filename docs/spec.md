@@ -106,14 +106,28 @@ and companion archive materials.
 - Constraint: production closeout verified native playback, saved-position
   resume, single-player behavior, MP3 download, and the native player/source/
   download fallback with JavaScript disabled
+- Constraint: the maintained portable-edition contract now builds a 90.0 MiB
+  EPUB 3 from all 57 semantic sections plus both companion documents and a
+  257.5 MiB AAC-LC M4B with the 52 reviewed recordings as named chapters;
+  strict local site build/validation requires and links both files
+- Constraint: the local EPUB passes EPUBCheck 5.3.0 with zero messages and was
+  rendered in Apple Books and epub.js; the M4B was imported, chapter-inspected,
+  and played in Apple Books
+- Constraint: the EPUB/M4B bundle was deployed on 2026-07-17; strict public
+  validation passed 103 HTML pages, 401 local references, 59 search rows, all
+  53 MP3s, and both portable files with correct MIME, exact length, and `206`
+  byte ranges, while desktop/mobile UI and browser logs also passed
+- Constraint: the SFTP helper waits for a real zero child exit and treats
+  nonzero or unknown exit status as failure; the public HTTPS gate remains the
+  authoritative deployment proof
 - Limitation: future hosting, CDN, or browser changes could regress byte-range
   delivery or native media behavior after this verified release
 - Limitation type: operational durability
-- Evolution signal: rerun strict public validation and the focused browser smoke
-  after future audiobook or hosting changes
+- Evolution signal: rerun strict public validation and the focused browser
+  smoke after future publication or hosting changes
 - Residual form: keep the static generator, deploy helper, and infrastructure
-  note plus the canonical audio manifest/full-book builder; delete only
-  temporary DNS workaround notes
+  note plus the canonical audio/portable manifests and focused builders; delete
+  only temporary renderer and DNS workaround files
 
 ## spec:5 Planning Infrastructure
 

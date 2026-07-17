@@ -36,6 +36,14 @@ from scripts.reading_sections import (  # noqa: E402
     ReadingSource,
     build_reading_catalog,
 )
+from scripts.portable_editions import (  # noqa: E402
+    PortableCatalog,
+    PortableEditionError,
+    copy_portable_artifacts,
+    load_portable_catalog,
+    validate_epub,
+)
+from scripts.build_m4b import validate_m4b  # noqa: E402
 
 ACTIVE_BUNDLE_PATH = ROOT / "input" / "doc-web-html" / "active-bundle.json"
 PROCESSED_DIR = ROOT / "output" / "processed-pages"
@@ -46,12 +54,13 @@ SUPPLEMENTAL_MANIFEST_PATH = ROOT / "output" / "supplemental-documents" / "manif
 COMPANION_DOC_WEB_MANIFEST_PATH = ROOT / "input" / "doc-web-html" / "companion-documents" / "manifest.json"
 DEFAULT_OUTPUT_DIR = ROOT / "build" / "family-site"
 AUDIOBOOK_MANIFEST_PATH = ROOT / "audiobook" / "manifest.json"
+PORTABLE_MANIFEST_PATH = ROOT / "portable" / "manifest.json"
 
 SITE_TITLE = "Alain Lessard"
 SITE_SUBTITLE = "Our First Ancestors and A Compilation of Stories of Their Descendants"
 PUBLIC_HOST = "https://alain-lessard.copper-dog.com"
 BOOK_YEAR = "1987"
-SITE_ASSET_VERSION = "20260716-semantic-reader-r2"
+SITE_ASSET_VERSION = "20260717-portable-editions-r1"
 COMPANION_CONTEXT_NOTE = "This document was not part of the main book; it was found tucked inside it."
 AUDIOBOOK_ICON_SVG = (
     '<svg class="listen-icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">'
@@ -690,12 +699,108 @@ def home_feature_sections(reading_catalog: ReadingCatalog) -> list[ReadingSectio
     return [section for section in reading_catalog.sections if section.kind == "narrative"][:6]
 
 
+def portable_artifact_action(
+    artifact,
+    label: str,
+    *,
+    primary: bool = False,
+) -> str:
+    if not artifact.is_available:
+        return f'<span class="button disabled">{escape(label)} unavailable in this preview</span>'
+    size = format_file_size(artifact.output_path.stat().st_size)
+    classes = "button primary" if primary else "button"
+    return (
+        f'<a class="{classes}" href="{escape(artifact.public_path)}" download>'
+        f'{escape(label)} <span class="button-meta">{escape(size)}</span></a>'
+    )
+
+
+def require_portable_artifacts(catalog: PortableCatalog) -> None:
+    missing = [
+        artifact.output_path
+        for artifact in (catalog.epub, catalog.m4b)
+        if not artifact.is_available
+    ]
+    if missing:
+        raise SystemExit(
+            "Release-ready family-site build requires portable editions:\n"
+            + "\n".join(f"- {path}" for path in missing)
+        )
+
+
+def render_portable_handoff(catalog: PortableCatalog, *, compact: bool = False) -> str:
+    heading = "Take the book with you" if compact else "Read or listen in another app"
+    return f"""<section class="portable-handoff{' compact' if compact else ''}">
+  <div class="portable-copy">
+    <p class="eyebrow">For eReaders, phones, and tablets</p>
+    <h2>{heading}</h2>
+    <p>Use the EPUB in an eReader or the chaptered M4B in a compatible audiobook app. Your device will ask where to save or open the file.</p>
+  </div>
+  <div class="portable-actions">
+    {portable_artifact_action(catalog.epub, "Download eReader edition (EPUB)", primary=True)}
+    {portable_artifact_action(catalog.m4b, "Download chaptered audiobook (M4B)")}
+    <a class="button" href="reading-apps.html">Help for my device</a>
+  </div>
+</section>"""
+
+
+def render_reading_apps(
+    portable_catalog: PortableCatalog,
+    audiobook_catalog: AudiobookCatalog,
+) -> str:
+    full = audiobook_catalog.full_audiobook
+    mp3_action = (
+        f'<a class="button" href="{escape(full.public_audio_path)}" download>Download audiobook as MP3</a>'
+        if full.is_available
+        else '<span class="button disabled">MP3 unavailable in this preview</span>'
+    )
+    body = f"""
+    <section class="page-title device-help-title">
+      <p class="eyebrow">Use the reader or listener you already know</p>
+      <h1>Read or listen on your device</h1>
+      <p>There is no single button that can place a family file into every app. Download the book first, then follow the short instructions for your device. The website remains available if you prefer not to install anything.</p>
+    </section>
+    {render_portable_handoff(portable_catalog)}
+    <section class="device-help-grid">
+      <article id="apple-books">
+        <h2>Apple Books</h2>
+        <ol><li>Download the EPUB.</li><li>Choose <strong>Open in Books</strong>, or use the Share button and choose Books.</li></ol>
+        <p>For the audiobook, download the M4B and open it in a compatible audiobook app. On a Mac, Books can also import audiobook files.</p>
+      </article>
+      <article id="kindle">
+        <h2>Kindle</h2>
+        <ol><li>Download the EPUB.</li><li>Open Amazon's <a href="https://www.amazon.com/sendtokindle" rel="external">Send to Kindle</a> page or app and choose the downloaded file.</li><li>Amazon will deliver its Kindle copy to your library.</li></ol>
+      </article>
+      <article id="kobo">
+        <h2>Kobo</h2>
+        <ol><li>Download the EPUB to a computer.</li><li>Connect the Kobo with its USB cable.</li><li>Copy the EPUB onto the Kobo, then safely eject it.</li></ol>
+        <p>Some newer Kobo models can also import EPUB files from Google Drive or Dropbox.</p>
+      </article>
+      <article id="google-play-books">
+        <h2>Google Play Books</h2>
+        <ol><li>Download the EPUB.</li><li>On Android, open the downloaded file with Play Books. On a computer, upload it to your Play Books library.</li><li>It will then be available on devices signed into that Google account.</li></ol>
+      </article>
+      <article id="audiobook-apps">
+        <h2>Other audiobook apps</h2>
+        <p>The M4B is one book with 52 named chapters and is the best choice for compatible audiobook apps. If your app does not accept M4B, use the complete MP3 instead.</p>
+        <div class="card-actions">{portable_artifact_action(portable_catalog.m4b, "Download M4B", primary=True)}{mp3_action}</div>
+      </article>
+      <article id="website-option">
+        <h2>No download needed</h2>
+        <p>You can always <a href="book.html">read on this website</a> or <a href="audiobook.html">listen in the browser</a>. No app or account is required.</p>
+      </article>
+    </section>
+"""
+    return html_page("Read or listen on your device", body)
+
+
 def render_home(
     bundle: Bundle,
     entries: list[Entry],
     reading_catalog: ReadingCatalog,
     supplemental_documents: list[SupplementalSiteDocument],
     audiobook_catalog: AudiobookCatalog,
+    portable_catalog: PortableCatalog,
 ) -> str:
     feature_cards = "\n".join(render_reading_card(section) for section in home_feature_sections(reading_catalog))
     supplemental_cards = render_supplemental_cards(supplemental_documents)
@@ -755,6 +860,8 @@ def render_home(
       </div>
       <div class="cards">{feature_cards}</div>
     </section>
+
+    {render_portable_handoff(portable_catalog, compact=True)}
 
     {supplemental_section}
 """
@@ -843,13 +950,14 @@ def build_semantic_book_parts(reading_catalog: ReadingCatalog) -> list[BookPart]
     return parts
 
 
-def render_book(reading_catalog: ReadingCatalog) -> str:
+def render_book(reading_catalog: ReadingCatalog, portable_catalog: PortableCatalog) -> str:
     parts = build_semantic_book_parts(reading_catalog)
     body = f"""
     <section class="page-title">
       <h1>Read the Book</h1>
       <p>Search the text or browse the book by family-history section. Photographs, captions, tables, and reference material remain with the stories they belong to.</p>
     </section>
+    {render_portable_handoff(portable_catalog, compact=True)}
     <section class="book-tools">
       <label class="search-label" for="site-search">Search the book</label>
       <input id="site-search" class="search-input" type="search" placeholder="Search names, places, stories">
@@ -1232,6 +1340,7 @@ def render_entry_audio_section(tracks: Iterable[AudiobookTrack]) -> str:
 def render_audiobook(
     catalog: AudiobookCatalog,
     reading_links: dict[int, tuple[str, str]],
+    portable_catalog: PortableCatalog | None = None,
 ) -> str:
     track_rows = []
     for track in catalog.tracks:
@@ -1251,6 +1360,12 @@ def render_audiobook(
         if full.is_available
         else ""
     )
+    chaptered_download = (
+        portable_artifact_action(portable_catalog.m4b, "Download with chapters (M4B)")
+        if portable_catalog
+        else ""
+    )
+    portable_handoff = render_portable_handoff(portable_catalog, compact=True) if portable_catalog else ""
     full_size = format_file_size(full.probe.size_bytes) if full.probe else ""
     full_meta = " · ".join(
         value
@@ -1272,7 +1387,7 @@ def render_audiobook(
   <p>Listen from beginning to end in one file, or download it for later.</p>
   {f'<p class="audio-runtime">{escape(full_meta)}</p>' if full_meta else ''}
   {full_player}
-  <div class="card-actions">{full_download}</div>
+  <div class="card-actions">{full_download}{chaptered_download}<a class="button" href="reading-apps.html">Help choosing a format</a></div>
   {full_unavailable}
 </section>"""
     skipped_counts: dict[str, int] = {}
@@ -1289,6 +1404,7 @@ def render_audiobook(
       <p class="audio-attribution">Narrated with the Matilda AI voice using ElevenLabs Multilingual v2. Tables, indexes, and dense records stay in the readable archive.</p>
     </section>
     {full_section}
+    {portable_handoff}
     <section class="section-list audio-track-list">
       <div class="section-heading">
         <h2>Individual recordings</h2>
@@ -1312,6 +1428,11 @@ def write_site_assets(output_dir: Path) -> None:
     (assets_dir / "site.css").write_text(SITE_CSS, encoding="utf-8")
     (assets_dir / "search.js").write_text(SEARCH_JS, encoding="utf-8")
     (assets_dir / "audio.js").write_text(AUDIO_JS, encoding="utf-8")
+    (output_dir / ".htaccess").write_text(
+        "AddType application/epub+zip .epub\n"
+        "AddType audio/mp4 .m4b\n",
+        encoding="utf-8",
+    )
 
 
 def write_scan_images(output_dir: Path) -> None:
@@ -1553,6 +1674,8 @@ def write_build_summary(
     audiobook_catalog: AudiobookCatalog,
     published_audio_count: int,
     published_audio_bytes: int,
+    published_portable_count: int,
+    published_portable_bytes: int,
 ) -> None:
     summary = {
         "schema_version": "alain_family_site_build_summary_v1",
@@ -1575,6 +1698,8 @@ def write_build_summary(
         "published_audio_file_count": published_audio_count,
         "published_audio_bytes": published_audio_bytes,
         "complete_audiobook_published": audiobook_catalog.full_audiobook.is_available,
+        "published_portable_file_count": published_portable_count,
+        "published_portable_bytes": published_portable_bytes,
         "public_host": PUBLIC_HOST,
     }
     internal_dir = output_dir / "_internal"
@@ -1588,14 +1713,27 @@ def build(output_dir: Path, *, require_complete_audio: bool = False) -> None:
     supplemental_documents = load_supplemental_documents()
     try:
         audiobook_catalog = load_audiobook_catalog(AUDIOBOOK_MANIFEST_PATH)
-    except AudiobookManifestError as exc:
-        raise SystemExit(f"Invalid audiobook manifest: {exc}") from exc
+        portable_catalog = load_portable_catalog(PORTABLE_MANIFEST_PATH)
+    except (AudiobookManifestError, PortableEditionError) as exc:
+        raise SystemExit(f"Invalid publication manifest: {exc}") from exc
     if require_complete_audio:
         validation = validate_audiobook_catalog(audiobook_catalog, release=True, decode=False)
         if validation.errors:
             raise SystemExit(
                 "Release-ready family-site build requires complete audiobook media:\n"
                 + "\n".join(f"- {error}" for error in validation.errors)
+            )
+        require_portable_artifacts(portable_catalog)
+        epub_validation = validate_epub(
+            portable_catalog.epub.output_path,
+            maximum_bytes=int(portable_catalog.epub.settings.get("maximum_bytes") or 0),
+        )
+        m4b_validation = validate_m4b(portable_catalog.m4b.output_path, audiobook_catalog, portable_catalog)
+        portable_errors = epub_validation.errors + m4b_validation.errors
+        if portable_errors:
+            raise SystemExit(
+                "Release-ready family-site build requires valid portable editions:\n"
+                + "\n".join(f"- {error}" for error in portable_errors)
             )
     reading_catalog = derive_site_reading_catalog(bundle, entries, audiobook_catalog)
     reading_links = audio_reading_links(reading_catalog, supplemental_documents, audiobook_catalog)
@@ -1618,19 +1756,24 @@ def build(output_dir: Path, *, require_complete_audio: bool = False) -> None:
     copy_supplemental_images(output_dir, supplemental_documents)
     copy_companion_doc_web_images(output_dir, supplemental_documents)
     copy_downloads(output_dir, supplemental_documents)
+    published_portable_count, published_portable_bytes = copy_portable_artifacts(portable_catalog, output_dir)
     copy_structured_data(bundle, output_dir)
     write_audio_scripts(output_dir)
     published_audio_count, published_audio_bytes = copy_audiobook_assets(audiobook_catalog, output_dir)
     write_reading_catalog(output_dir, reading_catalog)
 
     (output_dir / "index.html").write_text(
-        render_home(bundle, entries, reading_catalog, supplemental_documents, audiobook_catalog),
+        render_home(bundle, entries, reading_catalog, supplemental_documents, audiobook_catalog, portable_catalog),
         encoding="utf-8",
     )
-    (output_dir / "book.html").write_text(render_book(reading_catalog), encoding="utf-8")
+    (output_dir / "book.html").write_text(render_book(reading_catalog, portable_catalog), encoding="utf-8")
     (output_dir / "archive.html").write_text(render_archive(bundle, entries, supplemental_documents), encoding="utf-8")
     (output_dir / "audiobook.html").write_text(
-        render_audiobook(audiobook_catalog, reading_links),
+        render_audiobook(audiobook_catalog, reading_links, portable_catalog),
+        encoding="utf-8",
+    )
+    (output_dir / "reading-apps.html").write_text(
+        render_reading_apps(portable_catalog, audiobook_catalog),
         encoding="utf-8",
     )
     for document in supplemental_documents:
@@ -1666,12 +1809,15 @@ def build(output_dir: Path, *, require_complete_audio: bool = False) -> None:
         audiobook_catalog,
         published_audio_count,
         published_audio_bytes,
+        published_portable_count,
+        published_portable_bytes,
     )
     print(f"built family site: {output_dir}")
     print(f"source entries: {len(entries)}")
     print(f"reading sections: {len(reading_catalog.sections)}")
     print(f"supplemental documents: {len(supplemental_documents)}")
     print(f"published audio files: {published_audio_count}")
+    print(f"published portable files: {published_portable_count}")
 
 
 def cli_main() -> int:
@@ -1680,7 +1826,7 @@ def cli_main() -> int:
     parser.add_argument(
         "--require-complete-audio",
         action="store_true",
-        help="Fail unless all 52 tracks and the complete audiobook are present and valid.",
+        help="Fail unless all reviewed audio and portable EPUB/M4B release artifacts are present and valid.",
     )
     args = parser.parse_args()
     build(Path(args.output).resolve(), require_complete_audio=args.require_complete_audio)
@@ -2527,6 +2673,87 @@ img {
   white-space: nowrap;
 }
 
+.portable-handoff,
+.device-help-grid {
+  width: min(72rem, calc(100% - 2.8rem));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.portable-handoff {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 1fr);
+  align-items: center;
+  gap: 1.4rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  padding: 1.4rem;
+  color: #fff;
+  background: var(--deep);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.portable-handoff.compact {
+  margin-top: 0;
+  margin-bottom: 2.2rem;
+}
+
+.portable-handoff .eyebrow {
+  color: #f4cf72;
+}
+
+.portable-handoff h2,
+.portable-handoff p {
+  margin-top: 0;
+}
+
+.portable-handoff p:last-child {
+  margin-bottom: 0;
+  color: #eef4ef;
+}
+
+.portable-actions {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.portable-actions .button {
+  width: 100%;
+  justify-content: space-between;
+  gap: 1rem;
+  text-align: left;
+}
+
+.button-meta {
+  font-size: 0.78rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.device-help-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 0 0 3rem;
+}
+
+.device-help-grid article {
+  padding: 1.2rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.device-help-grid h2 {
+  margin-top: 0;
+}
+
+.device-help-grid li + li {
+  margin-top: 0.45rem;
+}
+
 .site-footer {
   padding: 2rem 1.4rem;
   color: var(--muted);
@@ -2559,7 +2786,9 @@ img {
     .part-links,
     .reader-shell,
     .companion-source-grid,
-    .audio-track-grid {
+    .audio-track-grid,
+    .portable-handoff,
+    .device-help-grid {
     grid-template-columns: 1fr;
   }
 

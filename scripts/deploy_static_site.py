@@ -260,8 +260,15 @@ def run_sftp(batch_text: str, host: str, username: str, password: str) -> str:
 
         tail = child.after if isinstance(child.after, str) else ""
         transcript = "".join(transcript_parts) + tail
-        if child.exitstatus not in (0, None) and child.exitstatus != 0:
-            raise SystemExit(f"SFTP exited with status {child.exitstatus}.\n{transcript}")
+        child.close()
+        if child.exitstatus != 0:
+            if child.exitstatus is not None:
+                status = str(child.exitstatus)
+            elif child.signalstatus is not None:
+                status = f"signal {child.signalstatus}"
+            else:
+                status = "unknown status"
+            raise SystemExit(f"SFTP exited with {status}.\n{transcript}")
         return transcript
     finally:
         try:

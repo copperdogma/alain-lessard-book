@@ -23,6 +23,9 @@ make test-audiobook
 make inspect-audiobook
 make build-full-audiobook
 make validate-audiobook
+make test-portable-editions
+make build-portable-editions RELEASE=1
+make validate-portable-editions EPUBCHECK=1 EPUBCHECK_JAR=/path/to/epubcheck.jar
 make build-family-site
 make build-family-site RELEASE=1
 make validate-family-site RELEASE=1
@@ -62,6 +65,15 @@ the configured two-second pause between tracks and preserving a 44.1 kHz mono
 speech profile. `make validate-audiobook` probes, hashes, and decodes all 52
 tracks plus the complete file.
 
+`make build-portable-editions RELEASE=1` builds two app-friendly derivatives
+from the same maintained contracts: a reflowable EPUB containing all 57 book
+sections and both companion documents, and a chaptered M4B containing the 52
+reviewed recordings. The tracked `portable/manifest.json` owns their metadata,
+generated paths, public paths, format settings, and expected counts. Run
+`make validate-portable-editions` for the built-in package/media checks; add
+`EPUBCHECK=1 EPUBCHECK_JAR=/path/to/epubcheck.jar` to run the official EPUBCheck
+jar as part of the maintained command.
+
 `make build-family-site` builds the static website bundle under
 `build/family-site/`, including 57 meaningful reading/reference sections derived
 from the `doc-web` source, figures, captions, tables, source scan links, search
@@ -69,7 +81,8 @@ data, PDF downloads, archive notes, the complete audiobook, individual track
 players/downloads, and compact listening bars on track-aligned sections. The
 reader does not expose printed-page routes as navigation; legacy page URLs
 redirect to their containing section. Use `RELEASE=1` to require all 53 MP3
-assets.
+assets plus the generated EPUB and M4B. The release bundle also publishes a
+plain-language device-help page and direct no-JavaScript download links.
 
 `make deploy-static` first runs strict audiobook bundle validation, then uploads
 `build/family-site/` to DreamHost using the gitignored local `.env`. The
@@ -103,6 +116,9 @@ Pipeline manifests and review images:
 - `audiobook/script/`
 - `audiobook/manifest.json`
 - `audiobook/generated/alain-lessard-complete-audiobook.mp3`
+- `audiobook/generated/alain-lessard-complete-audiobook.m4b`
+- `output/portable/alain-lessard-family-history.epub`
+- `portable/manifest.json`
 - `build/family-site/`
 
 ## `doc-web` Boundary
@@ -151,6 +167,10 @@ audio-enabled site bundle are established. The complete audiobook and all 52
 individual tracks were deployed and publicly range-verified on 2026-07-16. The
 production closeout also verified native playback, resume, single-player
 behavior, downloads, and the no-JavaScript fallback; Story 004 is complete.
+Story 005 adds EPUB 3 and chaptered M4B release artifacts plus the device-help
+website surface. Both files were deployed on 2026-07-17 and passed strict public
+MIME, exact-length, byte-range, desktop, and mobile verification; Story 005 is
+complete.
 
 ## Audiobook
 

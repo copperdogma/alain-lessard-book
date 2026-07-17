@@ -5,11 +5,13 @@ SCAN_INTAKE_OUTPUT ?= output/intake
 FAMILY_SITE_OUTPUT ?= build/family-site
 AUDIOBOOK_SCRIPT_OUTPUT ?= audiobook/script
 AUDIOBOOK_MANIFEST ?= audiobook/manifest.json
+PORTABLE_MANIFEST ?= portable/manifest.json
+EPUBCHECK_JAR ?=
 DOC_WEB_RUN_ID ?= alain-lessard-book-r1
 DOC_WEB_SNAPSHOT_ID ?= $(DOC_WEB_RUN_ID)
 PUBLIC_BASE ?=
 
-.PHONY: skills-sync skills-check methodology-compile methodology-check scan-intake-report process-scans build-image-pdf ocr-pdf archival-image-pdf archival-pdf scan-pdf-all supplemental-docs validate-supplemental-docs render-supplemental-pdf-checks doc-web-contract doc-web-run doc-web-import-run doc-web-validate-active companion-doc-web validate-companion-doc-web test-audiobook build-audiobook-script inspect-audiobook validate-audiobook build-full-audiobook build-family-site validate-family-site validate-family-site-release deploy-deps deploy-static render-pdf-checks validate-pdf
+.PHONY: skills-sync skills-check methodology-compile methodology-check scan-intake-report process-scans build-image-pdf ocr-pdf archival-image-pdf archival-pdf scan-pdf-all supplemental-docs validate-supplemental-docs render-supplemental-pdf-checks doc-web-contract doc-web-run doc-web-import-run doc-web-validate-active companion-doc-web validate-companion-doc-web test-audiobook test-portable-editions build-audiobook-script inspect-audiobook validate-audiobook build-full-audiobook build-epub validate-epub build-m4b validate-m4b build-portable-editions validate-portable-editions build-family-site validate-family-site validate-family-site-release deploy-deps deploy-static render-pdf-checks validate-pdf
 
 skills-sync:
 	./scripts/sync-agent-skills.sh
@@ -74,6 +76,10 @@ test-audiobook:
 	$(PYTHON) -m unittest discover -s tests -p 'test_audiobook*.py'
 	$(PYTHON) -m unittest discover -s tests -p 'test_build_full_audiobook.py'
 
+test-portable-editions:
+	$(PYTHON) -m unittest discover -s tests -p 'test_portable_editions.py'
+	$(PYTHON) -m unittest discover -s tests -p 'test_build_m4b.py'
+
 build-audiobook-script:
 	$(PYTHON) scripts/build_audiobook_script.py --output "$(AUDIOBOOK_SCRIPT_OUTPUT)"
 
@@ -88,6 +94,37 @@ build-full-audiobook: build-audiobook-script
 		--manifest "$(AUDIOBOOK_MANIFEST)" \
 		$(if $(OUTPUT),--output "$(OUTPUT)",) \
 		$(if $(FORCE),--force,)
+
+build-epub:
+	$(PYTHON) scripts/portable_editions.py build-epub \
+		--manifest "$(PORTABLE_MANIFEST)" \
+		$(if $(OUTPUT),--output "$(OUTPUT)",) \
+		$(if $(FORCE),--force,)
+
+validate-epub:
+	$(PYTHON) scripts/portable_editions.py validate-epub \
+		--manifest "$(PORTABLE_MANIFEST)" \
+		$(if $(EPUBCHECK),--epubcheck,) \
+		$(if $(EPUBCHECK_JAR),--epubcheck-jar "$(EPUBCHECK_JAR)",)
+
+build-m4b:
+	$(PYTHON) scripts/build_m4b.py build \
+		--audiobook-manifest "$(AUDIOBOOK_MANIFEST)" \
+		--portable-manifest "$(PORTABLE_MANIFEST)" \
+		$(if $(OUTPUT),--output "$(OUTPUT)",) \
+		$(if $(FORCE),--force,)
+
+validate-m4b:
+	$(PYTHON) scripts/build_m4b.py validate \
+		--audiobook-manifest "$(AUDIOBOOK_MANIFEST)" \
+		--portable-manifest "$(PORTABLE_MANIFEST)"
+
+build-portable-editions:
+	$(MAKE) build-epub FORCE="$(FORCE)"
+	$(MAKE) build-m4b FORCE="$(FORCE)"
+	$(MAKE) build-family-site RELEASE="$(RELEASE)"
+
+validate-portable-editions: validate-epub validate-m4b
 
 build-family-site: build-audiobook-script supplemental-docs
 	$(PYTHON) scripts/build_family_site.py --output "$(FAMILY_SITE_OUTPUT)" $(if $(RELEASE),--require-complete-audio,)

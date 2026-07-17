@@ -11,20 +11,20 @@
     "spec:1": { "substrate": "exists", "last_reviewed": "2026-07-02" },
     "spec:2": { "substrate": "exists", "last_reviewed": "2026-07-02" },
     "spec:3": { "substrate": "exists", "last_reviewed": "2026-07-02" },
-    "spec:4": { "substrate": "exists", "last_reviewed": "2026-07-16" },
+    "spec:4": { "substrate": "exists", "last_reviewed": "2026-07-17" },
     "spec:5": { "substrate": "exists", "last_reviewed": "2026-07-02" }
   },
   "compromises": {
     "C1": { "phase": "hold", "last_reviewed": "2026-07-02" },
     "C2": { "phase": "hold", "last_reviewed": "2026-07-01" },
     "C3": { "phase": "hold", "last_reviewed": "2026-07-01" },
-    "C4": { "phase": "hold", "last_reviewed": "2026-07-16" },
+    "C4": { "phase": "hold", "last_reviewed": "2026-07-17" },
     "B1": { "phase": "hold", "last_reviewed": "2026-07-01" }
   },
   "coverage_matrix": {
     "path": "tests/fixtures/formats/_coverage-matrix.json",
-    "last_reviewed": "2026-07-16",
-    "notes": "Canonical machine-readable inventory of source scans, doc-web bundle, 57 semantic reading sections, generated site, audio scripts, reviewed chapter MP3s, complete audiobook, and PDF artifact surfaces."
+    "last_reviewed": "2026-07-17",
+    "notes": "Canonical machine-readable inventory of source scans, doc-web bundle, 57 semantic reading sections, generated site, audio scripts, reviewed chapter MP3s, complete audiobook, portable EPUB/M4B editions, and PDF artifact surfaces."
   },
   "roadmap": {
     "active_focus": [],
@@ -67,6 +67,14 @@
           "story-004-publish-complete-on-site-audiobook"
         ],
         "notes": "The 52 reviewed MP3s, canonical v4 manifest, generated 9:00:14 complete audiobook, 57-section semantic reader, one Read target per applicable track, and compact listening bars are deployed. All 53 public audio paths passed HTTPS MIME, positive-length, and byte-range verification on 2026-07-16; production playback, resume, single-player, download, and no-JavaScript behavior also passed closeout validation."
+      },
+      {
+        "id": "portable-family-editions",
+        "status": "done",
+        "story_refs": [
+          "story-005-portable-ereader-and-chaptered-audiobook"
+        ],
+        "notes": "The 90.0 MiB EPUB 3 and 257.5 MiB chaptered M4B build from the canonical reading/audio contracts and are deployed with the device-help surface. Local package/app checks and strict production validation pass across 103 HTML pages, 401 references, 59 search rows, all 53 MP3s, and both portable files with exact MIME, length, and byte-range proof."
       }
     ]
   },
@@ -75,7 +83,7 @@
       {
         "id": "recommended-order",
         "title": "Recommended Order",
-        "markdown": "Story 004 is complete; no active story is currently selected."
+        "markdown": "Story 005 is complete; no active story is currently selected."
       }
     ],
     "uncategorized_label": "Legacy / Uncategorized Stories"

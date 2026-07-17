@@ -26,14 +26,21 @@ from scripts.audiobook import (  # noqa: E402
     load_audiobook_catalog,
     validate_audiobook_catalog,
 )
+from scripts.build_m4b import validate_m4b  # noqa: E402
+from scripts.portable_editions import (  # noqa: E402
+    PortableEditionError,
+    canonical_epub_documents,
+    load_portable_catalog,
+    validate_epub,
+)
 
 DEFAULT_BUILD_DIR = ROOT / "build" / "family-site"
-ASSET_VERSION = "20260716-semantic-reader-r2"
+ASSET_VERSION = "20260717-portable-editions-r1"
 EXPECTED_ENTRY_COUNT = 39
 EXPECTED_READING_SECTION_COUNT = 57
 EXPECTED_SEARCH_ROW_COUNT = 59
 EXPECTED_SUPPLEMENTAL_DOCUMENT_COUNT = 2
-EXPECTED_HTML_PAGE_COUNT = 102
+EXPECTED_HTML_PAGE_COUNT = 103
 EXPECTED_DOC_WEB_IMAGES = 155
 EXPECTED_DOC_WEB_BLOCK_IDS = 1737
 EXPECTED_SCAN_IMAGES = 153
@@ -63,6 +70,7 @@ SITE_COPY_FILES = (
     "book.html",
     "archive.html",
     "audiobook.html",
+    "reading-apps.html",
     "companion-alains-song.html",
     "companion-growing-up-on-the-farm.html",
 )
@@ -838,6 +846,110 @@ def check_audiobook_surface(
     return public_paths
 
 
+def check_portable_editions(
+    build_dir: Path,
+    validation: Validation,
+    *,
+    require_release: bool,
+) -> list[str]:
+    try:
+        portable = load_portable_catalog(ROOT / "portable" / "manifest.json")
+        audiobook = load_audiobook_catalog(ROOT / "audiobook" / "manifest.json")
+    except (PortableEditionError, AudiobookManifestError) as exc:
+        validation.error(f"Could not load portable-edition contracts: {exc}")
+        return []
+    validation.require(
+        (build_dir / "_internal" / "portable" / "manifest.json").is_file(),
+        "Built site is missing its internal portable-edition manifest snapshot",
+    )
+    mime_config = (build_dir / ".htaccess").read_text(encoding="utf-8") if (build_dir / ".htaccess").is_file() else ""
+    validation.require("AddType application/epub+zip .epub" in mime_config, "Built site is missing the EPUB MIME mapping")
+    validation.require("AddType audio/mp4 .m4b" in mime_config, "Built site is missing the M4B MIME mapping")
+    public_paths: list[str] = []
+    for label, artifact in (("EPUB", portable.epub), ("M4B", portable.m4b)):
+        built = build_dir / artifact.public_path
+        if artifact.is_available:
+            validation.require(built.is_file(), f"Built site is missing the {label}: {artifact.public_path}")
+            if built.is_file():
+                validation.require(
+                    built.stat().st_size == artifact.output_path.stat().st_size,
+                    f"Built {label} size differs from its generated source",
+                )
+                public_paths.append(artifact.public_path)
+        if require_release:
+            validation.require(artifact.is_available, f"Release build requires the generated {label} source")
+            validation.require(built.is_file(), f"Release build requires the published {label}")
+
+    built_epub = build_dir / portable.epub.public_path
+    if built_epub.is_file():
+        try:
+            documents, source_ids = canonical_epub_documents()
+            epub_validation = validate_epub(
+                built_epub,
+                expected_document_count=len(documents),
+                expected_main_source_ids=source_ids,
+                maximum_bytes=int(portable.epub.settings.get("maximum_bytes") or 0),
+            )
+            for error in epub_validation.errors:
+                validation.error(f"Published EPUB validation failed: {error}")
+        except PortableEditionError as exc:
+            validation.error(f"Could not derive canonical EPUB validation inputs: {exc}")
+    built_m4b = build_dir / portable.m4b.public_path
+    if built_m4b.is_file():
+        m4b_validation = validate_m4b(built_m4b, audiobook, portable)
+        for error in m4b_validation.errors:
+            validation.error(f"Published M4B validation failed: {error}")
+
+    pages = {
+        name: (build_dir / name).read_text(encoding="utf-8") if (build_dir / name).is_file() else ""
+        for name in ("index.html", "book.html", "audiobook.html", "reading-apps.html")
+    }
+    help_html = pages["reading-apps.html"]
+    for marker in (
+        "Read or listen on your device",
+        "Apple Books",
+        "Send to Kindle",
+        "Kobo",
+        "Google Play Books",
+        "Other audiobook apps",
+        "There is no single button",
+    ):
+        validation.require(marker in help_html, f"Device help is missing reader-facing guidance: {marker}")
+    validation.require(
+        'href="https://www.amazon.com/sendtokindle"' in help_html,
+        "Device help should link to Amazon Send to Kindle",
+    )
+    validation.require(
+        "navigator.userAgent" not in help_html,
+        "Device help must not use user-agent sniffing",
+    )
+    for page_name in ("index.html", "book.html", "audiobook.html", "reading-apps.html"):
+        validation.require(
+            'href="reading-apps.html"' in pages[page_name] or page_name == "reading-apps.html",
+            f"{page_name} should link to device help",
+        )
+    if require_release:
+        for page_name in ("index.html", "book.html", "reading-apps.html"):
+            validation.require(
+                f'href="{portable.epub.public_path}"' in pages[page_name],
+                f"{page_name} should expose the direct EPUB download",
+            )
+        for page_name in ("index.html", "audiobook.html", "reading-apps.html"):
+            validation.require(
+                f'href="{portable.m4b.public_path}"' in pages[page_name],
+                f"{page_name} should expose the direct M4B download",
+            )
+
+    summary = read_json(build_dir / "_internal" / "build-summary.json", validation, "build summary")
+    if isinstance(summary, dict):
+        expected_count = sum(artifact.is_available for artifact in (portable.epub, portable.m4b))
+        validation.require(
+            summary.get("published_portable_file_count") == expected_count,
+            "Build summary has the wrong portable-edition count",
+        )
+    return public_paths
+
+
 def fetch_public_audio(url: str, timeout: float) -> tuple[str, list[str]]:
     errors: list[str] = []
     headers = {"User-Agent": "alain-family-site-validator/1.0"}
@@ -885,6 +997,75 @@ def check_public_audio_assets(
             for error in errors:
                 validation.error(f"Public audiobook check failed for {url}: {error}")
     validation.note(f"Checked {len(urls)} public audiobook assets for MIME, length, and byte-range support.")
+
+
+def fetch_public_portable(
+    url: str,
+    expected_media_type: str,
+    expected_bytes: int,
+    timeout: float,
+) -> tuple[str, list[str]]:
+    errors: list[str] = []
+    headers = {"User-Agent": "alain-family-site-validator/1.0"}
+    try:
+        with urlopen(Request(url, headers=headers, method="HEAD"), timeout=timeout) as response:
+            if response.getcode() != 200:
+                errors.append(f"HEAD returned HTTP {response.getcode()}")
+            content_type = response.headers.get_content_type()
+            if content_type != expected_media_type:
+                errors.append(f"Content-Type is {content_type!r}, expected {expected_media_type!r}")
+            try:
+                content_length = int(response.headers.get("Content-Length") or 0)
+            except ValueError:
+                content_length = 0
+            if content_length != expected_bytes:
+                errors.append(f"Content-Length is {content_length}, expected {expected_bytes}")
+    except Exception as exc:  # noqa: BLE001 - public verification should retain exact network evidence.
+        errors.append(f"HEAD failed: {exc}")
+        return url, errors
+    range_headers = dict(headers)
+    range_headers["Range"] = "bytes=0-1023"
+    try:
+        with urlopen(Request(url, headers=range_headers, method="GET"), timeout=timeout) as response:
+            if response.getcode() != 206:
+                errors.append(f"Range request returned HTTP {response.getcode()}, expected 206")
+            if not str(response.headers.get("Content-Range") or "").startswith("bytes 0-"):
+                errors.append("Range response is missing a valid Content-Range header")
+            response.read(1024)
+    except Exception as exc:  # noqa: BLE001 - public verification should retain exact network evidence.
+        errors.append(f"Range request failed: {exc}")
+    return url, errors
+
+
+def check_public_portable_assets(
+    public_base: str,
+    public_paths: Iterable[str],
+    validation: Validation,
+    timeout: float,
+) -> None:
+    portable = load_portable_catalog(ROOT / "portable" / "manifest.json")
+    declared_paths = set(public_paths)
+    artifacts = {
+        artifact.public_path: artifact
+        for artifact in (portable.epub, portable.m4b)
+        if artifact.public_path in declared_paths
+    }
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        futures = [
+            executor.submit(
+                fetch_public_portable,
+                public_url(public_base, public_path),
+                artifact.media_type,
+                artifact.output_path.stat().st_size,
+                timeout,
+            )
+            for public_path, artifact in artifacts.items()
+        ]
+        for future in as_completed(futures):
+            url, errors = future.result()
+            for error in errors:
+                validation.error(f"Public portable-edition check failed for {url}: {error}")
+    validation.note(f"Checked {len(artifacts)} public portable editions for MIME, exact length, and byte-range support.")
 
 
 def public_url(base: str, ref: str) -> str:
@@ -978,6 +1159,11 @@ def run_validation(
         validation,
         require_complete_audio=require_complete_audio,
     )
+    public_portable_paths = check_portable_editions(
+        build_dir,
+        validation,
+        require_release=require_complete_audio,
+    )
     check_asset_version(build_dir, validation)
     validation.note(f"Checked {len(parsed)} HTML pages, {len(public_refs)} local references, and {EXPECTED_SEARCH_ROW_COUNT} search rows.")
 
@@ -985,6 +1171,7 @@ def run_validation(
         check_public_site(build_dir, public_base, public_refs, validation, timeout)
         if require_complete_audio:
             check_public_audio_assets(public_base, public_audio_paths, validation, timeout)
+            check_public_portable_assets(public_base, public_portable_paths, validation, timeout)
         validation.note(f"Checked public host: {public_base.rstrip('/')}")
     return validation
 
@@ -997,7 +1184,7 @@ def cli_main() -> int:
     parser.add_argument(
         "--require-complete-audio",
         action="store_true",
-        help="Require all 52 track MP3s plus the generated complete audiobook and release UI.",
+        help="Require all reviewed audio plus generated EPUB/M4B artifacts and release UI.",
     )
     args = parser.parse_args()
 

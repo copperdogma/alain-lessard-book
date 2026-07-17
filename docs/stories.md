@@ -4,7 +4,7 @@
 
 ## Recommended Order
 
-Story 004 is complete; no active story is currently selected.
+Story 005 is complete; no active story is currently selected.
 
 ## Current Stories
 
@@ -12,3 +12,4 @@ Story 004 is complete; no active story is currently selected.
 - **Done** — `docs/stories/story-002-dreamhost-hosted-subdomain-public-verification.md` — DreamHost hosted subdomain public verification
 - **Done** — `docs/stories/story-003-doc-web-powered-onward-style-site.md` — doc-web powered Onward-style site
 - **Done** — `docs/stories/story-004-publish-complete-on-site-audiobook.md` — Publish the complete on-site audiobook
+- **Done** — `docs/stories/story-005-portable-ereader-and-chaptered-audiobook.md` — Portable eReader and chaptered audiobook editions

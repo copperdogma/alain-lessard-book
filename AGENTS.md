@@ -94,15 +94,16 @@ Canonical location: `.agents/skills/`
 
 The repo has raw main-book scans, deterministic scan-to-PDF tooling, two
 searchable main-book PDFs, an accepted `doc-web` HTML/provenance bundle at
-`input/doc-web-html/alain-lessard-book-r1/`, Onward-style audio scripts for
-narrative sections, and a generated static family archive under
-`build/family-site/`. The current website is built from the active `doc-web`
-bundle and preserves chapter entries, source scan links, figures, captions,
-tables, TOC, and search. The 2026-07-02 SFTP deploy uploaded the rebuilt bundle
-to DreamHost at `/home/onward_user/alain-lessard.copper-dog.com`; public HTTPS
-verification passes for the homepage, book/search page, figure-heavy chapter,
-table-heavy personal-records chapter, doc-web crops, and versioned search
-index. The complete known supplemental scan set is present under
+`input/doc-web-html/alain-lessard-book-r1/`, 52 reviewed narrative audio tracks,
+and a generated static family archive under `build/family-site/`. The current
+website is built from the active `doc-web` bundle and preserves semantic reading
+sections, source scan links, figures, captions, tables, TOC, search, the complete
+MP3, and individual recordings. The 2026-07-16 SFTP deploy published all 53 MP3
+assets to DreamHost at `/home/onward_user/alain-lessard.copper-dog.com`; public
+HTTPS MIME, length, byte-range, playback, resume, download, and no-JavaScript
+verification passed. The complete known supplemental scan set is present under
 `input/raw scans/Alain's Song/` and
-`input/raw scans/Growing Up on the Farm/`; reviewed audio MP3 files are still
-pending.
+`input/raw scans/Growing Up on the Farm/`. Story 005 has also built and locally
+validated a reflowable EPUB 3, a 52-chapter M4B, and device-help site surface.
+The 2026-07-17 SFTP deploy published both portable files, and strict production
+MIME, exact-length, byte-range, desktop, and mobile validation passed.

@@ -1,0 +1,37 @@
+{
+  "schema_version": "alain_portable_editions_v1",
+  "publication": {
+    "identifier": "urn:uuid:8d51dd34-30f6-4b4d-a136-a19423f83d1d",
+    "title": "Alain Lessard",
+    "subtitle": "Our First Ancestors and A Compilation of Stories of Their Descendants",
+    "language": "en-CA",
+    "author": "The Alain and Lessard Families",
+    "publisher": "The Alain and Lessard Families",
+    "original_publication_year": "1987",
+    "modified": "2026-07-17T20:00:00Z",
+    "description": "A family history of the Alain and Lessard families, including photographs, family stories, records, and two companion documents found with the book.",
+    "source_url": "https://alain-lessard.copper-dog.com/",
+    "cover_source_path": "input/doc-web-html/alain-lessard-book-r1/images/page-001-000.jpg",
+    "cover_output_path": "output/portable/alain-lessard-cover.jpg"
+  },
+  "epub": {
+    "output_path": "output/portable/alain-lessard-family-history.epub",
+    "public_path": "downloads/alain-lessard-family-history.epub",
+    "media_type": "application/epub+zip",
+    "maximum_bytes": 209715200,
+    "expected_main_section_count": 57,
+    "expected_companion_count": 2,
+    "expected_main_source_block_count": 1737
+  },
+  "m4b": {
+    "output_path": "audiobook/generated/alain-lessard-complete-audiobook.m4b",
+    "public_path": "audiobook/alain-lessard-complete-audiobook.m4b",
+    "media_type": "audio/mp4",
+    "codec": "aac",
+    "profile": "AAC Low Complexity",
+    "bit_rate": "64k",
+    "sample_rate_hz": 44100,
+    "channels": 1,
+    "expected_chapter_count": 52
+  }
+}

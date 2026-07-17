@@ -55,7 +55,7 @@
           "C4"
         ],
         "substrate": "exists",
-        "last_reviewed": "2026-07-16"
+        "last_reviewed": "2026-07-17"
       },
       {
         "id": "spec:5",
@@ -93,7 +93,7 @@
       },
       "spec:4": {
         "substrate": "exists",
-        "last_reviewed": "2026-07-16"
+        "last_reviewed": "2026-07-17"
       },
       "spec:5": {
         "substrate": "exists",
@@ -115,7 +115,7 @@
       },
       "C4": {
         "phase": "hold",
-        "last_reviewed": "2026-07-16"
+        "last_reviewed": "2026-07-17"
       },
       "B1": {
         "phase": "hold",
@@ -124,8 +124,8 @@
     },
     "coverage_matrix": {
       "path": "tests/fixtures/formats/_coverage-matrix.json",
-      "last_reviewed": "2026-07-16",
-      "notes": "Canonical machine-readable inventory of source scans, doc-web bundle, 57 semantic reading sections, generated site, audio scripts, reviewed chapter MP3s, complete audiobook, and PDF artifact surfaces."
+      "last_reviewed": "2026-07-17",
+      "notes": "Canonical machine-readable inventory of source scans, doc-web bundle, 57 semantic reading sections, generated site, audio scripts, reviewed chapter MP3s, complete audiobook, portable EPUB/M4B editions, and PDF artifact surfaces."
     },
     "roadmap": {
       "active_focus": [],
@@ -168,6 +168,14 @@
             "story-004-publish-complete-on-site-audiobook"
           ],
           "notes": "The 52 reviewed MP3s, canonical v4 manifest, generated 9:00:14 complete audiobook, 57-section semantic reader, one Read target per applicable track, and compact listening bars are deployed. All 53 public audio paths passed HTTPS MIME, positive-length, and byte-range verification on 2026-07-16; production playback, resume, single-player, download, and no-JavaScript behavior also passed closeout validation."
+        },
+        {
+          "id": "portable-family-editions",
+          "status": "done",
+          "story_refs": [
+            "story-005-portable-ereader-and-chaptered-audiobook"
+          ],
+          "notes": "The 90.0 MiB EPUB 3 and 257.5 MiB chaptered M4B build from the canonical reading/audio contracts and are deployed with the device-help surface. Local package/app checks and strict production validation pass across 103 HTML pages, 401 references, 59 search rows, all 53 MP3s, and both portable files with exact MIME, length, and byte-range proof."
         }
       ]
     },
@@ -176,7 +184,7 @@
         {
           "id": "recommended-order",
           "title": "Recommended Order",
-          "markdown": "Story 004 is complete; no active story is currently selected."
+          "markdown": "Story 005 is complete; no active story is currently selected."
         }
       ],
       "uncategorized_label": "Legacy / Uncategorized Stories"
@@ -188,7 +196,7 @@
   },
   "coverage_matrix": {
     "version": 1,
-    "last_reviewed": "2026-07-16",
+    "last_reviewed": "2026-07-17",
     "sources": [
       {
         "id": "main-book-raw-scans",
@@ -284,9 +292,25 @@
         "id": "complete-audiobook",
         "path": "audiobook/generated/alain-lessard-complete-audiobook.mp3",
         "format": "manifest-ordered-mono-mp3",
-        "status": "generated-local",
+        "status": "deployed",
         "observed_count": 1,
         "notes": "9:00:14 complete audiobook generated from the 52 reviewed tracks with 51 two-second pauses."
+      },
+      {
+        "id": "portable-epub-edition",
+        "path": "output/portable/alain-lessard-family-history.epub",
+        "format": "epub-3.3-reflowable",
+        "status": "generated-local",
+        "observed_count": 1,
+        "notes": "90.0 MiB DRM-free EPUB built from 57 semantic main-book sections plus 2 companion documents, preserving all 1,737 main-book source block ids and 156 local image references. Repo validation and EPUBCheck 5.3.0 pass with zero messages; Apple Books and epub.js rendering passed on 2026-07-17."
+      },
+      {
+        "id": "chaptered-audiobook",
+        "path": "audiobook/generated/alain-lessard-complete-audiobook.m4b",
+        "format": "m4b-aac-lc-mono-with-cover-and-chapters",
+        "status": "generated-local",
+        "observed_count": 1,
+        "notes": "9:00:14, 257.5 MiB M4B generated in one AAC-LC pass from the 52 reviewed tracks with 51 two-second pauses, embedded cover/metadata, and exactly 52 named chapters. Probe, boundary, representative decode/comparison, Apple Books import, chapter navigation, and playback checks pass."
       },
       {
         "id": "family-site-audiobook-assets",
@@ -295,6 +319,14 @@
         "status": "deployed",
         "observed_count": 53,
         "notes": "Strict release bundle containing 52 individual tracks plus the complete audiobook, deployed to alain-lessard.copper-dog.com on 2026-07-16; all 53 public paths passed audio/mpeg, positive-length, and 206 byte-range checks."
+      },
+      {
+        "id": "family-site-portable-assets",
+        "path": "build/family-site/{downloads/alain-lessard-family-history.epub,audiobook/alain-lessard-complete-audiobook.m4b}",
+        "format": "static-site-epub-and-m4b-assets",
+        "status": "deployed",
+        "observed_count": 2,
+        "notes": "Deployed to alain-lessard.copper-dog.com on 2026-07-17 with direct no-JavaScript downloads, reading-apps.html guidance, and explicit EPUB/M4B MIME mappings. Strict public validation passed the declared MIME types, exact local lengths, and 206 byte ranges for both files."
       }
     ]
   },
@@ -328,10 +360,15 @@
         "path": "docs/stories/story-004-publish-complete-on-site-audiobook.md",
         "title": "Publish the complete on-site audiobook",
         "status": "Done"
+      },
+      {
+        "path": "docs/stories/story-005-portable-ereader-and-chaptered-audiobook.md",
+        "title": "Portable eReader and chaptered audiobook editions",
+        "status": "Done"
       }
     ],
     "counts_by_status": {
-      "Done": 4
+      "Done": 5
     }
   }
 }
