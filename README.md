@@ -26,6 +26,8 @@ make validate-audiobook
 make test-portable-editions
 make build-portable-editions RELEASE=1
 make validate-portable-editions EPUBCHECK=1 EPUBCHECK_JAR=/path/to/epubcheck.jar
+make test-reunion-flyer
+make reunion-flyer
 make build-family-site
 make build-family-site RELEASE=1
 make validate-family-site RELEASE=1
@@ -84,6 +86,19 @@ redirect to their containing section. Use `RELEASE=1` to require all 53 MP3
 assets plus the generated EPUB and M4B. The release bundle also publishes a
 plain-language device-help page and direct no-JavaScript download links.
 
+`make reunion-flyer` builds and validates the Story 006 outreach kit from
+`outreach/reunion-flyer.json`: a one-page US Letter PDF, exact 300 ppi print
+preview, 1080 x 1920 phone QR card, standalone integer-module QR PNG, and build
+report under `output/outreach/`. The generator uses embedded ReportLab-bundled
+Bitstream Vera fonts, the website's restrained deep-green/red/gold palette on a
+true white toner-friendly background, the accepted 1987 front-cover image on
+the letter flyer, and the canonical public homepage. Its
+validator checks page and pixel geometry, selectable text, embedded fonts,
+cover path/hash/dimensions/effective resolution, quiet-zone and black/white QR
+rules, low color coverage, and independent macOS Vision decoding. The exact
+cross-book design and Onward substitution contract is in
+`outreach/reunion-flyer-design-spec.md`.
+
 `make deploy-static` first runs strict audiobook bundle validation, then uploads
 `build/family-site/` to DreamHost using the gitignored local `.env`. The
 intended public host is
@@ -119,6 +134,10 @@ Pipeline manifests and review images:
 - `audiobook/generated/alain-lessard-complete-audiobook.m4b`
 - `output/portable/alain-lessard-family-history.epub`
 - `portable/manifest.json`
+- `outreach/reunion-flyer.json`
+- `outreach/reunion-flyer-design-spec.md`
+- `outreach/README.md`
+- `output/outreach/`
 - `build/family-site/`
 
 ## `doc-web` Boundary
@@ -171,6 +190,10 @@ Story 005 adds EPUB 3 and chaptered M4B release artifacts plus the device-help
 website surface. Both files were deployed on 2026-07-17 and passed strict public
 MIME, exact-length, byte-range, desktop, and mobile verification; Story 005 is
 complete.
+Story 006 adds a reproducible letter flyer, phone QR card, and standalone QR
+for reunion sharing. Digital build, rendering, grayscale, independent decode,
+and public-destination checks pass; physical proof on the intended home laser
+printer remains the final validation boundary.
 
 ## Audiobook
 

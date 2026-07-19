@@ -11,20 +11,20 @@
     "spec:1": { "substrate": "exists", "last_reviewed": "2026-07-02" },
     "spec:2": { "substrate": "exists", "last_reviewed": "2026-07-02" },
     "spec:3": { "substrate": "exists", "last_reviewed": "2026-07-02" },
-    "spec:4": { "substrate": "exists", "last_reviewed": "2026-07-17" },
+    "spec:4": { "substrate": "exists", "last_reviewed": "2026-07-19" },
     "spec:5": { "substrate": "exists", "last_reviewed": "2026-07-02" }
   },
   "compromises": {
     "C1": { "phase": "hold", "last_reviewed": "2026-07-02" },
     "C2": { "phase": "hold", "last_reviewed": "2026-07-01" },
     "C3": { "phase": "hold", "last_reviewed": "2026-07-01" },
-    "C4": { "phase": "hold", "last_reviewed": "2026-07-17" },
+    "C4": { "phase": "hold", "last_reviewed": "2026-07-19" },
     "B1": { "phase": "hold", "last_reviewed": "2026-07-01" }
   },
   "coverage_matrix": {
     "path": "tests/fixtures/formats/_coverage-matrix.json",
-    "last_reviewed": "2026-07-17",
-    "notes": "Canonical machine-readable inventory of source scans, doc-web bundle, 57 semantic reading sections, generated site, audio scripts, reviewed chapter MP3s, complete audiobook, portable EPUB/M4B editions, and PDF artifact surfaces."
+    "last_reviewed": "2026-07-19",
+    "notes": "Canonical machine-readable inventory of source scans, doc-web bundle, 57 semantic reading sections, generated site, audio scripts, reviewed chapter MP3s, complete audiobook, portable EPUB/M4B editions, PDF artifacts, and generated reunion outreach surfaces."
   },
   "roadmap": {
     "active_focus": [],
@@ -75,6 +75,14 @@
           "story-005-portable-ereader-and-chaptered-audiobook"
         ],
         "notes": "The 90.0 MiB EPUB 3 and 257.5 MiB chaptered M4B build from the canonical reading/audio contracts and are deployed with the device-help surface. Local package/app checks and strict production validation pass across 103 HTML pages, 401 references, 59 search rows, all 53 MP3s, and both portable files with exact MIME, length, and byte-range proof."
+      },
+      {
+        "id": "reunion-outreach",
+        "status": "done",
+        "story_refs": [
+          "story-006-reunion-book-flyer-and-phone-qr"
+        ],
+        "notes": "The large-type letter flyer gives the canonical 1987 cover and unchanged QR the same 4.1-inch height; the 300 ppi preview, phone QR card, standalone QR, builder/tests, provenance checks, stress decodes, and Onward reproduction handoff are generated and digitally validated. On 2026-07-19 the user printed the final equal-height revision, reported that it works perfectly, accepted the artifact, and directed Story 006 closure."
       }
     ]
   },
@@ -83,7 +91,7 @@
       {
         "id": "recommended-order",
         "title": "Recommended Order",
-        "markdown": "Story 005 is complete; no active story is currently selected."
+        "markdown": "Stories 001–006 are complete; the reunion flyer and phone QR kit are ready for family use and cross-book replication."
       }
     ],
     "uncategorized_label": "Legacy / Uncategorized Stories"

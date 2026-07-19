@@ -1,0 +1,110 @@
+{
+  "schema_version": "alain_reunion_flyer_v1",
+  "publication": {
+    "display_title": "Alain Lessard",
+    "formal_subtitle": "Our First Ancestors and A Compilation of Stories of Their Descendants",
+    "canonical_url": "https://alain-lessard.copper-dog.com/",
+    "display_url": "alain-lessard.copper-dog.com",
+    "original_publication_year": 1987
+  },
+  "copy": {
+    "eyebrow": "FREE FAMILY HISTORY",
+    "headline": "Our family history is online - free",
+    "camera_instruction": "Open your camera and point it at the code",
+    "actions": [
+      "Read the book online",
+      "Search names and places",
+      "Download PDF or eBook",
+      "Complete audiobook"
+    ],
+    "family_heading": "FAMILY NAMES IN THIS BOOK INCLUDE",
+    "phone_offer": "READ ONLINE | PDF OR EBOOK | COMPLETE AUDIOBOOK"
+  },
+  "family_names": [
+    "Alain / Allain",
+    "Lessard / Lessart",
+    "L'Heureux",
+    "Reindl",
+    "Prentice",
+    "Sevigny",
+    "Adrian",
+    "Toews",
+    "Menzies",
+    "Marsollier",
+    "Strasser",
+    "Folley"
+  ],
+  "artwork": {
+    "cover_source_path": "input/doc-web-html/alain-lessard-book-r1/images/page-001-000.jpg",
+    "cover_expected_sha256": "ac6d36744370bf7bf09d01de39dc1715cb4227d0bee2a3b308e9334e7d6e24bb",
+    "cover_expected_width_pixels": 2550,
+    "cover_expected_height_pixels": 3371,
+    "letter_height_points": 295.2,
+    "letter_row_y_points": 272,
+    "letter_gap_to_qr_points": 21.49,
+    "minimum_effective_ppi": 600
+  },
+  "palette": {
+    "paper": "#ffffff",
+    "ink": "#22231f",
+    "muted": "#626861",
+    "line": "#d8ddd5",
+    "deep": "#143d3b",
+    "deep_2": "#1f5b55",
+    "accent": "#8d2f23",
+    "accent_2": "#c1912f",
+    "qr": "#000000"
+  },
+  "typography": {
+    "family": "Bitstream Vera Sans",
+    "regular_file": "Vera.ttf",
+    "bold_file": "VeraBd.ttf",
+    "minimum_essential_print_points": 18,
+    "minimum_action_print_points": 18,
+    "minimum_display_url_print_points": 23
+  },
+  "qr": {
+    "error_correction": "Q",
+    "quiet_zone_modules": 4,
+    "expected_version": 4,
+    "expected_data_modules": 33,
+    "print_size_points": 295.2,
+    "phone_size_pixels": 820,
+    "master_box_pixels": 40
+  },
+  "surfaces": {
+    "letter": {
+      "width_points": 612,
+      "height_points": 792,
+      "preview_width_pixels": 2550,
+      "preview_height_pixels": 3300,
+      "preview_dpi": 300,
+      "safe_margin_points": 36
+    },
+    "phone": {
+      "width_pixels": 1080,
+      "height_pixels": 1920,
+      "safe_margin_pixels": 72
+    }
+  },
+  "outputs": {
+    "letter_pdf": "output/outreach/alain-lessard-reunion-flyer-letter.pdf",
+    "letter_preview_png": "output/outreach/alain-lessard-reunion-flyer-letter-preview.png",
+    "phone_png": "output/outreach/alain-lessard-phone-qr.png",
+    "qr_png": "output/outreach/alain-lessard-qr.png",
+    "build_report_json": "output/outreach/reunion-flyer-build-report.json"
+  },
+  "temporary_outputs": {
+    "phone_pdf": "tmp/pdfs/outreach/alain-lessard-phone-qr.pdf"
+  },
+  "constraints": {
+    "background_must_be_white": true,
+    "maximum_non_white_preview_ratio": 0.27,
+    "large_solid_color_fields_allowed": false,
+    "must_remain_clear_in_grayscale": true,
+    "forbidden_phrases": [
+      "No cost",
+      "No account"
+    ]
+  }
+}

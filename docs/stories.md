@@ -4,7 +4,7 @@
 
 ## Recommended Order
 
-Story 005 is complete; no active story is currently selected.
+Stories 001–006 are complete; the reunion flyer and phone QR kit are ready for family use and cross-book replication.
 
 ## Current Stories
 
@@ -13,3 +13,4 @@ Story 005 is complete; no active story is currently selected.
 - **Done** — `docs/stories/story-003-doc-web-powered-onward-style-site.md` — doc-web powered Onward-style site
 - **Done** — `docs/stories/story-004-publish-complete-on-site-audiobook.md` — Publish the complete on-site audiobook
 - **Done** — `docs/stories/story-005-portable-ereader-and-chaptered-audiobook.md` — Portable eReader and chaptered audiobook editions
+- **Done** — `docs/stories/story-006-reunion-book-flyer-and-phone-qr.md` — Reunion book flyer and phone QR card

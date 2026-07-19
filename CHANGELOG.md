@@ -1,5 +1,41 @@
 # Changelog
 
+## [2026-07-18-01] - Add reunion flyer and phone QR card (Story 006)
+
+### Added
+- Added a tracked reunion-outreach contract, deterministic ReportLab builder,
+  focused tests, Makefile targets, and portable cross-book design specification.
+- Generated an exact US Letter PDF, 300 ppi print preview, 1080 x 1920 phone
+  card, standalone integer-module QR PNG, and machine-readable build report.
+- Added the accepted 1987 book-cover image beside the full-size letter QR so
+  relatives can recognize the familiar physical book; recorded its canonical
+  source path, dimensions, SHA-256, printed geometry, and effective resolution.
+- Added independent macOS Vision QR decoding for the print preview, phone card,
+  and standalone QR plus adaptable-layout fixture coverage for a second book.
+
+### Changed
+- Reused the family website's deep-green, red, gold, charcoal, and light-rule
+  palette as sparse accents on true white so the flyer matches the site without
+  large toner-heavy fields on a home laser printer.
+- Recorded exact print/phone geometry, typography, QR parameters, commands,
+  hashes, overflow rules, and Onward substitutions so a second AI can produce a
+  matching but book-distinct companion.
+
+### Verified
+- Confirmed one 612 x 792 point PDF page, embedded/selectable Vera fonts, one
+  canonical 2550 x 3371 cover at 822.2 ppi and the same 4.1-inch height as the
+  QR, exact 2550 x 3300 and 1080 x 1920 PNGs, a pure black/white four-module QR
+  quiet zone, 25.67 percent non-white
+  print coverage, and clean color/grayscale visual renders.
+- Independently decoded the final three QR-bearing images plus maintained
+  reduced-size, grayscale, blurred/JPEG camera, and two low-brightness stress
+  variants to the exact canonical HTTPS homepage; freshly confirmed public
+  read, PDF, EPUB, MP3, and M4B responses.
+- The user printed the final equal-height cover/QR revision on the intended
+  home laser printer, reported that it `works perfectly`, accepted the artifact,
+  and directed Story 006 closure; unreported device/distance matrix details
+  remain explicitly unclaimed.
+
 ## [2026-07-17-01] - Add portable reader and chaptered audiobook editions (Story 005)
 
 ### Added

@@ -55,7 +55,7 @@
           "C4"
         ],
         "substrate": "exists",
-        "last_reviewed": "2026-07-17"
+        "last_reviewed": "2026-07-19"
       },
       {
         "id": "spec:5",
@@ -93,7 +93,7 @@
       },
       "spec:4": {
         "substrate": "exists",
-        "last_reviewed": "2026-07-17"
+        "last_reviewed": "2026-07-19"
       },
       "spec:5": {
         "substrate": "exists",
@@ -115,7 +115,7 @@
       },
       "C4": {
         "phase": "hold",
-        "last_reviewed": "2026-07-17"
+        "last_reviewed": "2026-07-19"
       },
       "B1": {
         "phase": "hold",
@@ -124,8 +124,8 @@
     },
     "coverage_matrix": {
       "path": "tests/fixtures/formats/_coverage-matrix.json",
-      "last_reviewed": "2026-07-17",
-      "notes": "Canonical machine-readable inventory of source scans, doc-web bundle, 57 semantic reading sections, generated site, audio scripts, reviewed chapter MP3s, complete audiobook, portable EPUB/M4B editions, and PDF artifact surfaces."
+      "last_reviewed": "2026-07-19",
+      "notes": "Canonical machine-readable inventory of source scans, doc-web bundle, 57 semantic reading sections, generated site, audio scripts, reviewed chapter MP3s, complete audiobook, portable EPUB/M4B editions, PDF artifacts, and generated reunion outreach surfaces."
     },
     "roadmap": {
       "active_focus": [],
@@ -176,6 +176,14 @@
             "story-005-portable-ereader-and-chaptered-audiobook"
           ],
           "notes": "The 90.0 MiB EPUB 3 and 257.5 MiB chaptered M4B build from the canonical reading/audio contracts and are deployed with the device-help surface. Local package/app checks and strict production validation pass across 103 HTML pages, 401 references, 59 search rows, all 53 MP3s, and both portable files with exact MIME, length, and byte-range proof."
+        },
+        {
+          "id": "reunion-outreach",
+          "status": "done",
+          "story_refs": [
+            "story-006-reunion-book-flyer-and-phone-qr"
+          ],
+          "notes": "The large-type letter flyer gives the canonical 1987 cover and unchanged QR the same 4.1-inch height; the 300 ppi preview, phone QR card, standalone QR, builder/tests, provenance checks, stress decodes, and Onward reproduction handoff are generated and digitally validated. On 2026-07-19 the user printed the final equal-height revision, reported that it works perfectly, accepted the artifact, and directed Story 006 closure."
         }
       ]
     },
@@ -184,7 +192,7 @@
         {
           "id": "recommended-order",
           "title": "Recommended Order",
-          "markdown": "Story 005 is complete; no active story is currently selected."
+          "markdown": "Stories 001\u2013006 are complete; the reunion flyer and phone QR kit are ready for family use and cross-book replication."
         }
       ],
       "uncategorized_label": "Legacy / Uncategorized Stories"
@@ -196,7 +204,7 @@
   },
   "coverage_matrix": {
     "version": 1,
-    "last_reviewed": "2026-07-17",
+    "last_reviewed": "2026-07-19",
     "sources": [
       {
         "id": "main-book-raw-scans",
@@ -327,6 +335,14 @@
         "status": "deployed",
         "observed_count": 2,
         "notes": "Deployed to alain-lessard.copper-dog.com on 2026-07-17 with direct no-JavaScript downloads, reading-apps.html guidance, and explicit EPUB/M4B MIME mappings. Strict public validation passed the declared MIME types, exact local lengths, and 206 byte ranges for both files."
+      },
+      {
+        "id": "reunion-outreach-assets",
+        "path": "output/outreach/{alain-lessard-reunion-flyer-letter.pdf,alain-lessard-reunion-flyer-letter-preview.png,alain-lessard-phone-qr.png,alain-lessard-qr.png,reunion-flyer-build-report.json}",
+        "format": "letter-pdf-plus-print-phone-qr-png-kit",
+        "status": "generated-local",
+        "observed_count": 5,
+        "notes": "Story 006 generated one exact US Letter PDF with the accepted 2550 x 3371 front cover at the same 4.1-inch height as its unchanged QR, a 2550 x 3300 print preview, a 1080 x 1920 phone card, a 1640 x 1640 integer-module QR master, and a build report. Cover path/hash/dimensions/822.2-ppi embedding, embedded/selectable fonts, page/pixel, true-white background with 25.67 percent non-white coverage, black/white quiet-zone, grayscale visual, independent final/reduced/grayscale/blurred/dim QR decode, and public destination/format checks pass on 2026-07-19. The user printed the final equal-height revision, reported that it works perfectly, accepted it, and directed Story 006 closure; individual distance/light/device cells were not separately enumerated."
       }
     ]
   },
@@ -365,10 +381,15 @@
         "path": "docs/stories/story-005-portable-ereader-and-chaptered-audiobook.md",
         "title": "Portable eReader and chaptered audiobook editions",
         "status": "Done"
+      },
+      {
+        "path": "docs/stories/story-006-reunion-book-flyer-and-phone-qr.md",
+        "title": "Reunion book flyer and phone QR card",
+        "status": "Done"
       }
     ],
     "counts_by_status": {
-      "Done": 5
+      "Done": 6
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_reviewed": "2026-07-17",
+  "last_reviewed": "2026-07-19",
   "sources": [
     {
       "id": "main-book-raw-scans",
@@ -131,6 +131,14 @@
       "status": "deployed",
       "observed_count": 2,
       "notes": "Deployed to alain-lessard.copper-dog.com on 2026-07-17 with direct no-JavaScript downloads, reading-apps.html guidance, and explicit EPUB/M4B MIME mappings. Strict public validation passed the declared MIME types, exact local lengths, and 206 byte ranges for both files."
+    },
+    {
+      "id": "reunion-outreach-assets",
+      "path": "output/outreach/{alain-lessard-reunion-flyer-letter.pdf,alain-lessard-reunion-flyer-letter-preview.png,alain-lessard-phone-qr.png,alain-lessard-qr.png,reunion-flyer-build-report.json}",
+      "format": "letter-pdf-plus-print-phone-qr-png-kit",
+      "status": "generated-local",
+      "observed_count": 5,
+      "notes": "Story 006 generated one exact US Letter PDF with the accepted 2550 x 3371 front cover at the same 4.1-inch height as its unchanged QR, a 2550 x 3300 print preview, a 1080 x 1920 phone card, a 1640 x 1640 integer-module QR master, and a build report. Cover path/hash/dimensions/822.2-ppi embedding, embedded/selectable fonts, page/pixel, true-white background with 25.67 percent non-white coverage, black/white quiet-zone, grayscale visual, independent final/reduced/grayscale/blurred/dim QR decode, and public destination/format checks pass on 2026-07-19. The user printed the final equal-height revision, reported that it works perfectly, accepted it, and directed Story 006 closure; individual distance/light/device cells were not separately enumerated."
     }
   ]
 }

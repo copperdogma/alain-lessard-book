@@ -11,7 +11,7 @@ DOC_WEB_RUN_ID ?= alain-lessard-book-r1
 DOC_WEB_SNAPSHOT_ID ?= $(DOC_WEB_RUN_ID)
 PUBLIC_BASE ?=
 
-.PHONY: skills-sync skills-check methodology-compile methodology-check scan-intake-report process-scans build-image-pdf ocr-pdf archival-image-pdf archival-pdf scan-pdf-all supplemental-docs validate-supplemental-docs render-supplemental-pdf-checks doc-web-contract doc-web-run doc-web-import-run doc-web-validate-active companion-doc-web validate-companion-doc-web test-audiobook test-portable-editions build-audiobook-script inspect-audiobook validate-audiobook build-full-audiobook build-epub validate-epub build-m4b validate-m4b build-portable-editions validate-portable-editions build-family-site validate-family-site validate-family-site-release deploy-deps deploy-static render-pdf-checks validate-pdf
+.PHONY: skills-sync skills-check methodology-compile methodology-check scan-intake-report process-scans build-image-pdf ocr-pdf archival-image-pdf archival-pdf scan-pdf-all supplemental-docs validate-supplemental-docs render-supplemental-pdf-checks doc-web-contract doc-web-run doc-web-import-run doc-web-validate-active companion-doc-web validate-companion-doc-web test-audiobook test-portable-editions test-reunion-flyer build-audiobook-script inspect-audiobook validate-audiobook build-full-audiobook build-epub validate-epub build-m4b validate-m4b build-portable-editions validate-portable-editions build-reunion-flyer validate-reunion-flyer reunion-flyer build-family-site validate-family-site validate-family-site-release deploy-deps deploy-static render-pdf-checks validate-pdf
 
 skills-sync:
 	./scripts/sync-agent-skills.sh
@@ -80,6 +80,9 @@ test-portable-editions:
 	$(PYTHON) -m unittest discover -s tests -p 'test_portable_editions.py'
 	$(PYTHON) -m unittest discover -s tests -p 'test_build_m4b.py'
 
+test-reunion-flyer:
+	PYTHONPATH=. $(PYTHON) -m unittest tests.test_reunion_flyer
+
 build-audiobook-script:
 	$(PYTHON) scripts/build_audiobook_script.py --output "$(AUDIOBOOK_SCRIPT_OUTPUT)"
 
@@ -125,6 +128,15 @@ build-portable-editions:
 	$(MAKE) build-family-site RELEASE="$(RELEASE)"
 
 validate-portable-editions: validate-epub validate-m4b
+
+build-reunion-flyer:
+	$(PYTHON) scripts/build_reunion_flyer.py build
+
+validate-reunion-flyer:
+	$(PYTHON) scripts/build_reunion_flyer.py validate
+
+reunion-flyer:
+	$(PYTHON) scripts/build_reunion_flyer.py all
 
 build-family-site: build-audiobook-script supplemental-docs
 	$(PYTHON) scripts/build_family_site.py --output "$(FAMILY_SITE_OUTPUT)" $(if $(RELEASE),--require-complete-audio,)

@@ -120,14 +120,29 @@ and companion archive materials.
 - Constraint: the SFTP helper waits for a real zero child exit and treats
   nonzero or unknown exit status as failure; the public HTTPS gate remains the
   authoritative deployment proof
+- Constraint: the Story 006 outreach contract deterministically builds an exact
+  US Letter flyer, 300 ppi preview, phone-display QR card, and standalone QR on
+  a white low-toner background using restrained website palette accents; the
+  letter flyer embeds the accepted 1987 cover at its native aspect ratio beside
+  the unchanged full-size QR, while the phone card remains QR-dominant; local
+  cover-path/hash/dimension/resolution, page/font/text/pixel/palette checks and
+  independent QR decoding pass, and the canonical homepage plus advertised
+  PDF/EPUB/MP3/M4B surfaces were freshly verified on 2026-07-18
+- Constraint: on 2026-07-19 the user printed the final equal-height cover/QR
+  revision on the intended home laser printer, reported that it `works
+  perfectly`, accepted the result, and directed Story 006 closure; individual
+  distance/light/device matrix cells were not separately enumerated
+- Limitation: future paper, mounting position, glare, weather, printer, or
+  camera changes can still affect physical readability and scanning
 - Limitation: future hosting, CDN, or browser changes could regress byte-range
   delivery or native media behavior after this verified release
 - Limitation type: operational durability
 - Evolution signal: rerun strict public validation and the focused browser
-  smoke after future publication or hosting changes
+  smoke after future publication or hosting changes; repeat a 100%-scale print
+  and real-device scan check after any flyer, printer, paper, or mounting change
 - Residual form: keep the static generator, deploy helper, and infrastructure
-  note plus the canonical audio/portable manifests and focused builders; delete
-  only temporary renderer and DNS workaround files
+  note plus the canonical audio/portable/outreach manifests and focused
+  builders; delete only temporary renderer and DNS workaround files
 
 ## spec:5 Planning Infrastructure
 

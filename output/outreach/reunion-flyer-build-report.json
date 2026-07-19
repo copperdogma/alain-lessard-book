@@ -1,0 +1,90 @@
+{
+  "schema_version": "alain_reunion_flyer_build_report_v1",
+  "source_manifest": "outreach/reunion-flyer.json",
+  "canonical_url": "https://alain-lessard.copper-dog.com/",
+  "toolchain": {
+    "python": "3.12.13",
+    "reportlab": "4.4.9",
+    "pillow": "12.2.0",
+    "pdftocairo": "pdftocairo version 25.04.0"
+  },
+  "fonts": {
+    "regular": {
+      "file": "Vera.ttf",
+      "sha256": "c4c45690b345435b2cba52ecabe275f05e49b389b39fe68ad03afbb551288d3d"
+    },
+    "bold": {
+      "file": "VeraBd.ttf",
+      "sha256": "cc037385e4d55bfde89b13e03091ee93bf40c0c52ddd391ff031ab276f13b8e9"
+    },
+    "license": {
+      "file": "bitstream-vera-license.txt",
+      "sha256": "3361d054759a2fc686a2c058be82deaf9c2e6fe549be9004d7935a6c1736315d"
+    }
+  },
+  "cover_source": {
+    "path": "input/doc-web-html/alain-lessard-book-r1/images/page-001-000.jpg",
+    "bytes": 4212968,
+    "sha256": "ac6d36744370bf7bf09d01de39dc1715cb4227d0bee2a3b308e9334e7d6e24bb",
+    "pixels": [
+      2550,
+      3371
+    ],
+    "letter_points": [
+      223.305,
+      295.2
+    ],
+    "effective_ppi": 822.2
+  },
+  "qr": {
+    "version": 4,
+    "data_modules": 33,
+    "quiet_zone_modules": 4,
+    "total_modules": 41,
+    "box_pixels": 40,
+    "pixel_size": 1640,
+    "error_correction": "Q"
+  },
+  "artifacts": {
+    "letter_pdf": {
+      "path": "output/outreach/alain-lessard-reunion-flyer-letter.pdf",
+      "bytes": 5493099,
+      "sha256": "fca4e010a7b2e4efede1f511d1c3d58b8f7113be0e397872ef3dbd5f930980ab",
+      "pages": 1,
+      "page_points": [
+        612.0,
+        792.0
+      ]
+    },
+    "letter_preview_png": {
+      "path": "output/outreach/alain-lessard-reunion-flyer-letter-preview.png",
+      "bytes": 2737060,
+      "sha256": "7a4cc11e3c526aeb8941be6baf4c91e4b4a21fb344c9d3b9e4b22dbc6dc1d035",
+      "pixels": [
+        2550,
+        3300
+      ],
+      "mode": "RGB"
+    },
+    "phone_png": {
+      "path": "output/outreach/alain-lessard-phone-qr.png",
+      "bytes": 92734,
+      "sha256": "e0847c2281c7049c09f25a3018b9a754a7f9c78a91951c0a506bc947ee7b3f50",
+      "pixels": [
+        1080,
+        1920
+      ],
+      "mode": "RGB"
+    },
+    "qr_png": {
+      "path": "output/outreach/alain-lessard-qr.png",
+      "bytes": 11710,
+      "sha256": "325e476dfea5126979b3ac52a4dc8032f2736afb1e6767ac6548bb86ab0262ba",
+      "pixels": [
+        1640,
+        1640
+      ],
+      "mode": "RGB"
+    }
+  }
+}
